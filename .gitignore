@@ -1,0 +1,384 @@
+# BTP Projet IA - Git Ignore Configuration
+
+# ============================================================================
+# Operating System Files
+# ============================================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.directory
+.Trash-*
+
+# ============================================================================
+# IDE and Editor Files
+# ============================================================================
+
+# Visual Studio Code
+.vscode/
+*.code-workspace
+.history/
+
+# JetBrains IDEs (IntelliJ, PyCharm, WebStorm, etc.)
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*.swp
+*.swo
+*.swn
+.*.swp
+.*.swo
+.*.swn
+Session.vim
+
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+
+# ============================================================================
+# Programming Languages
+# ============================================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.hypothesis/
+.pytype/
+*.cover
+*.log
+instance/
+.webassets-cache
+.scrapy
+docs/_build/
+target/
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+.python-version
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+celerybeat-schedule
+celerybeat.pid
+*.sage.py
+.spyderproject
+.spyproject
+.ropeproject
+Pipfile.lock
+poetry.lock
+pdm.lock
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+pnpm-debug.log*
+.npm
+.eslintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+.next
+out
+.nuxt
+dist
+.cache
+.parcel-cache
+.vuepress/dist
+.serverless/
+.fusebox/
+.dynamodb/
+.tern-port
+.vscode-test
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+hs_err_pid*
+.gradle/
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.dylib
+*.test
+*.out
+go.work
+vendor/
+
+# Rust
+target/
+Cargo.lock
+**/*.rs.bk
+
+# Ruby
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+.bundle/
+vendor/bundle
+.byebug_history
+.ruby-version
+.ruby-gemset
+
+# C/C++
+*.o
+*.obj
+*.lo
+*.a
+*.la
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.app
+*.i*86
+*.x86_64
+*.hex
+cmake-build-*/
+CMakeLists.txt.user
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+_deps
+
+# ============================================================================
+# Frameworks and Tools
+# ============================================================================
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media
+
+# Flask
+instance/
+.webassets-cache
+
+# FastAPI / Uvicorn
+*.db
+*.sqlite
+
+# Docker
+.docker/
+docker-compose.override.yml
+.dockerignore
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfvars
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# ============================================================================
+# Database Files
+# ============================================================================
+*.db
+*.sqlite
+*.sqlite3
+*.sql
+*.mdb
+*.accdb
+
+# ============================================================================
+# Log Files
+# ============================================================================
+*.log
+logs/
+*.log.*
+
+# ============================================================================
+# Temporary and Cache Files
+# ============================================================================
+*.tmp
+*.temp
+*.cache
+*.bak
+*.backup
+*.orig
+*~
+.cache/
+.temp/
+tmp/
+temp/
+
+# ============================================================================
+# Build and Distribution
+# ============================================================================
+build/
+dist/
+out/
+bin/
+obj/
+*.o
+*.a
+*.exe
+*.dll
+*.so
+*.dylib
+
+# ============================================================================
+# Environment and Configuration
+# ============================================================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+*.env
+config.local.js
+secrets.yml
+credentials.yml
+
+# ============================================================================
+# Testing
+# ============================================================================
+coverage/
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+test-results/
+.nyc_output/
+junit.xml
+
+# ============================================================================
+# Documentation Build
+# ============================================================================
+docs/_build/
+site/
+_site/
+.jekyll-cache/
+.jekyll-metadata
+
+# ============================================================================
+# Security and Secrets
+# ============================================================================
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+id_rsa
+id_rsa.pub
+*.asc
+secrets/
+.secrets/
+
+# ============================================================================
+# AI and ML Specific
+# ============================================================================
+*.h5
+*.pkl
+*.pickle
+*.model
+*.weights
+*.ckpt
+checkpoints/
+models/
+datasets/
+data/raw/
+data/processed/
+*.tfrecord
+
+# ============================================================================
+# Project Specific
+# ============================================================================
+# Add project-specific ignores below
