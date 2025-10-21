@@ -1,6 +1,6 @@
 # BTP Projet IA - Virtual Start-up
 
-A virtual start-up project developed entirely using generative AI, created by two student software developers.
+A virtual start-up project developed entirely using generative AI, created by [Leila Wilde](https://github.com/leila-wilde) and [Louis Cordier](https://github.com/louis-cordier).
 
 ## 🎯 Project Overview
 
@@ -59,7 +59,7 @@ This project is developed using generative AI tools. All prompts, decisions, and
 
 ## 👥 Team
 
-Two student software developers exploring AI-assisted development.
+[Leila Wilde](https://github.com/leila-wilde) and [Louis Cordier](https://github.com/louis-cordier) - student software developers exploring AI-assisted development.
 
 ## 📝 License
 
