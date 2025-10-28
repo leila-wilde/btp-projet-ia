@@ -1,0 +1,61 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: archipellibre_test
+          POSTGRES_USER: test_user
+          POSTGRES_PASSWORD: test_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Build with Maven
+      working-directory: ./backend
+      run: mvn clean install -DskipTests
+
+    - name: Run tests
+      working-directory: ./backend
+      run: mvn test
+      env:
+        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/archipellibre_test
+        SPRING_DATASOURCE_USERNAME: test_user
+        SPRING_DATASOURCE_PASSWORD: test_password
+
+    - name: Generate coverage report
+      working-directory: ./backend
+      run: mvn jacoco:report
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: ./backend/target/site/jacoco/jacoco.xml

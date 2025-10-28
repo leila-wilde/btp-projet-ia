@@ -32,6 +32,42 @@ This project leverages various AI agents and tools to assist in different stages
 
 ---
 
+### GitHub Copilot Coding Agent - Full Stack Implementation
+
+**First Used:** 2025-10-28  
+**Primary Role:** Complete full-stack application development  
+**Capabilities:**
+- Spring Boot backend architecture and implementation
+- Angular frontend structure and components
+- Database schema design with JPA/Hibernate
+- JWT authentication and security configuration
+- Docker containerization
+- CI/CD pipeline setup with GitHub Actions
+- Documentation in English and French
+
+**Tasks Performed:**
+- Complete backend structure with entities, repositories, services, controllers
+- Security implementation with JWT tokens and Spring Security
+- DTOs and request/response models
+- PostgreSQL database configuration
+- Frontend models and services
+- Angular interceptors and guards
+- Docker and Docker Compose configuration
+- Development and testing scripts
+- GitHub workflows for CI/CD
+- Comprehensive README with bilingual documentation
+- CONTRIBUTING guide with code style guidelines
+
+**Technologies Implemented:**
+- Backend: Spring Boot 3.2, Java 21, PostgreSQL 15, JWT, Lombok
+- Frontend: Angular 17, NgRx, RxJS
+- DevOps: Docker, GitHub Actions
+- Testing: JUnit 5, Jasmine, Karma
+
+**Notes:** Comprehensive implementation of L'Archipel Libre community platform following SOLID principles, security best practices, and modern development patterns.
+
+---
+
 ## 🔧 AI Tools Used
 
 *(This section will be updated as different AI tools are integrated)*

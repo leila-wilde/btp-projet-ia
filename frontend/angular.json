@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json.schemastore.org/angular-cli",
+  "version": 1,
+  "projects": {
+    "archipel-libre-frontend": {
+      "projectType": "application",
+      "root": "",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/archipel-libre-frontend",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": [],
+            "tsConfig": "tsconfig.app.json",
+            "assets": [
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "buildOptimizer": true,
+              "extractLicenses": true
+            },
+            "development": {
+              "optimization": false,
+              "buildOptimizer": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "browserTarget": "archipel-libre-frontend:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "archipel-libre-frontend:build:production"
+            },
+            "development": {
+              "browserTarget": "archipel-libre-frontend:build:development"
+            }
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "archipel-libre-frontend"
+}
