@@ -41,19 +41,22 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "archipel-libre-frontend:build"
+            "buildTarget": "archipel-libre-frontend:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "archipel-libre-frontend:build:production"
+              "buildTarget": "archipel-libre-frontend:build:production"
             },
             "development": {
-              "browserTarget": "archipel-libre-frontend:build:development"
+              "buildTarget": "archipel-libre-frontend:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         }
       }
     }
   },
-  "defaultProject": "archipel-libre-frontend"
+  "cli": {
+    "analytics": false
+  }
 }
