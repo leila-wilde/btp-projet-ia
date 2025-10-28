@@ -149,9 +149,9 @@ frontend/
 docs/
 │
 ├── AGENTS.md          # AI agent documentation
-├── PROMPTS.md         # Copilot/AI interaction logs
+├── prompts.md         # Copilot/AI interaction logs
 ├── CHANGELOG.md       # Project change tracking
-├── CONCEPTION.md      # Project conception and design thinking
+├── conception.md      # Project conception and design thinking
 │
 ├── api/
 │   └── openapi.yaml   # OpenAPI specification for API documentation

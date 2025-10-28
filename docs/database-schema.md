@@ -7,7 +7,7 @@
 - Performance-optimized indexing
 
 ## 📊 Entity Relationship Diagram
-```mermaid
+``` mermaid
 erDiagram
     USER ||--o{ EVENT : creates
     USER ||--o{ FORUM_THREAD : posts
@@ -16,7 +16,6 @@ erDiagram
     FORUM_THREAD ||--o{ FORUM_POST : contains
 ```
 ![er diagram](erdiagram.png)
-
 
 ## 🛠️ Workshop Proposal Table
 ``` sql
