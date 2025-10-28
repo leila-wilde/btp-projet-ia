@@ -1,0 +1,30 @@
+{
+  "name": "auth-system",
+  "version": "1.0.0",
+  "description": "Système d'authentification complet avec inscription, connexion, profil et suppression de compte",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "test": "echo 'Voir TESTS.md pour les scénarios de test'"
+  },
+  "keywords": [
+    "authentication",
+    "login",
+    "signup",
+    "profile",
+    "user-management"
+  ],
+  "author": "Projet IA - Bachelor IT B2",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-repo/auth-system"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.0"
+  }
+}

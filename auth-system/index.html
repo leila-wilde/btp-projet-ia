@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système d'Authentification</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Page de connexion/inscription -->
+        <div id="auth-container" class="auth-container active">
+            <div class="auth-box">
+                <h1>Authentification</h1>
+                
+                <!-- Formulaire d'inscription -->
+                <form id="signup-form" class="auth-form active">
+                    <h2>Inscription</h2>
+                    <input type="text" id="signup-username" placeholder="Nom d'utilisateur" required>
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                    <input type="password" id="signup-password" placeholder="Mot de passe" required>
+                    <input type="password" id="signup-confirm-password" placeholder="Confirmer le mot de passe" required>
+                    <button type="submit" class="btn-primary">S'inscrire</button>
+                    <p class="toggle-form">
+                        Déjà inscrit? <a href="#" onclick="toggleForm()">Se connecter</a>
+                    </p>
+                </form>
+
+                <!-- Formulaire de connexion -->
+                <form id="login-form" class="auth-form">
+                    <h2>Connexion</h2>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Mot de passe" required>
+                    <button type="submit" class="btn-primary">Se connecter</button>
+                    <p class="toggle-form">
+                        Pas encore inscrit? <a href="#" onclick="toggleForm()">S'inscrire</a>
+                    </p>
+                </form>
+
+                <div id="auth-message" class="message"></div>
+            </div>
+        </div>
+
+        <!-- Page du profil -->
+        <div id="profile-container" class="profile-container">
+            <nav class="navbar">
+                <h1>Mon Espace</h1>
+                <div class="nav-buttons">
+                    <button onclick="editProfile()" class="btn-secondary" id="edit-btn">Modifier le profil</button>
+                    <button onclick="logout()" class="btn-danger">Se déconnecter</button>
+                </div>
+            </nav>
+
+            <!-- Vue du profil -->
+            <div id="profile-view" class="profile-view active">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <h2 id="profile-username">Nom d'utilisateur</h2>
+                        <p id="profile-email">email@example.com</p>
+                    </div>
+                    <div class="profile-info">
+                        <p><strong>Membre depuis:</strong> <span id="profile-created">-</span></p>
+                        <p><strong>Dernière modification:</strong> <span id="profile-updated">-</span></p>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button onclick="showDeleteConfirm()" class="btn-danger">Supprimer le compte</button>
+                </div>
+            </div>
+
+            <!-- Formulaire d'édition du profil -->
+            <div id="profile-edit" class="profile-edit">
+                <div class="edit-card">
+                    <h2>Modifier le profil</h2>
+                    <form id="edit-form">
+                        <div class="form-group">
+                            <label for="edit-username">Nom d'utilisateur:</label>
+                            <input type="text" id="edit-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-email">Email:</label>
+                            <input type="email" id="edit-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-password">Nouveau mot de passe (optionnel):</label>
+                            <input type="password" id="edit-password" placeholder="Laisser vide pour ne pas changer">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Enregistrer</button>
+                            <button type="button" onclick="cancelEdit()" class="btn-secondary">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal de confirmation de suppression -->
+            <div id="delete-modal" class="modal">
+                <div class="modal-content">
+                    <h2>Supprimer le compte</h2>
+                    <p>Êtes-vous sûr de vouloir supprimer définitivement votre compte? Cette action ne peut pas être annulée.</p>
+                    <div class="modal-actions">
+                        <button onclick="closeDeleteConfirm()" class="btn-secondary">Annuler</button>
+                        <button onclick="deleteAccount()" class="btn-danger">Supprimer définitivement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+</body>
+</html>

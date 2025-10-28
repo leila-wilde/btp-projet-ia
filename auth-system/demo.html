@@ -1,0 +1,201 @@
+<!-- Configuration de développement et démo -->
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système d'Authentification - Demo</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .demo-info {
+            background-color: #f0f0f0;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 5px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+        }
+        .demo-info h3 {
+            margin-top: 0;
+        }
+        .demo-btn {
+            background-color: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-weight: bold;
+        }
+        .demo-btn:hover {
+            background-color: #5568d3;
+        }
+        .demo-controls {
+            padding: 20px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-controls">
+        <h2>🔧 Contrôles de Démo</h2>
+        <button class="demo-btn" onclick="createDemoUser()">Créer compte démo</button>
+        <button class="demo-btn" onclick="loginDemoUser()">Se connecter (démo)</button>
+        <button class="demo-btn" onclick="showStorageData()">Voir les données stockées</button>
+        <button class="demo-btn" onclick="clearAllData()">Effacer tout</button>
+        <button class="demo-btn" onclick="window.location.href='index.html'">Aller à l'app</button>
+    </div>
+
+    <div id="app-container">
+        <!-- Page de connexion/inscription -->
+        <div id="auth-container" class="auth-container active">
+            <div class="auth-box">
+                <h1>Authentification</h1>
+                
+                <!-- Formulaire d'inscription -->
+                <form id="signup-form" class="auth-form active">
+                    <h2>Inscription</h2>
+                    <input type="text" id="signup-username" placeholder="Nom d'utilisateur" required>
+                    <input type="email" id="signup-email" placeholder="Email" required>
+                    <input type="password" id="signup-password" placeholder="Mot de passe" required>
+                    <input type="password" id="signup-confirm-password" placeholder="Confirmer le mot de passe" required>
+                    <button type="submit" class="btn-primary">S'inscrire</button>
+                    <p class="toggle-form">
+                        Déjà inscrit? <a href="#" onclick="toggleForm()">Se connecter</a>
+                    </p>
+                </form>
+
+                <!-- Formulaire de connexion -->
+                <form id="login-form" class="auth-form">
+                    <h2>Connexion</h2>
+                    <input type="email" id="login-email" placeholder="Email" required>
+                    <input type="password" id="login-password" placeholder="Mot de passe" required>
+                    <button type="submit" class="btn-primary">Se connecter</button>
+                    <p class="toggle-form">
+                        Pas encore inscrit? <a href="#" onclick="toggleForm()">S'inscrire</a>
+                    </p>
+                </form>
+
+                <div id="auth-message" class="message"></div>
+
+                <div class="demo-info">
+                    <h3>📝 Comptes de test:</h3>
+                    <p><strong>Email:</strong> demo@example.com</p>
+                    <p><strong>Mot de passe:</strong> Demo123</p>
+                    <p><strong>Username:</strong> DemoUser</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Page du profil -->
+        <div id="profile-container" class="profile-container">
+            <nav class="navbar">
+                <h1>Mon Espace</h1>
+                <div class="nav-buttons">
+                    <button onclick="editProfile()" class="btn-secondary" id="edit-btn">Modifier le profil</button>
+                    <button onclick="logout()" class="btn-danger">Se déconnecter</button>
+                </div>
+            </nav>
+
+            <!-- Vue du profil -->
+            <div id="profile-view" class="profile-view active">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <h2 id="profile-username">Nom d'utilisateur</h2>
+                        <p id="profile-email">email@example.com</p>
+                    </div>
+                    <div class="profile-info">
+                        <p><strong>Membre depuis:</strong> <span id="profile-created">-</span></p>
+                        <p><strong>Dernière modification:</strong> <span id="profile-updated">-</span></p>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button onclick="showDeleteConfirm()" class="btn-danger">Supprimer le compte</button>
+                </div>
+            </div>
+
+            <!-- Formulaire d'édition du profil -->
+            <div id="profile-edit" class="profile-edit">
+                <div class="edit-card">
+                    <h2>Modifier le profil</h2>
+                    <form id="edit-form">
+                        <div class="form-group">
+                            <label for="edit-username">Nom d'utilisateur:</label>
+                            <input type="text" id="edit-username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-email">Email:</label>
+                            <input type="email" id="edit-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-password">Nouveau mot de passe (optionnel):</label>
+                            <input type="password" id="edit-password" placeholder="Laisser vide pour ne pas changer">
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn-primary">Enregistrer</button>
+                            <button type="button" onclick="cancelEdit()" class="btn-secondary">Annuler</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal de confirmation de suppression -->
+            <div id="delete-modal" class="modal">
+                <div class="modal-content">
+                    <h2>Supprimer le compte</h2>
+                    <p>Êtes-vous sûr de vouloir supprimer définitivement votre compte? Cette action ne peut pas être annulée.</p>
+                    <div class="modal-actions">
+                        <button onclick="closeDeleteConfirm()" class="btn-secondary">Annuler</button>
+                        <button onclick="deleteAccount()" class="btn-danger">Supprimer définitivement</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        function createDemoUser() {
+            if (!authSystem) return;
+            
+            authSystem.users['demo@example.com'] = {
+                username: 'DemoUser',
+                email: 'demo@example.com',
+                password: authSystem.hashPassword('Demo123'),
+                createdAt: new Date().toLocaleString('fr-FR'),
+                updatedAt: new Date().toLocaleString('fr-FR')
+            };
+            authSystem.saveUsers();
+            alert('✅ Compte démo créé!\n\nEmail: demo@example.com\nMot de passe: Demo123');
+        }
+
+        function loginDemoUser() {
+            if (!authSystem) return;
+            document.getElementById('login-email').value = 'demo@example.com';
+            document.getElementById('login-password').value = 'Demo123';
+            document.getElementById('signup-form').classList.remove('active');
+            document.getElementById('login-form').classList.add('active');
+        }
+
+        function showStorageData() {
+            const users = localStorage.getItem('users');
+            const currentUser = localStorage.getItem('currentUser');
+            console.clear();
+            console.log('%c=== DONNÉES STOCKÉES ===', 'color: #667eea; font-size: 16px; font-weight: bold;');
+            console.log('%cUtilisateurs:', 'color: #667eea; font-weight: bold;');
+            console.log(users ? JSON.parse(users) : 'Aucun utilisateur');
+            console.log('%cUtilisateur actuellement connecté:', 'color: #667eea; font-weight: bold;');
+            console.log(currentUser ? JSON.parse(currentUser) : 'Non connecté');
+        }
+
+        function clearAllData() {
+            if (confirm('⚠️ Êtes-vous sûr? Cela va effacer TOUTES les données!')) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
