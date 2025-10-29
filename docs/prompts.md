@@ -92,6 +92,31 @@ L'Archipel Libre is a community-driven platform designed to facilitate collabora
 
 ---
 
+## Documentation Fix - Frontend Port Configuration
+
+**Date:** 2025-10-29  
+**Stage:** Documentation Update  
+**Purpose:** Fix port number in documentation to reflect actual frontend deployment configuration
+
+### Prompt:
+```
+The frontend seems to be on port 8081. Fix the README.md and any other necessary documentation to give the correct port, set-up and launch instructions. Don't forget to log and document this prompt in prompts.md.
+```
+
+**Context:** The docker-compose.yml was correctly configured with port 8081 for the frontend (port 8081:80 mapping), but the README.md documentation was showing http://localhost as the access point for Docker Compose deployment, which was misleading. The development setup instructions also only mentioned localhost:4200 (ng serve default) without clarifying the Docker port.
+
+**Changes Made:**
+1. Updated README.md (English section) to clarify:
+   - Docker Compose frontend access: http://localhost:8081
+   - Database access: localhost:5433
+   - Backend API access: http://localhost:8080
+   
+2. Updated README.md (French section) with equivalent clarifications
+
+**Output:** Improved documentation with clear, accurate port information for both development (ng serve on 4200) and Docker Compose deployment (frontend on 8081, backend on 8080, database on 5433).
+
+---
+
 ## How to Use This Document
 
 - Each prompt should include the date, stage of development, purpose, and context

@@ -77,7 +77,11 @@ L'Archipel Libre enables community members to:
 docker-compose up -d
 ```
 
-Access the application at http://localhost
+Access the application:
+   - Frontend: http://localhost:8081
+   - Backend API: http://localhost:8080
+   - Swagger UI: http://localhost:8080/swagger-ui.html
+   - Database: localhost:5433
 
 ## 📁 Project Structure
 
@@ -325,7 +329,11 @@ L'Archipel Libre permet aux membres de la communauté de :
 docker-compose up -d
 ```
 
-Accéder à l'application sur http://localhost
+Accéder à l'application:
+   - Frontend: http://localhost:8081
+   - API Backend: http://localhost:8080
+   - Swagger UI: http://localhost:8080/swagger-ui.html
+   - Base de données: localhost:5433
 
 ## 📚 Documentation de l'API
 
