@@ -71,9 +71,10 @@
 
 - ✅ Comprehensive README.md (English & French)
 - ✅ CONTRIBUTING.md with code guidelines
-- ✅ AGENTS.md updated with AI usage details
-- ✅ prompts.md updated with current prompt
-- ✅ Existing architecture documentation preserved
+- ✅ AGENTS.md with AI-assisted development details
+- ✅ CHANGELOG.md tracking project progress
+- ✅ prompts.md documenting AI interactions
+- ✅ Architecture and system design documentation
 
 ## 🚀 Quick Start Commands
 
@@ -104,15 +105,17 @@ npm start
 - Project structure following repo-design.md
 - Backend entities (User, Event, ForumThread, ForumPost, WorkshopProposal)
 - Repository layer with custom queries
-- JWT authentication system
-- Spring Security configuration
+- JWT authentication system with Spring Security
 - CORS configuration for frontend integration
-- DTOs for authentication
-- Integration tests for auth endpoints
-- Docker containerization
-- CI/CD pipelines
-- Development scripts
-- Comprehensive documentation
+- DTOs for all API operations
+- Integration tests for authentication
+- Docker containerization with docker-compose
+- CI/CD pipelines with GitHub Actions
+- Development and testing scripts
+- Comprehensive bilingual documentation (EN & FR)
+- API documentation with Swagger/OpenAPI
+- Security implementation (JWT, BCrypt, Spring Security)
+- Database schema with PostgreSQL and JPA/Hibernate
 
 ### 🚧 Next Steps (To Be Implemented)
 - Event management controllers and services

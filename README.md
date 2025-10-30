@@ -199,8 +199,9 @@ API documentation is available via Swagger UI at:
 
 This project demonstrates comprehensive AI-assisted development. All AI interactions are documented:
 
-- **[docs/prompts.md](./docs/prompts.md)**: Complete prompt history
+- **[docs/INDEX.md](./docs/INDEX.md)**: Complete documentation index
 - **[AGENTS.md](./AGENTS.md)**: AI agents and tools used
+- **[docs/prompts.md](./docs/prompts.md)**: Complete prompt history
 - **[docs/conception.md](./docs/conception.md)**: Design decisions
 
 ## 🛠️ Development
@@ -246,7 +247,7 @@ Please read our contribution guidelines before submitting pull requests.
 
 ---
 
-**Last Updated**: 2025-10-28
+**Last Updated**: 2025-10-30
 
 ---
 
