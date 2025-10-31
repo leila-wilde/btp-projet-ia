@@ -1,3 +1,4 @@
+import 'zone.js';  // Required for Angular
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 import { provideAnimations } from '@angular/platform-browser/animations';
