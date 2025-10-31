@@ -1,6 +1,7 @@
 package com.archipellibre.security;
 
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.Keys;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 @Component
@@ -23,8 +23,9 @@ public class JwtTokenProvider {
     @Value("${app.jwt.expiration}")
     private long jwtExpirationMs;
 
-    private byte[] getSigningKey() {
-        return jwtSecret.getBytes(StandardCharsets.UTF_8);
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = jwtSecret.getBytes();
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generateToken(Authentication authentication) {
@@ -33,29 +34,34 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationMs);
 
-    return Jwts.builder()
-        .setSubject(userPrincipal.getUsername())
-        .setIssuedAt(now)
-        .setExpiration(expiryDate)
-        // Legacy JJWT signature method for 0.9.x
-        .signWith(SignatureAlgorithm.HS512, getSigningKey())
-        .compact();
+        return Jwts.builder()
+                .subject(userPrincipal.getUsername())
+                .issuedAt(now)
+                .expiration(expiryDate)
+                .signWith(getSigningKey(), SignatureAlgorithm.HS512)
+                .compact();
     }
 
     public String getUsernameFromJWT(String token) {
-    Claims claims = Jwts.parser()
-        .setSigningKey(getSigningKey())
-        .parseClaimsJws(token)
-        .getBody();
-
-        return claims.getSubject();
+        try {
+            Claims claims = Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            return claims.getSubject();
+        } catch (JwtException e) {
+            logger.error("Could not parse JWT token: {}", e.getMessage());
+            return null;
+        }
     }
 
     public boolean validateToken(String authToken) {
         try {
-        Jwts.parser()
-            .setSigningKey(getSigningKey())
-            .parseClaimsJws(authToken);
+            Jwts.parser()
+                    .verifyWith(getSigningKey())
+                    .build()
+                    .parseSignedClaims(authToken);
             return true;
         } catch (SecurityException ex) {
             logger.error("Invalid JWT signature");

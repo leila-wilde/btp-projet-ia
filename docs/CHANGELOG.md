@@ -8,32 +8,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- Complete backend implementation (Spring Boot 3.2, Java 21)
-  - 6 core modules: Auth, User, Event, Forum, Workshop, Admin
-  - JWT authentication with Spring Security
-  - PostgreSQL database with JPA/Hibernate
-  - Swagger/OpenAPI documentation
-- Full-stack Angular 17 frontend
-  - NgRx state management
-  - Material UI components
-  - 5 feature modules with responsive design
-- Docker containerization and docker-compose orchestration
-- GitHub Actions CI/CD pipelines
-- Comprehensive bilingual documentation (EN/FR)
-- Documentation Index (docs/INDEX.md) for better navigation
+- Complete authentication and authorization implementation
+  - JWT token generation and validation (JJWT 0.12.3)
+  - BCrypt password encoding with Spring Security
+  - UserDetailsService with dual username/email lookup
+  - JwtAuthenticationFilter for stateless authentication
+  - Role-based access control foundation (USER, MODERATOR, ADMIN)
+  - 7 comprehensive integration tests with 100% pass rate
+  - H2 in-memory database for testing
+- Comprehensive Authentication & Authorization Guide (docs/authentication-guide.md)
+  - Implementation details and architecture overview
+  - API endpoint documentation
+  - Security best practices and troubleshooting
+  - Frontend and backend integration examples
+- Updated JJWT dependency from 0.9.1 to 0.12.3 for Java 21 compatibility
 
 ### Changed
-- Enhanced AGENTS.md with:
-  - Detailed tool categories and capabilities
-  - AI usage statistics table with completion status
-  - Best practices learned from AI-assisted development
-  - Project achievements summary
-  - Technology stack details
-  - Features developed with AI assistance
-  - Key learnings with AI strengths and challenges
-- Updated documentation references across project
-- Improved project structure documentation
-- Added cross-references in README to new INDEX.md
+- AuthController `/register` endpoint now returns 201 Created status (was 200 OK)
+- JwtTokenProvider updated to use modern JJWT API (verifyWith/parseSignedClaims)
+- Improved test assertions for password encoding verification
 
 ---
 

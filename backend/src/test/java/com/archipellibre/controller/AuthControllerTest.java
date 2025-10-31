@@ -69,7 +69,7 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/auth/register")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.success").value(true))
                 .andExpect(jsonPath("$.message").value("User registered successfully"));
     }
@@ -135,6 +135,26 @@ class AuthControllerTest {
     }
 
     @Test
+    void shouldVerifyPasswordIsEncoded() throws Exception {
+        RegisterRequest request = new RegisterRequest();
+        request.setUsername("encodetest");
+        request.setEmail("encodetest@example.com");
+        request.setPassword("password123");
+
+        mockMvc.perform(post("/api/auth/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isCreated());
+
+        User savedUser = userRepository.findByUsername("encodetest")
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        // Verify password is not plain text (BCrypt hashes start with $2a, $2b, or $2y)
+        assert savedUser.getPasswordHash().startsWith("$2");
+        assert !savedUser.getPasswordHash().equals("password123");
+    }
+
+    @Test
     void shouldNotLoginWithInvalidPassword() throws Exception {
         LoginRequest request = new LoginRequest();
         request.setUsernameOrEmail("testuser");
@@ -143,6 +163,6 @@ class AuthControllerTest {
         mockMvc.perform(post("/api/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 }

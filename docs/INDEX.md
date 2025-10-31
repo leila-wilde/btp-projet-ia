@@ -18,6 +18,7 @@ This document serves as a central hub for all project documentation. Use this gu
 
 - **[repo-design.md](./repo-design.md)** - Project structure and file organization
 - **[system-design.md](./system-design.md)** - System architecture and design patterns
+- **[authentication-guide.md](./authentication-guide.md)** - JWT, BCrypt, Spring Security implementation
 - **[database-schema.md](./database-schema.md)** - Database design and entity relationships
 - **[tech-stack.md](./tech-stack.md)** - Technology choices and justifications
 

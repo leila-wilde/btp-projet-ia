@@ -117,6 +117,108 @@ The frontend seems to be on port 8081. Fix the README.md and any other necessary
 
 ---
 
+## User Authentication and Authorization Flow Review & Implementation
+
+**Date:** 2025-10-31  
+**Stage:** Security Implementation & Testing  
+**Purpose:** Review and complete the authentication and authorization flow for L'Archipel Libre with end-to-end testing
+
+### Prompt:
+```
+Review the complete user authentication and authorization flow for the 'L'Archipel Libre' project and implement any necessary files and code.
+Review the User entity and repository, the spring Security Configuration, JWT Utilities & UserDetails and the JWT Authentication Filter.
+The Spring Security Configuration SecurityConfig class must use Configuration and EnableWebSecurity, have a Bcrypt password encoderer bean, and a SecurityFilterChain bean configured to use JWT, permit public access to /api/auth/register and /api/auth/login etc.require authentication for all other requests (e.g., /api/v1/**).
+The JwtAuthenticationFilter should read the Authorization header, validate the JWT, and if valid, load the UserDetails from the UserDetailsService and set the Authentication in the SecurityContextHolder.
+
+### Authentication Controller
+Make sure that the AuthController is mapped to /api/auth that has RegisterRequest and LoginRequest DTOs
+    1. /register endpoint:
+        ◦ Takes a RegisterRequest.
+        ◦ Checks if the username/email already exists.
+        ◦ Encodes the password with BCrypt.
+        ◦ Saves the new User to the database with the USER role.
+        ◦ Returns a 201 Created status.
+    2. /login endpoint:
+        ◦ Takes a LoginRequest.
+        ◦ Uses AuthenticationManager to authenticate the user.
+        ◦ If authentication is successful, generate a JWT and return it in a response (e.g., {"token": "..."}).
+Check the necessary properties configuration for PostgreSQL database connection (datasource URL, username, password), JPA/Hibernate settings (e.g., ddl-auto=update), and the JWT secret key and expiration time.
+
+### End-to-End Integration Test
+Finally, create an integration test using @SpringBootTest and @AutoConfigureMockMvc. This test must:
+    1. Use @Testcontainers or an embedded H2 database for testing.
+    2. Call the /api/auth/register endpoint with a test user.
+    3. Verify the response is 201 Created.
+    4. Call the /api/auth/login endpoint with the new user's credentials.
+    5. Verify the response is 200 OK and that a JWT token is returned in the body.
+    6. Use the UserRepository to find the user and assert that their saved password is not plain text (i.e., it has been encoded).
+```
+
+**Context:** Ensuring L'Archipel Libre has a secure, complete authentication system with proper JWT validation, BCrypt password encoding, and comprehensive test coverage using H2 in-memory database for testing.
+
+**Implementation Details:**
+
+**Updated Files:**
+1. **JwtTokenProvider.java**: 
+   - Upgraded from JJWT 0.9.1 to 0.12.3 for Java 21 compatibility
+   - Updated to use modern JJWT API (`.parser().verifyWith()` instead of deprecated `.setSigningKey()`)
+   - Uses `Keys.hmacShaKeyFor()` for secure key generation
+   - Comprehensive error handling for JWT validation
+
+2. **AuthController.java**:
+   - Fixed `/register` endpoint to return 201 Created status code
+   - Full user validation (username/email uniqueness)
+   - BCrypt password encoding before storage
+   - Both `/register` and `/login` endpoints fully functional
+
+3. **AuthControllerTest.java**:
+   - Enhanced with 7 comprehensive test cases:
+     - `shouldRegisterNewUser()` - validates 201 Created response
+     - `shouldNotRegisterUserWithExistingUsername()` - validates duplicate prevention
+     - `shouldNotRegisterUserWithExistingEmail()` - validates email uniqueness
+     - `shouldLoginWithValidCredentials()` - validates token generation
+     - `shouldLoginWithEmail()` - validates email-based login
+     - `shouldNotLoginWithInvalidPassword()` - validates 403 Forbidden
+     - `shouldVerifyPasswordIsEncoded()` - validates BCrypt hashing (new)
+
+4. **backend/pom.xml**:
+   - Updated JJWT from 0.9.1 to 0.12.3
+   - Added proper Maven dependencies: jjwt-api, jjwt-impl, jjwt-jackson
+
+5. **Test Configuration**:
+   - Uses H2 in-memory database (application-test.yml)
+   - Test profile with separate JWT secret and expiration
+   - @ActiveProfiles("test") for test isolation
+
+**Security Features:**
+- JWT token generation with HS512 signature algorithm
+- BCrypt password encoding with Spring Security
+- Stateless session management
+- CORS configuration for frontend integration
+- Public endpoints: `/api/auth/**`, GET `/api/events/**`, GET `/api/forum/**`, GET `/api/workshops/**`
+- Protected endpoints: All other routes require authentication
+- Role-based authorization ready (USER, MODERATOR, ADMIN roles defined)
+
+**Test Results:**
+- All 7 tests passing
+- 201 Created status verified for registration
+- JWT token generation verified
+- Password encoding (BCrypt) verified
+- Duplicate prevention verified
+- Email-based login verified
+
+**Output:** Complete, tested authentication and authorization system with:
+- ✅ Secure JWT implementation (JJWT 0.12.3)
+- ✅ BCrypt password encoding
+- ✅ Role-based access control foundation
+- ✅ 7 passing integration tests
+- ✅ H2 in-memory database for testing
+- ✅ Spring Security SecurityFilterChain configuration
+- ✅ Public/Protected endpoint differentiation
+- ✅ UserDetailsService with dual username/email lookup
+
+---
+
 ## How to Use This Document
 
 - Each prompt should include the date, stage of development, purpose, and context
