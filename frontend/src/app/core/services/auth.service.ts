@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, BehaviorSubject, tap } from 'rxjs';
+import { Observable, BehaviorSubject, tap, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { LoginRequest, RegisterRequest, JwtResponse } from '../../models/user.model';
 
@@ -10,16 +10,36 @@ import { LoginRequest, RegisterRequest, JwtResponse } from '../../models/user.mo
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<JwtResponse | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  private tokenKey = environment.jwtTokenKey;
+  private storageType = 'localStorage'; // 'localStorage' or 'sessionStorage'
 
   constructor(private http: HttpClient) {
     this.loadStoredUser();
   }
 
+  private getStorage() {
+    return this.storageType === 'sessionStorage' ? sessionStorage : localStorage;
+  }
+
   private loadStoredUser(): void {
-    const token = localStorage.getItem(environment.jwtTokenKey);
+    const token = this.getStorage().getItem(this.tokenKey);
     if (token) {
-      // Decode token and populate user data
-      // For now, just indicate logged in state
+      this.currentUserSubject.next(this.decodeToken(token));
+    }
+  }
+
+  private decodeToken(token: string): JwtResponse | null {
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return {
+        accessToken: token,
+        tokenType: 'Bearer',
+        username: payload.sub,
+        email: payload.email || '',
+        role: payload.role || 'USER'
+      };
+    } catch (e) {
+      return null;
     }
   }
 
@@ -27,7 +47,7 @@ export class AuthService {
     return this.http.post<JwtResponse>(`${environment.apiUrl}/auth/login`, credentials)
       .pipe(
         tap(response => {
-          localStorage.setItem(environment.jwtTokenKey, response.accessToken);
+          this.getStorage().setItem(this.tokenKey, response.accessToken);
           this.currentUserSubject.next(response);
         })
       );
@@ -38,11 +58,23 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem(environment.jwtTokenKey);
+    this.getStorage().removeItem(this.tokenKey);
     this.currentUserSubject.next(null);
   }
 
+  getToken(): string | null {
+    return this.getStorage().getItem(this.tokenKey);
+  }
+
   isAuthenticated(): boolean {
-    return !!localStorage.getItem(environment.jwtTokenKey);
+    return !!this.getToken();
+  }
+
+  getCurrentUser(): JwtResponse | null {
+    return this.currentUserSubject.value;
+  }
+
+  setStorageType(type: 'localStorage' | 'sessionStorage'): void {
+    this.storageType = type;
   }
 }
