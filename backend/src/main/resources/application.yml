@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: archipel-libre
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/archipellibre
+    username: ${DB_USERNAME:archipellibre}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        jdbc:
+          time_zone: UTC
+
+  jackson:
+    time-zone: UTC
+    serialization:
+      write-dates-as-timestamps: false
+
+server:
+  port: 8080
+  servlet:
+    context-path: /
+
+# JWT Configuration
+app:
+  jwt:
+    secret: ${JWT_SECRET:YourSuperSecretKeyForJWTTokenGenerationMustBe256BitsOrMoreForHS512Algorithm}
+    expiration: 86400000 # 24 hours in milliseconds
+
+# API Documentation
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+
+# Logging
+logging:
+  level:
+    com.archipellibre: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE

@@ -1,0 +1,18 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/archipellibre_dev
+    username: ${DB_USERNAME:dev_user}
+    password: ${DB_PASSWORD:dev_password}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+logging:
+  level:
+    com.archipellibre: DEBUG
