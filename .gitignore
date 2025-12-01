@@ -381,4 +381,45 @@ data/processed/
 # ============================================================================
 # Project Specific
 # ============================================================================
-# Add project-specific ignores below
+
+# Maven (Java Backend)
+target/
+.m2/
+.mvn/
+mvnw
+mvnw.cmd
+
+# Angular CLI (Frontend)
+.angular/
+dist/
+*.lcov
+.nyc_output/
+
+# Environment variables - Local development
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE specific
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# System files
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Build outputs
+build/
+out/
+dist/
