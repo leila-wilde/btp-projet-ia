@@ -32,8 +32,8 @@ server:
 # JWT Configuration
 app:
   jwt:
-    secret: ${JWT_SECRET:YourSuperSecretKeyForJWTTokenGenerationMustBe256BitsOrMoreForHS512Algorithm}
-    expiration: 86400000 # 24 hours in milliseconds
+    secret: ${JWT_SECRET:}
+    expiration: ${JWT_EXPIRATION:86400000} # 24 hours in milliseconds
 
 # API Documentation
 springdoc:

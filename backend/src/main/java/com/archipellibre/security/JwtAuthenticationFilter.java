@@ -42,6 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+        } catch (io.jsonwebtoken.JwtException ex) {
+            logger.error("JWT token validation failed: {}", ex.getMessage());
+        } catch (org.springframework.security.core.userdetails.UsernameNotFoundException ex) {
+            logger.error("User not found in database: {}", ex.getMessage());
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
