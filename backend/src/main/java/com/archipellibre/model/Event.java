@@ -51,10 +51,12 @@ public class Event {
     private String imageUrl;
 
     @Column(nullable = false)
+    @Builder.Default
     private Integer maxParticipants = 0; // 0 means unlimited
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private EventStatus status = EventStatus.SCHEDULED;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

@@ -79,7 +79,8 @@ public class AuthController {
                 .active(true)
                 .build();
 
-        userRepository.save(user);
+        @SuppressWarnings({"null", "unused"})
+        var unused = userRepository.save(user);
 
         return ResponseEntity.status(201).body(new ApiResponse(true, "User registered successfully"));
     }
