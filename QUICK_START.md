@@ -65,8 +65,8 @@ docker-compose up -d
 ## 📚 Full Guides
 
 - **Development**: See [DEVELOPMENT.md](DEVELOPMENT.md)
-- **Deployment**: See [DEPLOYMENT.md](DEPLOYMENT.md)
-- **Testing**: See [TESTING.md](TESTING.md)
+- **Testing & Deployment**: See [TESTING_DEPLOYMENT.md](TESTING_DEPLOYMENT.md)
+- **Architecture**: See [ARCHITECTURE.md](ARCHITECTURE.md)
 
 ---
 

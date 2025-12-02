@@ -12,7 +12,7 @@
 └────────────────┬────────────────────────────────────────┘
                  │ REST API with JWT
 ┌────────────────▼────────────────────────────────────────┐
-│                BACKEND (Spring Boot 3.2)                │
+│                BACKEND (Spring Boot 3.5.0)              │
 │  http://localhost:8080                                  │
 │  - REST Controllers                                     │
 │  - Services (Business Logic)                            │

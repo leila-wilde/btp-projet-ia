@@ -39,7 +39,7 @@ docker-compose up -d
 
 ### Tech Stack
 
-- **Backend**: Java 21, Spring Boot 3.2, PostgreSQL 15
+- **Backend**: Java 21, Spring Boot 3.5.0, PostgreSQL 15
 - **Frontend**: Angular 17, NgRx, Material Design
 - **DevOps**: Docker, Docker Compose, GitHub Actions
 - **Testing**: JUnit 5, Jasmine/Karma
@@ -130,9 +130,8 @@ docker exec -it archipellibre-db psql -U archipellibre -d archipellibre
 
 ---
 
-**Project Timeline**: MVP launch in 4 days  
 **License**: Proprietary - L'Archipel Libre
 
 ---
 
-**Last Updated**: December 1, 2025
+**Last Updated**: December 2, 2025
