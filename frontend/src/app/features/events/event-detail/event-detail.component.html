@@ -1,0 +1,150 @@
+<div class="event-detail-container">
+  <button mat-icon-button class="back-button" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div *ngIf="loading" class="loading-spinner">
+    <mat-spinner></mat-spinner>
+  </div>
+
+  <div *ngIf="error" class="error-message">
+    {{ error }}
+  </div>
+
+  <div *ngIf="!loading && event" class="event-detail">
+    <mat-card class="event-header-card">
+      <img *ngIf="event.imageUrl" [src]="event.imageUrl" alt="{{ event.title }}" class="event-header-image">
+      <div class="event-header-overlay">
+        <h1>{{ event.title }}</h1>
+        <mat-chip-set>
+          <mat-chip [ngClass]="'status-' + event.status.toLowerCase()">
+            {{ event.status }}
+          </mat-chip>
+        </mat-chip-set>
+      </div>
+    </mat-card>
+
+    <div class="event-content">
+      <mat-card class="event-info">
+        <h2>Event Details</h2>
+
+        <div class="info-section">
+          <h3>Description</h3>
+          <p>{{ event.description }}</p>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <mat-icon>calendar_today</mat-icon>
+            <div>
+              <h4>Start Date & Time</h4>
+              <p>{{ formatDate(event.startTime) }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>schedule</mat-icon>
+            <div>
+              <h4>End Date & Time</h4>
+              <p>{{ formatDate(event.endTime) }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>location_on</mat-icon>
+            <div>
+              <h4>Location</h4>
+              <p>{{ event.location || 'TBD' }}</p>
+            </div>
+          </div>
+
+          <div class="info-item">
+            <mat-icon>person</mat-icon>
+            <div>
+              <h4>Organizer</h4>
+              <p>{{ event.organizer.username }}</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="participation-info">
+          <h3>Participation</h3>
+          <div class="participation-stats">
+            <div class="stat">
+              <span class="stat-value">{{ event.participants?.length || 0 }}</span>
+              <span class="stat-label">Registered</span>
+            </div>
+            <span class="stat-separator">/</span>
+            <div class="stat">
+              <span class="stat-value">{{ event.maxParticipants }}</span>
+              <span class="stat-label">Max Capacity</span>
+            </div>
+            <span class="stat-separator">=</span>
+            <div class="stat" [ngClass]="{ 'available': !isEventFull(), 'full': isEventFull() }">
+              <span class="stat-value">{{ getAvailableSpots() }}</span>
+              <span class="stat-label">Available Spots</span>
+            </div>
+          </div>
+
+          <div class="availability-bar">
+            <div class="filled" [style.width.%]="(event.participants?.length || 0) / event.maxParticipants * 100"></div>
+          </div>
+        </div>
+
+        <div *ngIf="event.participants && event.participants.length > 0" class="participants-section">
+          <h3>Participants</h3>
+          <div class="participants-list">
+            <div *ngFor="let participant of event.participants" class="participant-item">
+              <mat-icon>account_circle</mat-icon>
+              <span>{{ participant.username }}</span>
+            </div>
+          </div>
+        </div>
+      </mat-card>
+
+      <mat-card class="event-actions">
+        <div class="action-buttons">
+          <button *ngIf="canJoin()" 
+                  mat-raised-button 
+                  color="primary" 
+                  (click)="joinEvent()"
+                  [disabled]="registering">
+            <mat-icon *ngIf="!registering">add</mat-icon>
+            <mat-spinner *ngIf="registering" diameter="20"></mat-spinner>
+            {{ registering ? 'Joining...' : 'Join Event' }}
+          </button>
+
+          <button *ngIf="isRegistered && !registering" 
+                  mat-stroked-button 
+                  (click)="leaveEvent()"
+                  [disabled]="registering">
+            <mat-icon>remove</mat-icon>
+            Leave Event
+          </button>
+
+          <div *ngIf="isEventFull() && !isRegistered" class="event-full-notice">
+            Event is at full capacity
+          </div>
+        </div>
+
+        <div class="status-badge">
+          <mat-icon [ngClass]="'status-icon-' + event.status.toLowerCase()">
+            <span *ngIf="event.status === 'SCHEDULED'">event_note</span>
+            <span *ngIf="event.status === 'IN_PROGRESS'">play_circle_filled</span>
+            <span *ngIf="event.status === 'COMPLETED'">check_circle</span>
+            <span *ngIf="event.status === 'CANCELLED'">cancel</span>
+          </mat-icon>
+          <span>{{ event.status }}</span>
+        </div>
+      </mat-card>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && !event" class="not-found">
+    <mat-icon>search_off</mat-icon>
+    <p>Event not found</p>
+    <button mat-raised-button color="primary" (click)="goBack()">
+      Back to Events
+    </button>
+  </div>
+</div>

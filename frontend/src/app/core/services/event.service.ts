@@ -1,8 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { Event, CreateEventRequest, EventRegistration } from '../../models/domain.model';
+import { Event, CreateEventRequest, EventRegistration, PaginatedResponse } from '../../models/domain.model';
+
+export interface EventFilterOptions {
+  status?: string;
+  page?: number;
+  size?: number;
+  sort?: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +20,21 @@ export class EventService {
   constructor(private http: HttpClient) {}
 
   /**
-   * Get all events
+   * Get all events with pagination and filtering
    */
-  getAllEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>(this.apiUrl);
+  getAllEvents(filter?: EventFilterOptions): Observable<PaginatedResponse<Event>> {
+    let params = new HttpParams();
+    
+    if (filter) {
+      if (filter.status) params = params.set('status', filter.status);
+      if (filter.page !== undefined) params = params.set('page', filter.page.toString());
+      if (filter.size !== undefined) params = params.set('size', filter.size.toString());
+      if (filter.sort) params = params.set('sort', filter.sort);
+    } else {
+      params = params.set('page', '0').set('size', '10');
+    }
+
+    return this.http.get<PaginatedResponse<Event>>(this.apiUrl, { params });
   }
 
   /**
@@ -64,14 +82,53 @@ export class EventService {
   /**
    * Get events for current user
    */
-  getUserEvents(): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.apiUrl}/user/registered`);
+  getUserEvents(page = 0, size = 10): Observable<PaginatedResponse<Event>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PaginatedResponse<Event>>(`${this.apiUrl}/user/registered`, { params });
   }
 
   /**
    * Get events by status
    */
-  getEventsByStatus(status: string): Observable<Event[]> {
-    return this.http.get<Event[]>(`${this.apiUrl}?status=${status}`);
+  getEventsByStatus(status: string, page = 0, size = 10): Observable<PaginatedResponse<Event>> {
+    const params = new HttpParams()
+      .set('status', status)
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PaginatedResponse<Event>>(this.apiUrl, { params });
+  }
+
+  /**
+   * Get upcoming events
+   */
+  getUpcomingEvents(page = 0, size = 10): Observable<PaginatedResponse<Event>> {
+    const params = new HttpParams()
+      .set('page', page.toString())
+      .set('size', size.toString());
+    return this.http.get<PaginatedResponse<Event>>(`${this.apiUrl}/upcoming`, { params });
+  }
+
+  /**
+   * Check if user is registered for event
+   */
+  isUserRegistered(eventId: string): boolean {
+    // This will be implemented with state management
+    return false;
+  }
+
+  /**
+   * Get available spots in event
+   */
+  getAvailableSpots(event: Event): number {
+    return event.maxParticipants - (event.participants?.length || 0);
+  }
+
+  /**
+   * Check if event is full
+   */
+  isEventFull(event: Event): boolean {
+    return this.getAvailableSpots(event) <= 0;
   }
 }
