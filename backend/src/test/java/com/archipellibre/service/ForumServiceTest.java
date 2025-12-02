@@ -32,6 +32,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @Transactional
 @DisplayName("ForumService Integration Tests")
+@SuppressWarnings("null")
 class ForumServiceTest {
 
     @Autowired
@@ -167,7 +168,7 @@ class ForumServiceTest {
     @DisplayName("Should get pinned threads")
     void testGetPinnedThreads() {
         ForumThread thread1 = createTestThread();
-        ForumThread thread2 = createTestThread();
+        createTestThread(); // Create additional thread that won't be pinned
         
         forumService.pinThread(thread1.getId());
 

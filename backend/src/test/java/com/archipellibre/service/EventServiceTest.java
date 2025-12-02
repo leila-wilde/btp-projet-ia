@@ -30,6 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @Transactional
 @DisplayName("EventService Integration Tests")
+@SuppressWarnings("null")
 class EventServiceTest {
 
     @Autowired
@@ -174,7 +175,7 @@ class EventServiceTest {
     @Test
     @DisplayName("Should get events by status")
     void testGetEventsByStatus() {
-        Event event1 = createTestEvent();
+        createTestEvent(); // Create event with SCHEDULED status
         Event event2 = createTestEvent();
         event2.setStatus(EventStatus.COMPLETED);
         eventRepository.save(event2);
@@ -190,7 +191,7 @@ class EventServiceTest {
     @Test
     @DisplayName("Should get events by organizer")
     void testGetEventsByOrganizer() {
-        Event event1 = createTestEvent();
+        createTestEvent(); // Create event with default organizer
 
         User otherOrganizer = User.builder()
                 .username("other_org")

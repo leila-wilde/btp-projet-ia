@@ -1,6 +1,5 @@
 package com.archipellibre.service;
 
-import com.archipellibre.dto.ChangePasswordRequest;
 import com.archipellibre.dto.UserProfileRequest;
 import com.archipellibre.exception.BusinessLogicException;
 import com.archipellibre.exception.ResourceNotFoundException;
@@ -25,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ActiveProfiles("test")
 @Transactional
 @DisplayName("UserService Integration Tests")
+@SuppressWarnings("null")
 class UserServiceTest {
 
     @Autowired
