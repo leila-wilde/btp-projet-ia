@@ -49,7 +49,7 @@ public class AuthController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
 
         return ResponseEntity.ok(new JwtResponse(
                 jwt,
@@ -79,7 +79,8 @@ public class AuthController {
                 .active(true)
                 .build();
 
-        userRepository.save(user);
+        @SuppressWarnings({"null", "unused"})
+        var unused = userRepository.save(user);
 
         return ResponseEntity.status(201).body(new ApiResponse(true, "User registered successfully"));
     }

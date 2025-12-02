@@ -43,9 +43,11 @@ public class ForumThread {
     private String category;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean pinned = false;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean locked = false;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

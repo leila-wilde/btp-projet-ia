@@ -46,9 +46,11 @@ public class WorkshopProposal {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @Builder.Default
     private ProposalStatus status = ProposalStatus.PENDING;
 
     @Column(nullable = false)
+    @Builder.Default
     private Integer upvotes = 0;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)

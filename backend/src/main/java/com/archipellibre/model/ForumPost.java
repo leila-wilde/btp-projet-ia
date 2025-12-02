@@ -39,6 +39,7 @@ public class ForumPost {
     private ForumThread thread;
 
     @Column(nullable = false)
+    @Builder.Default
     private Boolean edited = false;
 
     @CreationTimestamp

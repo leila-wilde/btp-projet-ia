@@ -5,7 +5,6 @@ import com.archipellibre.dto.RegisterRequest;
 import com.archipellibre.model.User;
 import com.archipellibre.model.UserRole;
 import com.archipellibre.repository.UserRepository;
-import com.archipellibre.security.JwtTokenProvider;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,6 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 @Transactional
+@SuppressWarnings("null")
 class AuthControllerTest {
 
     @Autowired
@@ -38,9 +38,6 @@ class AuthControllerTest {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtTokenProvider tokenProvider;
 
     private User testUser;
 

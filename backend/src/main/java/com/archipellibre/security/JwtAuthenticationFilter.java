@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+ import lombok.NonNull;
 
 import java.io.IOException;
 
@@ -27,8 +28,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private UserDetailsServiceImpl userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, 
-                                    FilterChain filterChain) throws ServletException, IOException {
+    @SuppressWarnings("null")
+    protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, 
+                                    @NonNull FilterChain filterChain) throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
 
@@ -42,6 +44,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
+        } catch (io.jsonwebtoken.JwtException ex) {
+            logger.error("JWT token validation failed: {}", ex.getMessage());
+        } catch (org.springframework.security.core.userdetails.UsernameNotFoundException ex) {
+            logger.error("User not found in database: {}", ex.getMessage());
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
         }
