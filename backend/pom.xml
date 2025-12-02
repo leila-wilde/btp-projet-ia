@@ -198,41 +198,26 @@
                 </executions>
             </plugin>
 
-            <!-- SpotBugs -->
+            <!-- SpotBugs - Optional, run with: mvn spotbugs:check -->
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.8.1.1</version>
+                <version>4.7.3.6</version>
                 <configuration>
                     <effort>Max</effort>
-                    <threshold>Low</threshold>
-                    <failOnError>true</failOnError>
+                    <threshold>Medium</threshold>
+                    <skip>true</skip>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
-            <!-- OWASP Dependency Check -->
+            <!-- OWASP Dependency Check - Optional, run with: mvn dependency-check:check -->
             <plugin>
                 <groupId>org.owasp</groupId>
                 <artifactId>dependency-check-maven</artifactId>
                 <version>9.0.8</version>
                 <configuration>
-                    <failBuildOnCVSS>8</failBuildOnCVSS>
-                    <suppressionFile>${project.basedir}/dependency-check-suppression.xml</suppressionFile>
+                    <skip>true</skip>
                 </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

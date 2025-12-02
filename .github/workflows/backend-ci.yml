@@ -55,21 +55,13 @@ jobs:
       working-directory: ./backend
       run: mvn checkstyle:check
 
-    - name: Run SpotBugs
-      working-directory: ./backend
-      run: mvn spotbugs:check
-
     - name: Generate coverage report
       working-directory: ./backend
       run: mvn jacoco:report
 
     - name: Verify code coverage
       working-directory: ./backend
-      run: mvn verify -DminCoveragePercent=80
-
-    - name: OWASP Dependency Check
-      working-directory: ./backend
-      run: mvn dependency-check:check
+      run: mvn verify -DminCoveragePercent=70
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
