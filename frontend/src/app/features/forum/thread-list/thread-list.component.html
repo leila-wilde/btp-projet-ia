@@ -1,0 +1,158 @@
+<div class="forum-container">
+  <div class="forum-header">
+    <h1>Forum Discussions</h1>
+    <button 
+      *ngIf="isAuthenticated"
+      mat-raised-button 
+      color="primary" 
+      (click)="navigateToCreate()"
+      class="create-thread-btn">
+      <mat-icon>add</mat-icon>
+      Create Thread
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <mat-card class="filters-card">
+    <div class="filters-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+          <mat-option *ngFor="let cat of categories" [value]="cat.value">
+            {{ cat.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Search threads...</mat-label>
+        <input 
+          matInput 
+          [(ngModel)]="searchQuery" 
+          (input)="onSearchChange()"
+          placeholder="Search by title or content">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+  </mat-card>
+
+  <!-- Error Message -->
+  <mat-card *ngIf="error" class="error-card">
+    <mat-icon color="warn">error</mat-icon>
+    <span>{{ error }}</span>
+  </mat-card>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading forum threads...</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && filteredThreads.length === 0" class="empty-state">
+    <mat-icon>forum</mat-icon>
+    <p>No threads found</p>
+    <button 
+      *ngIf="isAuthenticated"
+      mat-stroked-button 
+      color="primary"
+      (click)="navigateToCreate()">
+      Create the first thread
+    </button>
+  </div>
+
+  <!-- Threads List -->
+  <div *ngIf="!loading && filteredThreads.length > 0" class="threads-list">
+    <mat-card 
+      *ngFor="let thread of filteredThreads" 
+      [ngClass]="getThreadStatusClass(thread)"
+      class="thread-card">
+      <mat-card-content>
+        <div class="thread-header">
+          <div class="thread-title-section">
+            <h2 class="thread-title" (click)="navigateToThread(thread.id)">
+              {{ thread.title }}
+            </h2>
+            <div class="thread-badges">
+              <mat-chip *ngIf="thread.pinned" class="badge-pinned">
+                <mat-icon>push_pin</mat-icon>
+                Pinned
+              </mat-chip>
+              <mat-chip *ngIf="thread.locked" class="badge-locked">
+                <mat-icon>lock</mat-icon>
+                Locked
+              </mat-chip>
+            </div>
+          </div>
+          
+          <div class="thread-stats">
+            <div class="stat">
+              <mat-icon>forum</mat-icon>
+              <span>{{ thread.postCount }} posts</span>
+            </div>
+            <div class="stat">
+              <mat-icon>category</mat-icon>
+              <span>{{ thread.category }}</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="thread-preview">{{ thread.content | slice:0:200 }}...</p>
+
+        <div class="thread-footer">
+          <div class="thread-meta">
+            <span class="author">By {{ thread.creator.username }}</span>
+            <span class="date">{{ formatDate(thread.lastActivityAt) }}</span>
+          </div>
+
+          <div class="thread-actions">
+            <button 
+              mat-icon-button 
+              matTooltip="View Thread"
+              (click)="navigateToThread(thread.id)">
+              <mat-icon>chevron_right</mat-icon>
+            </button>
+
+            <button 
+              *ngIf="canModerate()"
+              mat-icon-button 
+              [matMenuTriggerFor]="moderationMenu"
+              matTooltip="Moderation Options">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            
+            <mat-menu #moderationMenu="matMenu">
+              <button 
+                mat-menu-item 
+                (click)="toggleThreadPin(thread.id)">
+                <mat-icon>{{ thread.pinned ? 'push_pin' : 'push_pin_outlined' }}</mat-icon>
+                <span>{{ thread.pinned ? 'Unpin' : 'Pin' }}</span>
+              </button>
+              <button 
+                mat-menu-item 
+                (click)="toggleThreadLock(thread.id)">
+                <mat-icon>{{ thread.locked ? 'lock_open' : 'lock' }}</mat-icon>
+                <span>{{ thread.locked ? 'Unlock' : 'Lock' }}</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button mat-menu-item class="danger-option">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Pagination -->
+  <mat-paginator
+    *ngIf="!loading && filteredThreads.length > 0"
+    [length]="totalElements"
+    [pageSize]="pageSize"
+    [pageIndex]="pageIndex"
+    [pageSizeOptions]="[5, 10, 25, 50]"
+    (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

@@ -1,0 +1,209 @@
+<div class="thread-detail-container">
+  <!-- Back Button -->
+  <button 
+    mat-icon-button 
+    (click)="goBack()" 
+    class="back-button">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading thread...</p>
+  </div>
+
+  <!-- Error Message -->
+  <mat-card *ngIf="error && !loading" class="error-card">
+    <mat-icon color="warn">error</mat-icon>
+    <span>{{ error }}</span>
+  </mat-card>
+
+  <!-- Thread Content -->
+  <div *ngIf="thread && !loading" class="thread-content">
+    <!-- Thread Header -->
+    <mat-card class="thread-header-card">
+      <mat-card-content>
+        <div class="thread-header">
+          <div class="header-title-section">
+            <h1 class="thread-title">{{ thread.title }}</h1>
+            <div class="thread-badges">
+              <mat-chip *ngIf="thread.pinned" class="badge-pinned">
+                <mat-icon>push_pin</mat-icon>
+                Pinned
+              </mat-chip>
+              <mat-chip *ngIf="thread.locked" class="badge-locked">
+                <mat-icon>lock</mat-icon>
+                Locked
+              </mat-chip>
+            </div>
+          </div>
+
+          <div class="header-actions">
+            <button 
+              *ngIf="canModerate()"
+              mat-icon-button 
+              [matMenuTriggerFor]="threadMenu"
+              matTooltip="Thread Options">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #threadMenu="matMenu">
+              <button 
+                mat-menu-item 
+                (click)="toggleThreadPin()">
+                <mat-icon>{{ thread.pinned ? 'push_pin' : 'push_pin_outlined' }}</mat-icon>
+                <span>{{ thread.pinned ? 'Unpin' : 'Pin' }}</span>
+              </button>
+              <button 
+                mat-menu-item 
+                (click)="toggleThreadLock()">
+                <mat-icon>{{ thread.locked ? 'lock_open' : 'lock' }}</mat-icon>
+                <span>{{ thread.locked ? 'Unlock' : 'Lock' }}</span>
+              </button>
+              <mat-divider></mat-divider>
+              <button 
+                mat-menu-item 
+                class="danger-option"
+                (click)="deleteThread()">
+                <mat-icon>delete</mat-icon>
+                <span>Delete</span>
+              </button>
+            </mat-menu>
+          </div>
+        </div>
+
+        <div class="thread-meta">
+          <span class="meta-item">
+            <mat-icon>person</mat-icon>
+            By {{ thread.creator.username }}
+          </span>
+          <span class="meta-item">
+            <mat-icon>access_time</mat-icon>
+            {{ formatDate(thread.createdAt) }}
+          </span>
+          <span class="meta-item">
+            <mat-icon>category</mat-icon>
+            {{ thread.category }}
+          </span>
+          <span class="meta-item">
+            <mat-icon>forum</mat-icon>
+            {{ thread.postCount }} replies
+          </span>
+        </div>
+
+        <mat-divider class="mt-2 mb-2"></mat-divider>
+
+        <div class="thread-body">
+          {{ thread.content }}
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Posts Section -->
+    <div class="posts-section">
+      <h2>Replies</h2>
+
+      <!-- Loading Posts -->
+      <div *ngIf="postsLoading" class="loading-posts">
+        <mat-spinner diameter="30"></mat-spinner>
+        <p>Loading replies...</p>
+      </div>
+
+      <!-- Empty Posts -->
+      <div *ngIf="!postsLoading && posts.length === 0" class="no-posts">
+        <mat-icon>comment_disabled</mat-icon>
+        <p>No replies yet. Be the first to reply!</p>
+      </div>
+
+      <!-- Posts List -->
+      <div *ngIf="!postsLoading && posts.length > 0" class="posts-list">
+        <mat-card *ngFor="let post of posts; let i = index" class="post-card">
+          <mat-card-content>
+            <div class="post-header">
+              <div class="post-author-info">
+                <span class="post-author">{{ post.author.username }}</span>
+                <span class="post-edited" *ngIf="post.edited">(edited)</span>
+              </div>
+              <div class="post-date">
+                {{ formatDate(post.createdAt) }}
+              </div>
+            </div>
+
+            <mat-divider class="post-divider"></mat-divider>
+
+            <div class="post-content">
+              {{ post.content }}
+            </div>
+
+            <div class="post-actions">
+              <button 
+                *ngIf="canEditPost(post)"
+                mat-icon-button 
+                matTooltip="Edit"
+                (click)="editPost(post)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button 
+                *ngIf="canEditPost(post)"
+                mat-icon-button 
+                matTooltip="Delete"
+                (click)="deletePost(post.id)">
+                <mat-icon color="warn">delete</mat-icon>
+              </button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Reply Form -->
+    <div *ngIf="!thread.locked" class="reply-section">
+      <h2>Add a Reply</h2>
+      
+      <div *ngIf="!isAuthenticated" class="login-prompt">
+        <p>Please log in to reply to this thread</p>
+        <button mat-raised-button color="primary" routerLink="/auth/login">
+          <mat-icon>login</mat-icon>
+          Log In
+        </button>
+      </div>
+
+      <mat-card *ngIf="isAuthenticated" class="reply-form-card">
+        <form [formGroup]="replyForm" (ngSubmit)="submitReply()">
+          <mat-form-field appearance="outline" class="reply-input">
+            <mat-label>Your Reply</mat-label>
+            <textarea 
+              matInput 
+              formControlName="content"
+              rows="6"
+              placeholder="Share your thoughts..."></textarea>
+            <mat-error *ngIf="replyForm.get('content')?.hasError('required')">
+              Reply content is required
+            </mat-error>
+            <mat-error *ngIf="replyForm.get('content')?.hasError('minlength')">
+              Reply must be at least 3 characters long
+            </mat-error>
+          </mat-form-field>
+
+          <div class="form-actions">
+            <button 
+              mat-raised-button 
+              color="primary"
+              type="submit"
+              [disabled]="!replyForm.valid || submittingReply">
+              <mat-icon *ngIf="!submittingReply">send</mat-icon>
+              <mat-spinner *ngIf="submittingReply" diameter="20"></mat-spinner>
+              {{ submittingReply ? 'Posting...' : 'Post Reply' }}
+            </button>
+          </div>
+        </form>
+      </mat-card>
+    </div>
+
+    <!-- Thread Locked Message -->
+    <mat-card *ngIf="thread.locked" class="locked-message">
+      <mat-icon>lock</mat-icon>
+      <p>This thread is locked. No new replies can be added.</p>
+    </mat-card>
+  </div>
+</div>
