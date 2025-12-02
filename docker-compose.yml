@@ -2,10 +2,7 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: archipellibre-db
-    environment:
-      POSTGRES_DB: archipellibre
-      POSTGRES_USER: archipellibre
-      POSTGRES_PASSWORD: changeme
+    env_file: .env
     ports:
       - "5433:5432"
     volumes:
@@ -17,17 +14,21 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 256M
+        reservations:
+          cpus: '0.5'
+          memory: 128M
 
   backend:
     build:
       context: ./backend
       dockerfile: Dockerfile
     container_name: archipellibre-backend
-    environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/archipellibre
-      SPRING_DATASOURCE_USERNAME: archipellibre
-      SPRING_DATASOURCE_PASSWORD: changeme
-      JWT_SECRET: YourSuperSecretKeyForJWTTokenGenerationMustBe256BitsOrMoreForHS512Algorithm
+    env_file: .env
     ports:
       - "8080:8080"
     depends_on:
@@ -36,6 +37,20 @@ services:
     networks:
       - archipellibre-network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 512M
+        reservations:
+          cpus: '0.5'
+          memory: 256M
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   frontend:
     build:
@@ -49,14 +64,25 @@ services:
     networks:
       - archipellibre-network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
 
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: archipellibre-pgadmin
-    environment:
-      PGADMIN_DEFAULT_EMAIL: admin@example.com
-      PGADMIN_DEFAULT_PASSWORD: admin
-      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    env_file: .env
     ports:
       - "5050:80"
     depends_on:
@@ -64,6 +90,14 @@ services:
     networks:
       - archipellibre-network
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 256M
+        reservations:
+          cpus: '0.25'
+          memory: 128M
 
 volumes:
   postgres_data:

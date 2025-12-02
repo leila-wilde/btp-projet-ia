@@ -51,11 +51,28 @@ jobs:
         SPRING_DATASOURCE_USERNAME: test_user
         SPRING_DATASOURCE_PASSWORD: test_password
 
+    - name: Run checkstyle
+      working-directory: ./backend
+      run: mvn checkstyle:check
+
+    - name: Run SpotBugs
+      working-directory: ./backend
+      run: mvn spotbugs:check
+
     - name: Generate coverage report
       working-directory: ./backend
       run: mvn jacoco:report
+
+    - name: Verify code coverage
+      working-directory: ./backend
+      run: mvn verify -DminCoveragePercent=80
+
+    - name: OWASP Dependency Check
+      working-directory: ./backend
+      run: mvn dependency-check:check
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
         files: ./backend/target/site/jacoco/jacoco.xml
+

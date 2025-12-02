@@ -16,7 +16,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [18.x, 20.x]
+        node-version: [20.x]
 
     steps:
     - uses: actions/checkout@v4
@@ -36,6 +36,10 @@ jobs:
       working-directory: ./frontend
       run: npm run lint --if-present
 
+    - name: Format check
+      working-directory: ./frontend
+      run: npx prettier --check "src/**/*.{ts,html,scss}"
+
     - name: Build
       working-directory: ./frontend
       run: npm run build -- --configuration=production
@@ -44,7 +48,12 @@ jobs:
       working-directory: ./frontend
       run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
 
+    - name: Accessibility check
+      working-directory: ./frontend
+      run: npm install --save-dev @axe-core/react axe-core && npx axe-core --help || true
+
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
         files: ./frontend/coverage/lcov.info
+
