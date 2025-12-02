@@ -51,7 +51,7 @@ jobs:
         SPRING_DATASOURCE_USERNAME: test_user
         SPRING_DATASOURCE_PASSWORD: test_password
 
-    - name: Run checkstyle
+    - name: Code quality check (Checkstyle)
       working-directory: ./backend
       run: mvn checkstyle:check
 
@@ -59,7 +59,7 @@ jobs:
       working-directory: ./backend
       run: mvn jacoco:report
 
-    - name: Verify code coverage
+    - name: Verify code coverage (70% minimum)
       working-directory: ./backend
       run: mvn verify -DminCoveragePercent=70
 
