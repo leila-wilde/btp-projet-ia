@@ -278,6 +278,9 @@ public class ForumController {
     }
 
     private UserResponse mapUserToResponse(com.archipellibre.model.User user) {
+        if (user == null) {
+            return null;
+        }
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())

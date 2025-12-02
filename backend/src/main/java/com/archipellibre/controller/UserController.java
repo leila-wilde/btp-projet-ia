@@ -170,6 +170,9 @@ public class UserController {
     // ===== HELPER METHOD =====
 
     private UserResponse mapToResponse(User user) {
+        if (user == null) {
+            return null;
+        }
         return UserResponse.builder()
                 .id(user.getId())
                 .username(user.getUsername())
