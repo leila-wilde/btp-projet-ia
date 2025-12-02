@@ -23,6 +23,7 @@ import java.util.UUID;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+@SuppressWarnings("null")
 public class EventService {
 
     private final EventRepository eventRepository;

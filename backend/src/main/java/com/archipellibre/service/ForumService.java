@@ -26,6 +26,7 @@ import java.util.UUID;
 @Transactional
 @Slf4j
 @RequiredArgsConstructor
+@SuppressWarnings("null")
 public class ForumService {
 
     private final ForumThreadRepository threadRepository;
@@ -338,7 +339,7 @@ public class ForumService {
      * Flag post for moderation (report inappropriate content)
      */
     public void flagPostForModeration(UUID postId, String reason) {
-        ForumPost post = getPostById(postId);
+        getPostById(postId); // Verify post exists
         // In a real application, this would create a moderation ticket
         log.warn("Post flagged for moderation: {} - Reason: {}", postId, reason);
     }
