@@ -13,9 +13,9 @@ describe('SystemStatisticsComponent', () => {
   let forumService: jasmine.SpyObj<ForumService>;
 
   beforeEach(async () => {
-    const userServiceSpy = jasmine.createSpyObj('UserService', ['getUsers']);
-    const eventServiceSpy = jasmine.createSpyObj('EventService', ['getEvents']);
-    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getThreads']);
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['getAllUsers']);
+    const eventServiceSpy = jasmine.createSpyObj('EventService', ['getAllEvents']);
+    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getAllThreads']);
 
     await TestBed.configureTestingModule({
       imports: [SystemStatisticsComponent],
@@ -30,9 +30,9 @@ describe('SystemStatisticsComponent', () => {
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
 
-    userService.getUsers.and.returnValue(of({ total: 100, data: [] }));
-    eventService.getEvents.and.returnValue(of({ total: 50, data: [] }));
-    forumService.getThreads.and.returnValue(of({ total: 30, data: [] }));
+    userService.getAllUsers.and.returnValue(of({ total: 100, data: [], page: 0, pageSize: 10, hasMore: false }));
+    eventService.getAllEvents.and.returnValue(of({ total: 50, data: [], page: 0, pageSize: 10, hasMore: false }));
+    forumService.getAllThreads.and.returnValue(of({ total: 30, data: [], page: 0, pageSize: 10, hasMore: false }));
 
     fixture = TestBed.createComponent(SystemStatisticsComponent);
     component = fixture.componentInstance;
@@ -46,9 +46,9 @@ describe('SystemStatisticsComponent', () => {
     fixture.detectChanges();
 
     setTimeout(() => {
-      expect(userService.getUsers).toHaveBeenCalled();
-      expect(eventService.getEvents).toHaveBeenCalled();
-      expect(forumService.getThreads).toHaveBeenCalled();
+      expect(userService.getAllUsers).toHaveBeenCalled();
+      expect(eventService.getAllEvents).toHaveBeenCalled();
+      expect(forumService.getAllThreads).toHaveBeenCalled();
       done();
     }, 100);
   });

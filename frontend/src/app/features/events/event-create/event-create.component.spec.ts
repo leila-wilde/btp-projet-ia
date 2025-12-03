@@ -131,8 +131,8 @@ describe('EventCreateComponent', () => {
       expect(capacityField?.hasError('max')).toBe(true);
 
       capacityField?.setValue(50);
-      expect(maxField?.hasError('min')).toBe(false);
-      expect(maxField?.hasError('max')).toBe(false);
+      expect(capacityField?.hasError('min')).toBe(false);
+      expect(capacityField?.hasError('max')).toBe(false);
     });
   });
 

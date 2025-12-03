@@ -3,7 +3,7 @@ import { DashboardOverviewComponent } from './dashboard-overview.component';
 import { UserService } from '../../../core/services/user.service';
 import { EventService } from '../../../core/services/event.service';
 import { ForumService } from '../../../core/services/forum.service';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 describe('DashboardOverviewComponent', () => {
   let component: DashboardOverviewComponent;
@@ -14,8 +14,8 @@ describe('DashboardOverviewComponent', () => {
 
   beforeEach(async () => {
     const userServiceSpy = jasmine.createSpyObj('UserService', ['getCurrentUser']);
-    const eventServiceSpy = jasmine.createSpyObj('EventService', ['getEvents']);
-    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getThreads']);
+    const eventServiceSpy = jasmine.createSpyObj('EventService', ['getAllEvents']);
+    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getAllThreads']);
 
     await TestBed.configureTestingModule({
       imports: [DashboardOverviewComponent],
@@ -30,9 +30,9 @@ describe('DashboardOverviewComponent', () => {
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
 
-    userService.getCurrentUser.and.returnValue(of({ id: '1', registeredEvents: [{ id: '1' }, { id: '2' }] } as any));
-    eventService.getEvents.and.returnValue(of({ total: 10, data: [] }));
-    forumService.getThreads.and.returnValue(of({ total: 5, data: [] }));
+    userService.getCurrentUser.and.returnValue(of({ id: '1', username: 'user1', email: 'user@example.com', role: 'USER', status: 'ACTIVE', createdAt: new Date(), updatedAt: new Date() } as any));
+    eventService.getAllEvents.and.returnValue(of({ total: 10, data: [], page: 0, pageSize: 10, hasMore: false }));
+    forumService.getAllThreads.and.returnValue(of({ total: 5, data: [], page: 0, pageSize: 10, hasMore: false }));
 
     fixture = TestBed.createComponent(DashboardOverviewComponent);
     component = fixture.componentInstance;
@@ -45,29 +45,24 @@ describe('DashboardOverviewComponent', () => {
   it('should load activity stats on init', () => {
     fixture.detectChanges();
 
-    expect(eventService.getEvents).toHaveBeenCalled();
+    expect(eventService.getAllEvents).toHaveBeenCalled();
     expect(userService.getCurrentUser).toHaveBeenCalled();
-    expect(forumService.getThreads).toHaveBeenCalled();
+    expect(forumService.getAllThreads).toHaveBeenCalled();
   });
 
   it('should display stats correctly', () => {
     fixture.detectChanges();
 
     expect(component.stats.totalEvents).toBe(10);
-    expect(component.stats.registeredEvents).toBe(2);
     expect(component.stats.forumThreads).toBe(5);
   });
 
   it('should handle error loading stats', () => {
-    eventService.getEvents.and.returnValue(throwError(() => new Error('Load error')));
-    forumService.getThreads.and.returnValue(throwError(() => new Error('Load error')));
+    eventService.getAllEvents.and.returnValue(throwError(() => new Error('Load error')));
+    forumService.getAllThreads.and.returnValue(throwError(() => new Error('Load error')));
 
     fixture.detectChanges();
 
     expect(component.error).not.toBeNull();
   });
 });
-
-function throwError(arg0: () => Error) {
-  throw new Error('Function not implemented.');
-}

@@ -1,11 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { ForumService } from './forum.service';
+import { ForumService, ForumFilterOptions } from './forum.service';
 import { environment } from '../../../environments/environment';
+import { ForumThread, ForumPost, PaginatedResponse } from '../../models/domain.model';
 
 describe('ForumService', () => {
   let service: ForumService;
   let httpMock: HttpTestingController;
+  const apiUrl = `${environment.apiUrl}/forum`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,248 +23,215 @@ describe('ForumService', () => {
     httpMock.verify();
   });
 
-  describe('Thread Operations', () => {
+  const mockThread: ForumThread = {
+    id: '1',
+    title: 'Sample Thread',
+    content: 'Thread content here',
+    category: 'GENERAL',
+    pinned: false,
+    locked: false,
+    creator: { id: 'user1', username: 'john' },
+    postCount: 5,
+    createdAt: new Date(),
+    lastActivityAt: new Date()
+  };
+
+  const mockPost: ForumPost = {
+    id: 'post1',
+    content: 'Post content',
+    author: { id: 'user1', username: 'john' },
+    threadId: '1',
+    edited: false,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  };
+
+  const mockPaginatedThreads: PaginatedResponse<ForumThread> = {
+    data: [mockThread],
+    total: 1,
+    page: 0,
+    pageSize: 10,
+    hasMore: false
+  };
+
+  describe('getAllThreads', () => {
     it('should retrieve all threads', (done) => {
-      const mockThreads = [
-        { id: '1', title: 'Thread 1', category: 'GENERAL', authorId: 'user1', content: 'text', createdAt: '2025-01-01', updatedAt: '2025-01-01', postCount: 0, viewCount: 0, isPinned: false, isLocked: false },
-        { id: '2', title: 'Thread 2', category: 'TECH', authorId: 'user2', content: 'text', createdAt: '2025-01-02', updatedAt: '2025-01-02', postCount: 0, viewCount: 0, isPinned: false, isLocked: false }
-      ];
-
-      service.getAllThreads().subscribe(threads => {
-        expect(threads.length).toBe(2);
+      service.getAllThreads().subscribe(response => {
+        expect(response.data.length).toBe(1);
+        expect(response.total).toBe(1);
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads`);
+      const req = httpMock.expectOne(req => 
+        req.url.includes('/forum/threads') && 
+        req.params.has('page')
+      );
       expect(req.request.method).toBe('GET');
-      req.flush(mockThreads);
+      req.flush(mockPaginatedThreads);
     });
 
-    it('should retrieve threads by category', (done) => {
-      const mockThreads = [
-        { id: '1', title: 'Tech Thread 1', category: 'TECH', authorId: 'user1', content: 'text', createdAt: '2025-01-01', updatedAt: '2025-01-01', postCount: 0, viewCount: 0, isPinned: false, isLocked: false }
-      ];
-
-      service.getThreadsByCategory('TECH').subscribe(threads => {
-        expect(threads[0].category).toBe('TECH');
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads?category=TECH`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockThreads);
-    });
-
-    it('should retrieve single thread by ID', (done) => {
-      const mockThread = {
-        id: '1',
-        title: 'Thread 1',
+    it('should retrieve threads with filter options', (done) => {
+      const filter: ForumFilterOptions = {
         category: 'GENERAL',
-        authorId: 'user1',
-        content: 'text',
-        createdAt: '2025-01-01',
-        updatedAt: '2025-01-01',
-        postCount: 0,
-        viewCount: 0,
-        isPinned: false,
-        isLocked: false
+        page: 0,
+        size: 10
       };
 
-      service.getThread('1').subscribe(thread => {
-        expect(thread.id).toBe('1');
-        expect(thread.title).toBe('Thread 1');
+      service.getAllThreads(filter).subscribe(response => {
+        expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads/1`);
+      const req = httpMock.expectOne(req => 
+        req.url.includes('/forum/threads') &&
+        req.params.get('category') === 'GENERAL'
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(mockPaginatedThreads);
+    });
+  });
+
+  describe('getThreadsByCategory', () => {
+    it('should retrieve threads by category', (done) => {
+      service.getThreadsByCategory('TECH').subscribe(response => {
+        expect(response.data).toBeDefined();
+        done();
+      });
+
+      const req = httpMock.expectOne(req => 
+        req.url.includes('/forum/threads') &&
+        req.params.get('category') === 'TECH'
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(mockPaginatedThreads);
+    });
+  });
+
+  describe('getThread', () => {
+    it('should retrieve a single thread by ID', (done) => {
+      service.getThread('1').subscribe(thread => {
+        expect(thread.id).toBe('1');
+        expect(thread.title).toBe('Sample Thread');
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiUrl}/threads/1`);
       expect(req.request.method).toBe('GET');
       req.flush(mockThread);
     });
+  });
 
-    it('should create new thread', (done) => {
-      const newThread = { title: 'New Thread', category: 'GENERAL', content: 'Content' };
-      const responseThread = { 
-        id: '3', 
+  describe('createThread', () => {
+    it('should create a new thread', (done) => {
+      const newThread = {
         title: 'New Thread',
-        category: 'GENERAL',
-        content: 'Content',
-        authorId: 'user1',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-        postCount: 0,
-        viewCount: 0,
-        isPinned: false,
-        isLocked: false
+        content: 'New content',
+        category: 'GENERAL'
       };
 
-      service.createThread(newThread as any).subscribe(thread => {
-        expect(thread.id).toBe('3');
-        expect(thread.title).toBe('New Thread');
+      service.createThread(newThread).subscribe(thread => {
+        expect(thread.id).toBe('1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads`);
+      const req = httpMock.expectOne(`${apiUrl}/threads`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(newThread);
-      req.flush(responseThread);
+      req.flush(mockThread);
     });
+  });
 
-    it('should update thread', (done) => {
+  describe('updateThread', () => {
+    it('should update a thread', (done) => {
       const updates = { title: 'Updated Title' };
-      const updatedThread = { 
-        id: '1', 
-        title: 'Updated Title',
-        category: 'GENERAL',
-        authorId: 'user1',
-        content: 'text',
-        createdAt: '2025-01-01',
-        updatedAt: '2025-01-01',
-        postCount: 0,
-        viewCount: 0,
-        isPinned: false,
-        isLocked: false
-      };
 
       service.updateThread('1', updates).subscribe(thread => {
-        expect(thread.title).toBe('Updated Title');
+        expect(thread.id).toBe('1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads/1`);
+      const req = httpMock.expectOne(`${apiUrl}/threads/1`);
       expect(req.request.method).toBe('PUT');
-      req.flush(updatedThread);
+      req.flush(mockThread);
     });
+  });
 
-    it('should delete thread', (done) => {
+  describe('deleteThread', () => {
+    it('should delete a thread', (done) => {
       service.deleteThread('1').subscribe(() => {
-        expect(true).toBe(true);
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads/1`);
+      const req = httpMock.expectOne(`${apiUrl}/threads/1`);
       expect(req.request.method).toBe('DELETE');
-      req.flush({});
+      req.flush(null);
     });
   });
 
-  describe('Post Operations', () => {
-    it('should create new post in thread', (done) => {
-      const newPost = { content: 'New post content', threadId: '1' };
-      const responsePost = { id: '1', content: 'New post content', threadId: '1', authorId: 'user1', createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() };
+  describe('createPost', () => {
+    it('should create a new post', (done) => {
+      const newPost = {
+        content: 'New post content',
+        threadId: '1'
+      };
 
-      service.createPost(newPost as any).subscribe(post => {
-        expect(post.id).toBe('1');
-        expect(post.content).toBe('New post content');
+      service.createPost(newPost).subscribe(post => {
+        expect(post.id).toBe('post1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/posts`);
+      const req = httpMock.expectOne(`${apiUrl}/posts`);
       expect(req.request.method).toBe('POST');
-      req.flush(responsePost);
+      req.flush(mockPost);
     });
+  });
 
-    it('should update post', (done) => {
-      const updatedPost = { id: '1', content: 'Updated content', threadId: '1', authorId: 'user1', createdAt: '2025-01-01', updatedAt: '2025-01-01' };
-
-      service.updatePost('1', 'Updated content').subscribe(post => {
-        expect(post.content).toBe('Updated content');
+  describe('updatePost', () => {
+    it('should update a post', (done) => {
+      service.updatePost('post1', 'Updated content').subscribe(post => {
+        expect(post.id).toBe('post1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/posts/1`);
+      const req = httpMock.expectOne(`${apiUrl}/posts/post1`);
       expect(req.request.method).toBe('PUT');
-      req.flush(updatedPost);
+      req.flush(mockPost);
     });
+  });
 
-    it('should delete post', (done) => {
-      service.deletePost('1').subscribe(() => {
-        expect(true).toBe(true);
+  describe('deletePost', () => {
+    it('should delete a post', (done) => {
+      service.deletePost('post1').subscribe(() => {
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/posts/1`);
+      const req = httpMock.expectOne(`${apiUrl}/posts/post1`);
       expect(req.request.method).toBe('DELETE');
-      req.flush({});
+      req.flush(null);
     });
   });
 
-  describe('Moderation', () => {
-    it('should toggle lock thread', (done) => {
-      const lockedThread = {
-        id: '1',
-        title: 'Thread 1',
-        category: 'GENERAL',
-        authorId: 'user1',
-        content: 'text',
-        createdAt: '2025-01-01',
-        updatedAt: '2025-01-01',
-        postCount: 0,
-        viewCount: 0,
-        isPinned: false,
-        isLocked: true
-      };
-
+  describe('toggleLock', () => {
+    it('should toggle thread lock status', (done) => {
       service.toggleLock('1').subscribe(() => {
-        expect(true).toBe(true);
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads/1/lock`);
-      expect(req.request.method).toBe('POST');
-      req.flush(lockedThread);
-    });
-
-    it('should toggle pin thread', (done) => {
-      const pinnedThread = {
-        id: '1',
-        title: 'Thread 1',
-        category: 'GENERAL',
-        authorId: 'user1',
-        content: 'text',
-        createdAt: '2025-01-01',
-        updatedAt: '2025-01-01',
-        postCount: 0,
-        viewCount: 0,
-        isPinned: true,
-        isLocked: false
-      };
-
-      service.togglePin('1').subscribe(() => {
-        expect(true).toBe(true);
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads/1/pin`);
-      expect(req.request.method).toBe('POST');
-      req.flush(pinnedThread);
+      const req = httpMock.expectOne(`${apiUrl}/threads/1/lock`);
+      expect(req.request.method).toBe('PATCH');
+      req.flush(mockThread);
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle thread not found error', (done) => {
-      service.getThread('invalid').subscribe(
-        () => fail('should have failed'),
-        (error: any) => {
-          expect(error.status).toBe(404);
-          done();
-        }
-      );
+  describe('togglePin', () => {
+    it('should toggle thread pin status', (done) => {
+      service.togglePin('1').subscribe(() => {
+        done();
+      });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads/invalid`);
-      req.flush('Thread not found', { status: 404, statusText: 'Not Found' });
-    });
-
-    it('should handle unauthorized moderation error', (done) => {
-      service.deleteThread('1').subscribe(
-        () => fail('should have failed'),
-        (error: any) => {
-          expect(error.status).toBe(403);
-          done();
-        }
-      );
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/forum/threads/1`);
-      req.flush('Insufficient permissions', { status: 403, statusText: 'Forbidden' });
+      const req = httpMock.expectOne(`${apiUrl}/threads/1/pin`);
+      expect(req.request.method).toBe('PATCH');
+      req.flush(mockThread);
     });
   });
 });

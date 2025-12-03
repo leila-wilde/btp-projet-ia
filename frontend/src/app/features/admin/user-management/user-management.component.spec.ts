@@ -9,7 +9,7 @@ describe('UserManagementComponent', () => {
   let userService: jasmine.SpyObj<UserService>;
 
   beforeEach(async () => {
-    const userServiceSpy = jasmine.createSpyObj('UserService', ['getUsers']);
+    const userServiceSpy = jasmine.createSpyObj('UserService', ['getAllUsers']);
 
     await TestBed.configureTestingModule({
       imports: [UserManagementComponent],
@@ -27,6 +27,7 @@ describe('UserManagementComponent', () => {
           role: 'USER',
           status: 'ACTIVE',
           createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           id: '2',
@@ -35,12 +36,16 @@ describe('UserManagementComponent', () => {
           role: 'MODERATOR',
           status: 'ACTIVE',
           createdAt: new Date(),
+          updatedAt: new Date()
         },
       ],
       total: 2,
+      page: 0,
+      pageSize: 10,
+      hasMore: false
     };
 
-    userService.getUsers.and.returnValue(of(mockUsers as any));
+    userService.getAllUsers.and.returnValue(of(mockUsers));
 
     fixture = TestBed.createComponent(UserManagementComponent);
     component = fixture.componentInstance;
@@ -53,7 +58,7 @@ describe('UserManagementComponent', () => {
   it('should load users on init', () => {
     fixture.detectChanges();
 
-    expect(userService.getUsers).toHaveBeenCalled();
+    expect(userService.getAllUsers).toHaveBeenCalled();
   });
 
   it('should display users', () => {
@@ -68,7 +73,7 @@ describe('UserManagementComponent', () => {
     component.onSearch('test');
 
     setTimeout(() => {
-      expect(userService.getUsers).toHaveBeenCalled();
+      expect(userService.getAllUsers).toHaveBeenCalled();
       done();
     }, 400);
   });

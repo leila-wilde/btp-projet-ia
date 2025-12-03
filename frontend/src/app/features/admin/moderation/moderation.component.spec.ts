@@ -9,7 +9,7 @@ describe('ModerationComponent', () => {
   let forumService: jasmine.SpyObj<ForumService>;
 
   beforeEach(async () => {
-    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getThreads']);
+    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getAllThreads']);
 
     await TestBed.configureTestingModule({
       imports: [ModerationComponent],
@@ -18,7 +18,7 @@ describe('ModerationComponent', () => {
 
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
 
-    forumService.getThreads.and.returnValue(of({ data: [], total: 0 }));
+    forumService.getAllThreads.and.returnValue(of({ data: [], total: 0, page: 0, pageSize: 10, hasMore: false }));
 
     fixture = TestBed.createComponent(ModerationComponent);
     component = fixture.componentInstance;
@@ -31,7 +31,7 @@ describe('ModerationComponent', () => {
   it('should load flagged content on init', () => {
     fixture.detectChanges();
 
-    expect(forumService.getThreads).toHaveBeenCalled();
+    expect(forumService.getAllThreads).toHaveBeenCalled();
   });
 
   it('should calculate stats correctly', () => {
