@@ -46,10 +46,6 @@ jobs:
     - name: Run tests
       working-directory: ./backend
       run: mvn test -Dspring.profiles.active=test
-      env:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/archipellibre_test
-        SPRING_DATASOURCE_USERNAME: test_user
-        SPRING_DATASOURCE_PASSWORD: test_password
 
     - name: Code quality check (Checkstyle)
       working-directory: ./backend
