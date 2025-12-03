@@ -58,13 +58,13 @@ export class DashboardOverviewComponent implements OnInit, OnDestroy {
 
     // Load events
     this.eventService
-      .getEvents({ page: 1, size: 1 })
+      .getAllEvents({ page: 0, size: 1 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.stats.totalEvents = response.total || 0;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading events:', err);
           this.error = 'Failed to load event statistics';
           this.loading = false;
@@ -76,24 +76,24 @@ export class DashboardOverviewComponent implements OnInit, OnDestroy {
       .getCurrentUser()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (user) => {
-          this.stats.registeredEvents = user.registeredEvents?.length || 0;
+        next: (user: any) => {
+          this.stats.registeredEvents = user.registrations?.length || 0;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading user profile:', err);
         },
       });
 
     // Load forum threads
     this.forumService
-      .getThreads({ page: 1, size: 1 })
+      .getAllThreads({ page: 0, size: 1 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.stats.forumThreads = response.total || 0;
           this.loading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading forum stats:', err);
           this.error = 'Failed to load forum statistics';
           this.loading = false;

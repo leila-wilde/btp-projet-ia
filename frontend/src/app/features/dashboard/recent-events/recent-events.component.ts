@@ -45,14 +45,14 @@ export class RecentEventsComponent implements OnInit, OnDestroy {
     this.error = null;
 
     this.eventService
-      .getEvents({ page: 1, size: 5 })
+      .getUpcomingEvents(0, 5)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.recentEvents = response.data?.slice(0, 5) || [];
           this.loading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading recent events:', err);
           this.error = 'Failed to load recent events';
           this.loading = false;

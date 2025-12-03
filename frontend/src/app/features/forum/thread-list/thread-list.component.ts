@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ForumService } from '../../../core/services/forum.service';
-import { ForumThread } from '../../../models/forum.model';
+import { ForumThread } from '../../../models/domain.model';
 import { AuthService } from '../../../core/services/auth.service';
 
 interface ThreadCategory {
@@ -106,12 +106,12 @@ export class ThreadListComponent implements OnInit, OnDestroy {
       this.forumService.getThreadsByCategory(this.selectedCategory)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (threads: ForumThread[]) => {
-            this.threads = threads;
+          next: (response: any) => {
+            this.threads = response.data || [];
             this.applyFilters();
             this.loading = false;
           },
-          error: (err) => {
+          error: (err: any) => {
             this.error = 'Failed to load forum threads';
             this.loading = false;
             console.error('Error loading threads:', err);
@@ -121,12 +121,12 @@ export class ThreadListComponent implements OnInit, OnDestroy {
       this.forumService.getAllThreads()
         .pipe(takeUntil(this.destroy$))
         .subscribe({
-          next: (threads: ForumThread[]) => {
-            this.threads = threads;
+          next: (response: any) => {
+            this.threads = response.data || [];
             this.applyFilters();
             this.loading = false;
           },
-          error: (err) => {
+          error: (err: any) => {
             this.error = 'Failed to load forum threads';
             this.loading = false;
             console.error('Error loading threads:', err);

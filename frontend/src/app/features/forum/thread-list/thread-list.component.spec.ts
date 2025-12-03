@@ -4,7 +4,7 @@ import { ForumService } from '../../../core/services/forum.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { Router } from '@angular/router';
 import { of, BehaviorSubject } from 'rxjs';
-import { ForumThread } from '../../../models/forum.model';
+import { ForumThread } from '../../../models/domain.model';
 
 describe('ThreadListComponent', () => {
   let component: ThreadListComponent;

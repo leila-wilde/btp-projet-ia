@@ -13,7 +13,6 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
-import { MatSearchBarModule } from '@angular/material/search-bar';
 import { Subject } from 'rxjs';
 import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { UserService } from '../../../core/services/user.service';
@@ -101,15 +100,15 @@ export class UserManagementComponent implements OnInit, OnDestroy {
 
     // In a real app, pass filters to the service
     this.userService
-      .getUsers({ page: this.pageIndex + 1, size: this.pageSize })
+      .getAllUsers({ page: this.pageIndex + 1, size: this.pageSize })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.users = response.data || [];
           this.totalUsers = response.total || 0;
           this.loading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading users:', err);
           this.error = 'Failed to load users';
           this.loading = false;

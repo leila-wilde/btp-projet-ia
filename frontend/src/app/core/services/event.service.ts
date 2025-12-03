@@ -212,7 +212,7 @@ export class EventService {
    * Get available spots in event
    */
   getAvailableSpots(event: Event): number {
-    return event.maxParticipants - (event.participants?.length || 0);
+    return event.capacity - event.registeredCount;
   }
 
   /**

@@ -57,10 +57,10 @@ export class ForumStatsComponent implements OnInit, OnDestroy {
     this.error = null;
 
     this.forumService
-      .getThreads({ page: 1, size: 10 })
+      .getAllThreads({ page: 0, size: 10 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.stats.totalThreads = response.total || 0;
           this.stats.activeThreads = response.data?.filter((t: any) => t.status !== 'LOCKED').length || 0;
 
@@ -81,7 +81,7 @@ export class ForumStatsComponent implements OnInit, OnDestroy {
 
           this.loading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading forum stats:', err);
           this.error = 'Failed to load forum statistics';
           this.loading = false;

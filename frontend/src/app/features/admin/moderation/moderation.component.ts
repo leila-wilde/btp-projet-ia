@@ -76,16 +76,16 @@ export class ModerationComponent implements OnInit, OnDestroy {
     this.error = null;
 
     this.forumService
-      .getThreads({ page: 1, size: 100 })
+      .getAllThreads({ page: 1, size: 100 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           // In a real app, this would come from a dedicated moderation API
           this.flaggedContent = [];
           this.calculateStats();
           this.loading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading flagged content:', err);
           this.error = 'Failed to load moderation queue';
           this.loading = false;

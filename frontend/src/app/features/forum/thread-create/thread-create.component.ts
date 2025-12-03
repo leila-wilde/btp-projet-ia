@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ForumService } from '../../../core/services/forum.service';
-import { CreateThreadRequest, ForumThread } from '../../../models/forum.model';
+import { CreateThreadRequest, ForumThread } from '../../../models/domain.model';
 
 interface CategoryOption {
   value: string;

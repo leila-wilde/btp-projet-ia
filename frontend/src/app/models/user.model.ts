@@ -23,6 +23,7 @@ export interface JwtResponse {
   accessToken: string;
   refreshToken?: string;
   tokenType?: string;
+  id?: string;
   username: string;
   email: string;
   role: string;

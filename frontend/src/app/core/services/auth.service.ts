@@ -200,6 +200,13 @@ export class AuthService {
   }
 
   /**
+   * Check if user is logged in (alias for isAuthenticated)
+   */
+  isLoggedIn(): boolean {
+    return this.isAuthenticated();
+  }
+
+  /**
    * Get current user from subject
    */
   getCurrentUser(): JwtResponse | null {

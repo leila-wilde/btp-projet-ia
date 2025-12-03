@@ -5,7 +5,7 @@ import { of, BehaviorSubject } from 'rxjs';
 import { ThreadDetailComponent } from './thread-detail.component';
 import { ForumService } from '../../../core/services/forum.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ForumThread, ForumPost } from '../../../models/forum.model';
+import { ForumThread, ForumPost } from '../../../models/domain.model';
 
 describe('ThreadDetailComponent', () => {
   let component: ThreadDetailComponent;

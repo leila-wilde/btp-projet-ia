@@ -85,10 +85,10 @@ export class SystemStatisticsComponent implements OnInit, OnDestroy {
 
     // Load users
     this.userService
-      .getUsers({ page: 1, size: 1 })
+      .getAllUsers({ page: 1, size: 1 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.stats.totalUsers = response.total || 0;
           this.stats.activeUsers = Math.floor(this.stats.totalUsers * 0.7);
           this.checkAllLoaded(++loadedCount, totalRequests);
@@ -100,10 +100,10 @@ export class SystemStatisticsComponent implements OnInit, OnDestroy {
 
     // Load events
     this.eventService
-      .getEvents({ page: 1, size: 1 })
+      .getAllEvents({ page: 1, size: 1 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.stats.totalEvents = response.total || 0;
           this.stats.upcomingEvents = Math.floor(this.stats.totalEvents * 0.3);
           this.checkAllLoaded(++loadedCount, totalRequests);
@@ -115,10 +115,10 @@ export class SystemStatisticsComponent implements OnInit, OnDestroy {
 
     // Load forum
     this.forumService
-      .getThreads({ page: 1, size: 1 })
+      .getAllThreads({ page: 1, size: 1 })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           this.stats.totalThreads = response.total || 0;
           this.stats.totalPosts = Math.floor(this.stats.totalThreads * 5);
           this.checkAllLoaded(++loadedCount, totalRequests);

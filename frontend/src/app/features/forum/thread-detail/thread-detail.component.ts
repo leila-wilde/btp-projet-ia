@@ -16,7 +16,7 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ForumService } from '../../../core/services/forum.service';
 import { AuthService } from '../../../core/services/auth.service';
-import { ForumThread, ForumPost, CreatePostRequest } from '../../../models/forum.model';
+import { ForumThread, ForumPost, CreatePostRequest } from '../../../models/domain.model';
 
 @Component({
   selector: 'app-thread-detail',
@@ -97,7 +97,7 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe(user => {
         if (user) {
-          this.currentUserId = user.id;
+          this.currentUserId = user.id || '';
           this.userRole = user.role;
         }
       });
@@ -128,11 +128,11 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
     this.forumService.getThreadPosts(this.threadId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: (posts: ForumPost[]) => {
-          this.posts = posts;
+        next: (response: any) => {
+          this.posts = response.data || [];
           this.postsLoading = false;
         },
-        error: (err) => {
+        error: (err: any) => {
           console.error('Error loading posts:', err);
           this.postsLoading = false;
         }
@@ -187,7 +187,7 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (updatedPost: ForumPost) => {
-            const index = this.posts.findIndex(p => p.id === postId);
+            const index = this.posts.findIndex(p => p.id === post.id);
             if (index !== -1) {
               this.posts[index] = updatedPost;
             }

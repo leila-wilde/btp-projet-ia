@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 import { ThreadCreateComponent } from './thread-create.component';
 import { ForumService } from '../../../core/services/forum.service';
-import { ForumThread, CreateThreadRequest } from '../../../models/forum.model';
+import { ForumThread, CreateThreadRequest } from '../../../models/domain.model';
 
 describe('ThreadCreateComponent', () => {
   let component: ThreadCreateComponent;
