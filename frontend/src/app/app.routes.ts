@@ -18,11 +18,11 @@ import { EventCreateComponent } from './features/events/event-create/event-creat
 const authGuard = () => {
   const authService = inject(AuthService);
   const router = inject(Router);
-  
+
   if (authService.isAuthenticated()) {
     return true;
   }
-  
+
   router.navigate(['/auth/login']);
   return false;
 };
@@ -34,33 +34,33 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'admin',
     component: AdminComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [authGuard]
+    canActivate: [authGuard],
   },
   {
     path: 'events',
     children: [
       { path: '', component: EventListComponent },
       { path: 'create', component: EventCreateComponent, canActivate: [authGuard] },
-      { path: ':id', component: EventDetailComponent }
-    ]
+      { path: ':id', component: EventDetailComponent },
+    ],
   },
   {
     path: 'forum',
     children: [
       { path: '', component: ThreadListComponent },
       { path: 'create-thread', component: ThreadCreateComponent, canActivate: [authGuard] },
-      { path: 'threads/:id', component: ThreadDetailComponent }
-    ]
+      { path: 'threads/:id', component: ThreadDetailComponent },
+    ],
   },
-  { path: '**', redirectTo: '' }
+  { path: '**', redirectTo: '' },
 ];

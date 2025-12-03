@@ -12,7 +12,7 @@ describe('ForumService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [ForumService]
+      providers: [ForumService],
     });
 
     service = TestBed.inject(ForumService);
@@ -33,7 +33,7 @@ describe('ForumService', () => {
     creator: { id: 'user1', username: 'john' },
     postCount: 5,
     createdAt: new Date(),
-    lastActivityAt: new Date()
+    lastActivityAt: new Date(),
   };
 
   const mockPost: ForumPost = {
@@ -43,7 +43,7 @@ describe('ForumService', () => {
     threadId: '1',
     edited: false,
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 
   const mockPaginatedThreads: PaginatedResponse<ForumThread> = {
@@ -51,20 +51,19 @@ describe('ForumService', () => {
     total: 1,
     page: 0,
     pageSize: 10,
-    hasMore: false
+    hasMore: false,
   };
 
   describe('getAllThreads', () => {
     it('should retrieve all threads', (done) => {
-      service.getAllThreads().subscribe(response => {
+      service.getAllThreads().subscribe((response) => {
         expect(response.data.length).toBe(1);
         expect(response.total).toBe(1);
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url.includes('/forum/threads') && 
-        req.params.has('page')
+      const req = httpMock.expectOne(
+        (req) => req.url.includes('/forum/threads') && req.params.has('page')
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedThreads);
@@ -74,17 +73,16 @@ describe('ForumService', () => {
       const filter: ForumFilterOptions = {
         category: 'GENERAL',
         page: 0,
-        size: 10
+        size: 10,
       };
 
-      service.getAllThreads(filter).subscribe(response => {
+      service.getAllThreads(filter).subscribe((response) => {
         expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url.includes('/forum/threads') &&
-        req.params.get('category') === 'GENERAL'
+      const req = httpMock.expectOne(
+        (req) => req.url.includes('/forum/threads') && req.params.get('category') === 'GENERAL'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedThreads);
@@ -93,14 +91,13 @@ describe('ForumService', () => {
 
   describe('getThreadsByCategory', () => {
     it('should retrieve threads by category', (done) => {
-      service.getThreadsByCategory('TECH').subscribe(response => {
+      service.getThreadsByCategory('TECH').subscribe((response) => {
         expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url.includes('/forum/threads') &&
-        req.params.get('category') === 'TECH'
+      const req = httpMock.expectOne(
+        (req) => req.url.includes('/forum/threads') && req.params.get('category') === 'TECH'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedThreads);
@@ -109,7 +106,7 @@ describe('ForumService', () => {
 
   describe('getThread', () => {
     it('should retrieve a single thread by ID', (done) => {
-      service.getThread('1').subscribe(thread => {
+      service.getThread('1').subscribe((thread) => {
         expect(thread.id).toBe('1');
         expect(thread.title).toBe('Sample Thread');
         done();
@@ -126,10 +123,10 @@ describe('ForumService', () => {
       const newThread = {
         title: 'New Thread',
         content: 'New content',
-        category: 'GENERAL'
+        category: 'GENERAL',
       };
 
-      service.createThread(newThread).subscribe(thread => {
+      service.createThread(newThread).subscribe((thread) => {
         expect(thread.id).toBe('1');
         done();
       });
@@ -145,7 +142,7 @@ describe('ForumService', () => {
     it('should update a thread', (done) => {
       const updates = { title: 'Updated Title' };
 
-      service.updateThread('1', updates).subscribe(thread => {
+      service.updateThread('1', updates).subscribe((thread) => {
         expect(thread.id).toBe('1');
         done();
       });
@@ -172,10 +169,10 @@ describe('ForumService', () => {
     it('should create a new post', (done) => {
       const newPost = {
         content: 'New post content',
-        threadId: '1'
+        threadId: '1',
       };
 
-      service.createPost(newPost).subscribe(post => {
+      service.createPost(newPost).subscribe((post) => {
         expect(post.id).toBe('post1');
         done();
       });
@@ -188,7 +185,7 @@ describe('ForumService', () => {
 
   describe('updatePost', () => {
     it('should update a post', (done) => {
-      service.updatePost('post1', 'Updated content').subscribe(post => {
+      service.updatePost('post1', 'Updated content').subscribe((post) => {
         expect(post.id).toBe('post1');
         done();
       });

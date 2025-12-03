@@ -1,6 +1,6 @@
 /**
  * Core Services Index
- * 
+ *
  * This barrel file exports all core services for easy importing throughout the application.
  * These services handle authentication, HTTP communication, and business logic.
  */

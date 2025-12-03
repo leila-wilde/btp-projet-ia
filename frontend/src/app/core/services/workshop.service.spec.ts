@@ -12,7 +12,7 @@ describe('WorkshopService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [WorkshopService]
+      providers: [WorkshopService],
     });
 
     service = TestBed.inject(WorkshopService);
@@ -32,7 +32,7 @@ describe('WorkshopService', () => {
     votesCount: 10,
     status: 'PROPOSED',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 
   const mockPaginatedProposals: PaginatedResponse<WorkshopProposal> = {
@@ -40,20 +40,18 @@ describe('WorkshopService', () => {
     total: 1,
     page: 0,
     pageSize: 10,
-    hasMore: false
+    hasMore: false,
   };
 
   describe('getAllProposals', () => {
     it('should retrieve all workshop proposals', (done) => {
-      service.getAllProposals().subscribe(response => {
+      service.getAllProposals().subscribe((response) => {
         expect(response.data.length).toBe(1);
         expect(response.total).toBe(1);
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url === apiUrl && req.params.has('page')
-      );
+      const req = httpMock.expectOne((req) => req.url === apiUrl && req.params.has('page'));
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedProposals);
     });
@@ -62,17 +60,16 @@ describe('WorkshopService', () => {
       const filter: WorkshopFilterOptions = {
         status: 'PROPOSED',
         page: 0,
-        size: 10
+        size: 10,
       };
 
-      service.getAllProposals(filter).subscribe(response => {
+      service.getAllProposals(filter).subscribe((response) => {
         expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url === apiUrl && 
-        req.params.get('status') === 'PROPOSED'
+      const req = httpMock.expectOne(
+        (req) => req.url === apiUrl && req.params.get('status') === 'PROPOSED'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedProposals);
@@ -81,7 +78,7 @@ describe('WorkshopService', () => {
 
   describe('getProposal', () => {
     it('should retrieve a workshop proposal by ID', (done) => {
-      service.getProposal('workshop1').subscribe(proposal => {
+      service.getProposal('workshop1').subscribe((proposal) => {
         expect(proposal.id).toBe('workshop1');
         expect(proposal.title).toBe('Advanced Angular');
         done();
@@ -97,10 +94,10 @@ describe('WorkshopService', () => {
     it('should create a new workshop proposal', (done) => {
       const newProposal = {
         title: 'React Workshop',
-        description: 'Learn React'
+        description: 'Learn React',
       };
 
-      service.createProposal(newProposal).subscribe(proposal => {
+      service.createProposal(newProposal).subscribe((proposal) => {
         expect(proposal.id).toBe('workshop1');
         done();
       });
@@ -115,7 +112,7 @@ describe('WorkshopService', () => {
     it('should update a workshop proposal', (done) => {
       const updates = { title: 'Updated Title' };
 
-      service.updateProposal('workshop1', updates).subscribe(proposal => {
+      service.updateProposal('workshop1', updates).subscribe((proposal) => {
         expect(proposal.id).toBe('workshop1');
         done();
       });
@@ -153,7 +150,7 @@ describe('WorkshopService', () => {
 
   describe('approveProposal', () => {
     it('should approve a workshop proposal', (done) => {
-      service.approveProposal('workshop1').subscribe(proposal => {
+      service.approveProposal('workshop1').subscribe((proposal) => {
         expect(proposal.id).toBe('workshop1');
         done();
       });
@@ -166,7 +163,7 @@ describe('WorkshopService', () => {
 
   describe('rejectProposal', () => {
     it('should reject a workshop proposal', (done) => {
-      service.rejectProposal('workshop1').subscribe(proposal => {
+      service.rejectProposal('workshop1').subscribe((proposal) => {
         expect(proposal.id).toBe('workshop1');
         done();
       });

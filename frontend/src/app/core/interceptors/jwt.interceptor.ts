@@ -4,7 +4,7 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse
+  HttpErrorResponse,
 } from '@angular/common/http';
 import { Observable, throwError, BehaviorSubject } from 'rxjs';
 import { catchError, filter, take, switchMap } from 'rxjs/operators';
@@ -18,12 +18,7 @@ export class JwtInterceptor implements HttpInterceptor {
   private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
 
   // Public endpoints that don't require authentication
-  private readonly PUBLIC_ENDPOINTS = [
-    '/auth/login',
-    '/auth/register',
-    '/auth/public',
-    '/health'
-  ];
+  private readonly PUBLIC_ENDPOINTS = ['/auth/login', '/auth/register', '/auth/public', '/health'];
 
   constructor(
     private authService: AuthService,
@@ -34,7 +29,7 @@ export class JwtInterceptor implements HttpInterceptor {
    * Check if endpoint is public (doesn't require token)
    */
   private isPublicEndpoint(url: string): boolean {
-    return this.PUBLIC_ENDPOINTS.some(endpoint => url.includes(endpoint));
+    return this.PUBLIC_ENDPOINTS.some((endpoint) => url.includes(endpoint));
   }
 
   /**
@@ -47,7 +42,7 @@ export class JwtInterceptor implements HttpInterceptor {
     }
 
     return next.handle(request).pipe(
-      catchError(error => {
+      catchError((error) => {
         if (error instanceof HttpErrorResponse) {
           switch (error.status) {
             case 401:
@@ -69,8 +64,8 @@ export class JwtInterceptor implements HttpInterceptor {
   private addToken(request: HttpRequest<any>, token: string): HttpRequest<any> {
     return request.clone({
       setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
   }
 
@@ -110,9 +105,9 @@ export class JwtInterceptor implements HttpInterceptor {
     } else {
       // Wait for token refresh to complete, then retry request
       return this.refreshTokenSubject.pipe(
-        filter(token => token != null),
+        filter((token) => token != null),
         take(1),
-        switchMap(token => {
+        switchMap((token) => {
           return next.handle(this.addToken(request, token));
         })
       );

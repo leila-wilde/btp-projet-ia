@@ -12,7 +12,7 @@ describe('EventService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [EventService]
+      providers: [EventService],
     });
 
     service = TestBed.inject(EventService);
@@ -34,7 +34,7 @@ describe('EventService', () => {
     registeredCount: 5,
     status: 'SCHEDULED',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 
   const mockPaginatedResponse: PaginatedResponse<Event> = {
@@ -42,18 +42,18 @@ describe('EventService', () => {
     total: 1,
     page: 0,
     pageSize: 10,
-    hasMore: false
+    hasMore: false,
   };
 
   describe('getAllEvents', () => {
     it('should retrieve all events with default pagination', (done) => {
-      service.getAllEvents().subscribe(response => {
+      service.getAllEvents().subscribe((response) => {
         expect(response.data.length).toBe(1);
         expect(response.total).toBe(1);
         done();
       });
 
-      const req = httpMock.expectOne(req => req.url === apiUrl && req.params.has('page'));
+      const req = httpMock.expectOne((req) => req.url === apiUrl && req.params.has('page'));
       expect(req.request.method).toBe('GET');
       expect(req.request.params.get('page')).toBe('0');
       expect(req.request.params.get('size')).toBe('10');
@@ -65,18 +65,19 @@ describe('EventService', () => {
         status: 'SCHEDULED',
         page: 1,
         size: 20,
-        sort: 'date,desc'
+        sort: 'date,desc',
       };
 
       service.getAllEvents(filter).subscribe(() => {
         done();
       });
 
-      const req = httpMock.expectOne(req =>
-        req.url === apiUrl &&
-        req.params.get('status') === 'SCHEDULED' &&
-        req.params.get('page') === '1' &&
-        req.params.get('size') === '20'
+      const req = httpMock.expectOne(
+        (req) =>
+          req.url === apiUrl &&
+          req.params.get('status') === 'SCHEDULED' &&
+          req.params.get('page') === '1' &&
+          req.params.get('size') === '20'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedResponse);
@@ -85,7 +86,7 @@ describe('EventService', () => {
 
   describe('getEvent', () => {
     it('should retrieve a single event by id', (done) => {
-      service.getEvent('1').subscribe(event => {
+      service.getEvent('1').subscribe((event) => {
         expect(event.id).toBe('1');
         expect(event.title).toBe('Angular Workshop');
         done();
@@ -104,10 +105,10 @@ describe('EventService', () => {
         description: 'Learn React',
         date: new Date('2025-12-15T14:00:00'),
         location: 'Lyon',
-        capacity: 50
+        capacity: 50,
       };
 
-      service.createEvent(createRequest).subscribe(event => {
+      service.createEvent(createRequest).subscribe((event) => {
         expect(event.id).toBe('1');
         expect(event.title).toBe('Angular Workshop');
         done();
@@ -124,7 +125,7 @@ describe('EventService', () => {
     it('should update an existing event', (done) => {
       const updates = { title: 'Updated Workshop' };
 
-      service.updateEvent('1', updates).subscribe(event => {
+      service.updateEvent('1', updates).subscribe((event) => {
         expect(event.id).toBe('1');
         done();
       });
@@ -149,7 +150,7 @@ describe('EventService', () => {
 
   describe('registerForEvent', () => {
     it('should register user for event', (done) => {
-      service.registerForEvent('1').subscribe(registration => {
+      service.registerForEvent('1').subscribe((registration) => {
         expect(registration.eventId).toBe('1');
         done();
       });
@@ -174,14 +175,13 @@ describe('EventService', () => {
 
   describe('getUserEvents', () => {
     it('should retrieve user registered events', (done) => {
-      service.getUserEvents(0, 10).subscribe(response => {
+      service.getUserEvents(0, 10).subscribe((response) => {
         expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url === `${apiUrl}/user/registered` && 
-        req.params.get('page') === '0'
+      const req = httpMock.expectOne(
+        (req) => req.url === `${apiUrl}/user/registered` && req.params.get('page') === '0'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedResponse);
@@ -190,14 +190,13 @@ describe('EventService', () => {
 
   describe('getUpcomingEvents', () => {
     it('should retrieve upcoming events', (done) => {
-      service.getUpcomingEvents(0, 10).subscribe(response => {
+      service.getUpcomingEvents(0, 10).subscribe((response) => {
         expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url === `${apiUrl}/upcoming` && 
-        req.params.get('page') === '0'
+      const req = httpMock.expectOne(
+        (req) => req.url === `${apiUrl}/upcoming` && req.params.get('page') === '0'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedResponse);

@@ -16,8 +16,8 @@ describe('AuthGuard', () => {
       providers: [
         AuthGuard,
         { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     });
 
     guard = TestBed.inject(AuthGuard);

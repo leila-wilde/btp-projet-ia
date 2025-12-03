@@ -14,7 +14,7 @@ export interface UserFilterOptions {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class UserService {
   private apiUrl = `${environment.apiUrl}/users`;
@@ -95,7 +95,7 @@ export class UserService {
   changePassword(currentPassword: string, newPassword: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/change-password`, {
       currentPassword,
-      newPassword
+      newPassword,
     });
   }
 }

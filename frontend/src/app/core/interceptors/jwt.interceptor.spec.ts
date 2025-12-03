@@ -22,8 +22,8 @@ describe('JWT Authentication Integration', () => {
       providers: [
         AuthService,
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
-        { provide: Router, useValue: routerSpyObj }
-      ]
+        { provide: Router, useValue: routerSpyObj },
+      ],
     });
 
     authService = TestBed.inject(AuthService);
@@ -40,33 +40,38 @@ describe('JWT Authentication Integration', () => {
   describe('Complete Auth Flow', () => {
     it('should complete login, store token, and inject in requests', (done) => {
       const loginResponse = {
-        accessToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImVtYWlsIjoidGVzdEBlbWFpbC5jb20iLCJyb2xlIjoiVVNFUiJ9.test',
+        accessToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImVtYWlsIjoidGVzdEBlbWFpbC5jb20iLCJyb2xlIjoiVVNFUiJ9.test',
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@email.com',
-        role: 'USER'
+        role: 'USER',
       };
 
       // Step 1: Login
-      authService.login({
-        usernameOrEmail: 'testuser',
-        password: 'password123'
-      }).subscribe(() => {
-        // Step 2: Verify token stored
-        expect(authService.isAuthenticated()).toBe(true);
-        expect(authService.getAccessToken()).toBe(loginResponse.accessToken);
+      authService
+        .login({
+          usernameOrEmail: 'testuser',
+          password: 'password123',
+        })
+        .subscribe(() => {
+          // Step 2: Verify token stored
+          expect(authService.isAuthenticated()).toBe(true);
+          expect(authService.getAccessToken()).toBe(loginResponse.accessToken);
 
-        // Step 3: Make protected request
-        // The interceptor should inject token
-        authService['http'].get('/api/users/me').subscribe();
+          // Step 3: Make protected request
+          // The interceptor should inject token
+          authService['http'].get('/api/users/me').subscribe();
 
-        // Step 4: Verify token was injected
-        const req = httpMock.expectOne('/api/users/me');
-        expect(req.request.headers.get('Authorization')).toBe(`Bearer ${loginResponse.accessToken}`);
-        req.flush({ id: 1, username: 'testuser' });
+          // Step 4: Verify token was injected
+          const req = httpMock.expectOne('/api/users/me');
+          expect(req.request.headers.get('Authorization')).toBe(
+            `Bearer ${loginResponse.accessToken}`
+          );
+          req.flush({ id: 1, username: 'testuser' });
 
-        done();
-      });
+          done();
+        });
 
       const loginReq = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       expect(loginReq.request.method).toBe('POST');
@@ -102,17 +107,19 @@ describe('JWT Authentication Integration', () => {
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@email.com',
-        role: 'USER'
+        role: 'USER',
       };
 
-      authService.login({
-        usernameOrEmail: 'testuser',
-        password: 'password123'
-      }).subscribe(() => {
-        // Verify token in localStorage (default)
-        expect(localStorage.getItem(environment.jwtTokenKey)).toBe('test-token-xyz');
-        done();
-      });
+      authService
+        .login({
+          usernameOrEmail: 'testuser',
+          password: 'password123',
+        })
+        .subscribe(() => {
+          // Verify token in localStorage (default)
+          expect(localStorage.getItem(environment.jwtTokenKey)).toBe('test-token-xyz');
+          done();
+        });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       req.flush(loginResponse);
@@ -121,7 +128,8 @@ describe('JWT Authentication Integration', () => {
     it('should decode JWT token correctly', () => {
       // Real JWT structure (header.payload.signature)
       // Payload: {"sub":"testuser","email":"test@example.com","role":"MODERATOR"}
-      const validToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
+      const validToken =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.' +
         'eyJzdWIiOiJ0ZXN0dXNlciIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsInJvbGUiOiJNT0RFUkFUT1IifQ.' +
         'signature';
 
@@ -138,7 +146,7 @@ describe('JWT Authentication Integration', () => {
     it('should handle invalid credentials', (done) => {
       const credentials = {
         usernameOrEmail: 'wronguser',
-        password: 'wrongpass'
+        password: 'wrongpass',
       };
 
       authService.login(credentials).subscribe(
@@ -155,23 +163,22 @@ describe('JWT Authentication Integration', () => {
     });
 
     it('should handle existing username on register', (done) => {
-      authService.register({
-        username: 'existinguser',
-        email: 'new@example.com',
-        password: 'password123'
-      }).subscribe(
-        () => fail('should have failed'),
-        (error) => {
-          expect(error.error.message).toContain('already exists');
-          done();
-        }
-      );
+      authService
+        .register({
+          username: 'existinguser',
+          email: 'new@example.com',
+          password: 'password123',
+        })
+        .subscribe(
+          () => fail('should have failed'),
+          (error) => {
+            expect(error.error.message).toContain('already exists');
+            done();
+          }
+        );
 
       const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
-      req.flush(
-        { message: 'Username already exists' },
-        { status: 400, statusText: 'Bad Request' }
-      );
+      req.flush({ message: 'Username already exists' }, { status: 400, statusText: 'Bad Request' });
     });
   });
 
@@ -179,7 +186,7 @@ describe('JWT Authentication Integration', () => {
     it('should emit current user on login', (done) => {
       const users: any[] = [];
 
-      authService.currentUser$.subscribe(user => {
+      authService.currentUser$.subscribe((user) => {
         if (user) users.push(user);
       });
 
@@ -188,17 +195,19 @@ describe('JWT Authentication Integration', () => {
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@email.com',
-        role: 'USER'
+        role: 'USER',
       };
 
-      authService.login({
-        usernameOrEmail: 'testuser',
-        password: 'password'
-      }).subscribe(() => {
-        expect(users.length).toBe(1);
-        expect(users[0].username).toBe('testuser');
-        done();
-      });
+      authService
+        .login({
+          usernameOrEmail: 'testuser',
+          password: 'password',
+        })
+        .subscribe(() => {
+          expect(users.length).toBe(1);
+          expect(users[0].username).toBe('testuser');
+          done();
+        });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/auth/login`);
       req.flush(loginResponse);
@@ -211,7 +220,7 @@ describe('JWT Authentication Integration', () => {
       const token = 'test-token';
       localStorage.setItem(environment.jwtTokenKey, token);
 
-      authService.currentUser$.subscribe(user => {
+      authService.currentUser$.subscribe((user) => {
         users.push(user);
       });
 

@@ -12,7 +12,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService]
+      providers: [AuthService],
     });
 
     service = TestBed.inject(AuthService);
@@ -33,10 +33,10 @@ describe('AuthService', () => {
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@example.com',
-        role: 'USER'
+        role: 'USER',
       };
 
-      service.login(credentials).subscribe(response => {
+      service.login(credentials).subscribe((response) => {
         expect(response.accessToken).toBe('jwt-token-xyz');
         expect(localStorage.getItem(environment.jwtTokenKey)).toBe('jwt-token-xyz');
         expect(service.isAuthenticated()).toBe(true);
@@ -55,10 +55,10 @@ describe('AuthService', () => {
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@example.com',
-        role: 'USER'
+        role: 'USER',
       };
 
-      service.currentUser$.subscribe(user => {
+      service.currentUser$.subscribe((user) => {
         if (user) {
           expect(user.username).toBe('testuser');
           expect(user.email).toBe('test@example.com');
@@ -78,7 +78,7 @@ describe('AuthService', () => {
       const registerData = {
         username: 'newuser',
         email: 'new@example.com',
-        password: 'password123'
+        password: 'password123',
       };
 
       const mockResponse = {
@@ -86,10 +86,10 @@ describe('AuthService', () => {
         tokenType: 'Bearer',
         username: 'newuser',
         email: 'new@example.com',
-        role: 'USER'
+        role: 'USER',
       };
 
-      service.register(registerData).subscribe(response => {
+      service.register(registerData).subscribe((response) => {
         expect(response.accessToken).toBe('jwt-token-new');
         expect(response.username).toBe('newuser');
         done();

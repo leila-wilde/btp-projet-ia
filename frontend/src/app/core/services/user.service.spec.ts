@@ -12,7 +12,7 @@ describe('UserService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [UserService]
+      providers: [UserService],
     });
 
     service = TestBed.inject(UserService);
@@ -30,7 +30,7 @@ describe('UserService', () => {
     role: 'USER',
     status: 'ACTIVE',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 
   const mockPaginatedUsers: PaginatedResponse<User> = {
@@ -38,19 +38,17 @@ describe('UserService', () => {
     total: 1,
     page: 0,
     pageSize: 10,
-    hasMore: false
+    hasMore: false,
   };
 
   describe('getAllUsers', () => {
     it('should retrieve all users', (done) => {
-      service.getAllUsers().subscribe(response => {
+      service.getAllUsers().subscribe((response) => {
         expect(response.data.length).toBe(1);
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url === apiUrl && req.params.has('page')
-      );
+      const req = httpMock.expectOne((req) => req.url === apiUrl && req.params.has('page'));
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedUsers);
     });
@@ -59,17 +57,16 @@ describe('UserService', () => {
       const filter: UserFilterOptions = {
         role: 'USER',
         page: 0,
-        size: 10
+        size: 10,
       };
 
-      service.getAllUsers(filter).subscribe(response => {
+      service.getAllUsers(filter).subscribe((response) => {
         expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(req => 
-        req.url === apiUrl && 
-        req.params.get('role') === 'USER'
+      const req = httpMock.expectOne(
+        (req) => req.url === apiUrl && req.params.get('role') === 'USER'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockPaginatedUsers);
@@ -78,7 +75,7 @@ describe('UserService', () => {
 
   describe('getUser', () => {
     it('should retrieve a user by ID', (done) => {
-      service.getUser('user1').subscribe(user => {
+      service.getUser('user1').subscribe((user) => {
         expect(user.id).toBe('user1');
         expect(user.username).toBe('john_doe');
         done();
@@ -92,7 +89,7 @@ describe('UserService', () => {
 
   describe('getCurrentUser', () => {
     it('should retrieve current user profile', (done) => {
-      service.getCurrentUser().subscribe(user => {
+      service.getCurrentUser().subscribe((user) => {
         expect(user.id).toBe('user1');
         done();
       });
@@ -107,7 +104,7 @@ describe('UserService', () => {
     it('should update a user', (done) => {
       const updates = { email: 'newemail@example.com' };
 
-      service.updateUser('user1', updates).subscribe(user => {
+      service.updateUser('user1', updates).subscribe((user) => {
         expect(user.id).toBe('user1');
         done();
       });

@@ -5,7 +5,7 @@ import { environment } from '../../../environments/environment';
 import { LoginRequest, RegisterRequest, JwtResponse } from '../../models/user.model';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   private readonly ACCESS_TOKEN_KEY = 'auth_token';
@@ -61,7 +61,7 @@ export class AuthService {
         tokenType: 'Bearer',
         username: payload.sub || payload.username,
         email: payload.email || '',
-        role: payload.role || 'USER'
+        role: payload.role || 'USER',
       };
     } catch (e) {
       console.error('Error decoding token:', e);
@@ -86,42 +86,40 @@ export class AuthService {
    * Login with credentials
    */
   login(credentials: LoginRequest): Observable<JwtResponse> {
-    return this.http.post<JwtResponse>(`${environment.apiUrl}/auth/login`, credentials)
-      .pipe(
-        tap(response => {
-          this.setTokens(response.accessToken, response.refreshToken);
-          this.currentUserSubject.next(response);
-          this.isAuthenticatedSubject.next(true);
-        }),
-        catchError(error => {
-          console.error('Login error:', error);
-          return throwError(() => ({
-            message: error.error?.message || 'Login failed',
-            status: error.status
-          }));
-        })
-      );
+    return this.http.post<JwtResponse>(`${environment.apiUrl}/auth/login`, credentials).pipe(
+      tap((response) => {
+        this.setTokens(response.accessToken, response.refreshToken);
+        this.currentUserSubject.next(response);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      catchError((error) => {
+        console.error('Login error:', error);
+        return throwError(() => ({
+          message: error.error?.message || 'Login failed',
+          status: error.status,
+        }));
+      })
+    );
   }
 
   /**
    * Register new user
    */
   register(data: RegisterRequest): Observable<JwtResponse> {
-    return this.http.post<JwtResponse>(`${environment.apiUrl}/auth/register`, data)
-      .pipe(
-        tap(response => {
-          this.setTokens(response.accessToken, response.refreshToken);
-          this.currentUserSubject.next(response);
-          this.isAuthenticatedSubject.next(true);
-        }),
-        catchError(error => {
-          console.error('Registration error:', error);
-          return throwError(() => ({
-            message: error.error?.message || 'Registration failed',
-            status: error.status
-          }));
-        })
-      );
+    return this.http.post<JwtResponse>(`${environment.apiUrl}/auth/register`, data).pipe(
+      tap((response) => {
+        this.setTokens(response.accessToken, response.refreshToken);
+        this.currentUserSubject.next(response);
+        this.isAuthenticatedSubject.next(true);
+      }),
+      catchError((error) => {
+        console.error('Registration error:', error);
+        return throwError(() => ({
+          message: error.error?.message || 'Registration failed',
+          status: error.status,
+        }));
+      })
+    );
   }
 
   /**
@@ -133,15 +131,16 @@ export class AuthService {
       return throwError(() => new Error('No refresh token available'));
     }
 
-    return this.http.post<JwtResponse>(`${environment.apiUrl}/auth/refresh`, { 
-      refreshToken 
-    })
+    return this.http
+      .post<JwtResponse>(`${environment.apiUrl}/auth/refresh`, {
+        refreshToken,
+      })
       .pipe(
-        tap(response => {
+        tap((response) => {
           this.setTokens(response.accessToken, response.refreshToken);
           this.currentUserSubject.next(response);
         }),
-        catchError(error => {
+        catchError((error) => {
           this.clearTokens();
           this.isAuthenticatedSubject.next(false);
           return throwError(() => error);
