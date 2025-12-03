@@ -4,6 +4,7 @@ import com.archipellibre.dto.ApiResponse;
 import com.archipellibre.dto.JwtResponse;
 import com.archipellibre.dto.LoginRequest;
 import com.archipellibre.dto.RegisterRequest;
+import com.archipellibre.dto.UserResponse;
 import com.archipellibre.model.User;
 import com.archipellibre.model.UserRole;
 import com.archipellibre.repository.UserRepository;
@@ -83,5 +84,32 @@ public class AuthController {
         var unused = userRepository.save(user);
 
         return ResponseEntity.status(201).body(new ApiResponse(true, "User registered successfully"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(new ApiResponse(false, "Not authenticated"));
+        }
+        
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
+        
+        UserResponse response = UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .bio(user.getBio())
+                .avatarUrl(user.getAvatarUrl())
+                .role(user.getRole().name())
+                .active(user.getActive())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build();
+        
+        return ResponseEntity.ok(response);
     }
 }
