@@ -5,6 +5,7 @@ import { AuthService } from './core/services/auth.service';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './features/auth/login/login.component';
 import { RegisterComponent } from './features/auth/register/register.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 import { ThreadListComponent } from './features/forum/thread-list/thread-list.component';
 import { ThreadDetailComponent } from './features/forum/thread-detail/thread-detail.component';
 import { ThreadCreateComponent } from './features/forum/thread-create/thread-create.component';
@@ -28,6 +29,11 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: HomeComponent,
+    canActivate: [authGuard]
+  },
+  {
+    path: 'profile',
+    component: ProfileComponent,
     canActivate: [authGuard]
   },
   {
