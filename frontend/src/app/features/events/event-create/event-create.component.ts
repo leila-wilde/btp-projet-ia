@@ -60,27 +60,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     this.form = this.formBuilder.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
       description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]],
-      startTime: ['', Validators.required],
-      endTime: ['', Validators.required],
+      date: ['', Validators.required],
       location: ['', [Validators.required, Validators.minLength(3)]],
-      maxParticipants: [30, [Validators.required, Validators.min(1), Validators.max(1000)]],
-      imageUrl: ['', Validators.pattern(/^https?:\/\/.+/)]
-    }, { validators: this.endTimeAfterStartTime() });
-  }
-
-  endTimeAfterStartTime() {
-    return (group: FormGroup) => {
-      const startTime = group.get('startTime')?.value;
-      const endTime = group.get('endTime')?.value;
-
-      if (startTime && endTime) {
-        if (new Date(endTime) <= new Date(startTime)) {
-          group.get('endTime')?.setErrors({ endTimeAfterStart: true });
-          return { endTimeAfterStart: true };
-        }
-      }
-      return null;
-    };
+      capacity: [30, [Validators.required, Validators.min(1), Validators.max(1000)]]
+    });
   }
 
   onSubmit(): void {
@@ -96,10 +79,9 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     const request: CreateEventRequest = {
       title: formValue.title,
       description: formValue.description,
-      startTime: new Date(formValue.startTime),
-      endTime: new Date(formValue.endTime),
+      date: new Date(formValue.date),
       location: formValue.location,
-      maxParticipants: parseInt(formValue.maxParticipants, 10)
+      capacity: parseInt(formValue.capacity, 10)
     };
 
     this.eventService.createEvent(request)

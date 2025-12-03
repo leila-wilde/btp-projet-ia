@@ -11,7 +11,7 @@ describe('RecentEventsComponent', () => {
   let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    const eventServiceSpy = jasmine.createSpyObj('EventService', ['getEvents']);
+    const eventServiceSpy = jasmine.createSpyObj('EventService', ['getUpcomingEvents']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
@@ -30,22 +30,37 @@ describe('RecentEventsComponent', () => {
         {
           id: '1',
           title: 'Event 1',
-          startDate: new Date(),
+          date: new Date(),
           location: 'Location 1',
-          status: 'UPCOMING',
+          organizer: 'org1',
+          capacity: 30,
+          registeredCount: 10,
+          description: 'Event 1 description',
+          status: 'SCHEDULED',
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
         {
           id: '2',
           title: 'Event 2',
-          startDate: new Date(),
+          date: new Date(),
           location: 'Location 2',
-          status: 'ONGOING',
+          organizer: 'org2',
+          capacity: 50,
+          registeredCount: 25,
+          description: 'Event 2 description',
+          status: 'SCHEDULED',
+          createdAt: new Date(),
+          updatedAt: new Date()
         },
       ],
       total: 2,
+      page: 0,
+      pageSize: 5,
+      hasMore: false
     };
 
-    eventService.getEvents.and.returnValue(of(mockEvents as any));
+    eventService.getUpcomingEvents.and.returnValue(of(mockEvents));
 
     fixture = TestBed.createComponent(RecentEventsComponent);
     component = fixture.componentInstance;
@@ -58,7 +73,7 @@ describe('RecentEventsComponent', () => {
   it('should load recent events on init', () => {
     fixture.detectChanges();
 
-    expect(eventService.getEvents).toHaveBeenCalledWith({ page: 1, size: 5 });
+    expect(eventService.getUpcomingEvents).toHaveBeenCalledWith(0, 5);
   });
 
   it('should display recent events', () => {

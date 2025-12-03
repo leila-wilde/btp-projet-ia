@@ -11,7 +11,7 @@ describe('ForumStatsComponent', () => {
   let router: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getThreads']);
+    const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getAllThreads']);
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
@@ -27,14 +27,50 @@ describe('ForumStatsComponent', () => {
 
     const mockThreads = {
       data: [
-        { id: '1', title: 'Thread 1', status: 'ACTIVE', postCount: 10 },
-        { id: '2', title: 'Thread 2', status: 'ACTIVE', postCount: 5 },
-        { id: '3', title: 'Thread 3', status: 'LOCKED', postCount: 20 },
+        { 
+          id: '1', 
+          title: 'Thread 1', 
+          content: 'Content 1',
+          category: 'Tech',
+          pinned: false,
+          locked: false,
+          creator: { id: 'user1', username: 'john' },
+          postCount: 10,
+          createdAt: new Date(),
+          lastActivityAt: new Date()
+        },
+        { 
+          id: '2', 
+          title: 'Thread 2', 
+          content: 'Content 2',
+          category: 'Tech',
+          pinned: false,
+          locked: false,
+          creator: { id: 'user2', username: 'jane' },
+          postCount: 5,
+          createdAt: new Date(),
+          lastActivityAt: new Date()
+        },
+        { 
+          id: '3', 
+          title: 'Thread 3', 
+          content: 'Content 3',
+          category: 'General',
+          pinned: false,
+          locked: true,
+          creator: { id: 'user3', username: 'bob' },
+          postCount: 20,
+          createdAt: new Date(),
+          lastActivityAt: new Date()
+        },
       ],
       total: 3,
+      page: 0,
+      pageSize: 10,
+      hasMore: false
     };
 
-    forumService.getThreads.and.returnValue(of(mockThreads as any));
+    forumService.getAllThreads.and.returnValue(of(mockThreads));
 
     fixture = TestBed.createComponent(ForumStatsComponent);
     component = fixture.componentInstance;
@@ -47,7 +83,7 @@ describe('ForumStatsComponent', () => {
   it('should load forum stats on init', () => {
     fixture.detectChanges();
 
-    expect(forumService.getThreads).toHaveBeenCalledWith({ page: 1, size: 10 });
+    expect(forumService.getAllThreads).toHaveBeenCalledWith({ page: 0, size: 10 });
   });
 
   it('should calculate stats correctly', () => {

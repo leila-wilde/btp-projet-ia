@@ -17,18 +17,14 @@ describe('EventDetailComponent', () => {
     id: '1',
     title: 'Angular Workshop',
     description: 'Learn Angular basics and advanced concepts',
-    startTime: new Date('2025-12-10T10:00:00'),
-    endTime: new Date('2025-12-10T12:00:00'),
+    date: new Date('2025-12-10T10:00:00'),
     location: 'Paris',
-    imageUrl: 'https://example.com/image.jpg',
-    maxParticipants: 30,
+    organizer: 'john_doe',
+    capacity: 30,
+    registeredCount: 2,
     status: 'SCHEDULED',
-    organizer: { id: 'org1', username: 'john_doe' },
-    participants: [
-      { id: 'user1', username: 'jane_doe' },
-      { id: 'user2', username: 'bob_smith' }
-    ],
-    createdAt: new Date()
+    createdAt: new Date(),
+    updatedAt: new Date()
   };
 
   beforeEach(async () => {
@@ -129,7 +125,8 @@ describe('EventDetailComponent', () => {
     });
 
     it('should join event successfully', () => {
-      eventService.registerForEvent.and.returnValue(of({}));
+      const mockRegistration = { userId: 'user1', eventId: '1', registeredAt: new Date() };
+      eventService.registerForEvent.and.returnValue(of(mockRegistration));
       spyOn(component, 'loadEvent');
 
       component.joinEvent();
@@ -275,7 +272,8 @@ describe('EventDetailComponent', () => {
     });
 
     it('should reload event after joining', () => {
-      eventService.registerForEvent.and.returnValue(of({}));
+      const mockRegistration = { userId: 'user1', eventId: '1', registeredAt: new Date() };
+      eventService.registerForEvent.and.returnValue(of(mockRegistration));
       spyOn(component, 'loadEvent');
 
       component.joinEvent();
@@ -294,7 +292,8 @@ describe('EventDetailComponent', () => {
     });
 
     it('should set registering flag during join', (done) => {
-      eventService.registerForEvent.and.returnValue(of({}));
+      const mockRegistration = { userId: 'user1', eventId: '1', registeredAt: new Date() };
+      eventService.registerForEvent.and.returnValue(of(mockRegistration));
       spyOn(component, 'loadEvent');
       
       expect(component.registering).toBe(false);

@@ -17,37 +17,36 @@ describe('EventListComponent', () => {
       id: '1',
       title: 'Angular Workshop',
       description: 'Learn Angular basics',
-      startTime: new Date('2025-12-10T10:00:00'),
-      endTime: new Date('2025-12-10T12:00:00'),
+      date: new Date('2025-12-10T10:00:00'),
       location: 'Paris',
-      imageUrl: 'https://example.com/image.jpg',
-      maxParticipants: 30,
+      organizer: 'john_doe',
+      capacity: 30,
+      registeredCount: 5,
       status: 'SCHEDULED',
-      organizer: { id: 'org1', username: 'john_doe' },
-      participants: [{ id: 'user1', username: 'jane_doe' }],
-      createdAt: new Date()
+      createdAt: new Date(),
+      updatedAt: new Date()
     },
     {
       id: '2',
       title: 'React Meetup',
       description: 'React community meetup',
-      startTime: new Date('2025-12-15T14:00:00'),
-      endTime: new Date('2025-12-15T16:00:00'),
+      date: new Date('2025-12-15T14:00:00'),
       location: 'Lyon',
-      maxParticipants: 50,
+      organizer: 'alice_smith',
+      capacity: 50,
+      registeredCount: 50,
       status: 'SCHEDULED',
-      organizer: { id: 'org2', username: 'alice_smith' },
-      participants: Array(50).fill({ id: 'user', username: 'user' }),
-      createdAt: new Date()
+      createdAt: new Date(),
+      updatedAt: new Date()
     }
   ];
 
   const mockResponse: PaginatedResponse<Event> = {
-    content: mockEvents,
-    totalElements: 2,
-    totalPages: 1,
-    currentPage: 0,
-    pageSize: 10
+    data: mockEvents,
+    total: 2,
+    page: 0,
+    pageSize: 10,
+    hasMore: false
   };
 
   beforeEach(async () => {
@@ -234,11 +233,11 @@ describe('EventListComponent', () => {
   describe('Empty State', () => {
     it('should display no events message when list is empty', () => {
       const emptyResponse: PaginatedResponse<Event> = {
-        content: [],
-        totalElements: 0,
-        totalPages: 0,
-        currentPage: 0,
-        pageSize: 10
+        data: [],
+        total: 0,
+        page: 0,
+        pageSize: 10,
+        hasMore: false
       };
 
       eventService.getAllEvents.and.returnValue(of(emptyResponse));

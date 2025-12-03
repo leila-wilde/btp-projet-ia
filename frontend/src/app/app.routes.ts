@@ -11,6 +11,9 @@ import { AdminComponent } from './features/admin/admin.component';
 import { ThreadListComponent } from './features/forum/thread-list/thread-list.component';
 import { ThreadDetailComponent } from './features/forum/thread-detail/thread-detail.component';
 import { ThreadCreateComponent } from './features/forum/thread-create/thread-create.component';
+import { EventListComponent } from './features/events/event-list/event-list.component';
+import { EventDetailComponent } from './features/events/event-detail/event-detail.component';
+import { EventCreateComponent } from './features/events/event-create/event-create.component';
 
 const authGuard = () => {
   const authService = inject(AuthService);
@@ -42,6 +45,14 @@ export const routes: Routes = [
     path: 'profile',
     component: ProfileComponent,
     canActivate: [authGuard]
+  },
+  {
+    path: 'events',
+    children: [
+      { path: '', component: EventListComponent },
+      { path: 'create', component: EventCreateComponent, canActivate: [authGuard] },
+      { path: ':id', component: EventDetailComponent }
+    ]
   },
   {
     path: 'forum',
