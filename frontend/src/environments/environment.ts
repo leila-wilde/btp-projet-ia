@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: '/api',
+  apiUrl: 'http://localhost:8080/api',
   jwtTokenKey: 'auth_token',
   // JWT Configuration
   jwt: {

@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
+  apiUrl: 'https://api.yourdomain.com/api',
   jwtTokenKey: 'auth_token',
   // JWT Configuration
   jwt: {
