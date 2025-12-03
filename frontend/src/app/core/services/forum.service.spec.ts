@@ -215,7 +215,7 @@ describe('ForumService', () => {
       });
 
       const req = httpMock.expectOne(`${apiUrl}/threads/1/lock`);
-      expect(req.request.method).toBe('PATCH');
+      expect(req.request.method).toBe('POST');
       req.flush(mockThread);
     });
   });
@@ -227,7 +227,7 @@ describe('ForumService', () => {
       });
 
       const req = httpMock.expectOne(`${apiUrl}/threads/1/pin`);
-      expect(req.request.method).toBe('PATCH');
+      expect(req.request.method).toBe('POST');
       req.flush(mockThread);
     });
   });

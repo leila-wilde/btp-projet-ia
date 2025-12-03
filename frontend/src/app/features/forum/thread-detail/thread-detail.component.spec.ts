@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { of, BehaviorSubject } from 'rxjs';
 import { ThreadDetailComponent } from './thread-detail.component';
@@ -80,7 +81,7 @@ describe('ThreadDetailComponent', () => {
     };
 
     await TestBed.configureTestingModule({
-      imports: [ThreadDetailComponent, ReactiveFormsModule],
+      imports: [ThreadDetailComponent, ReactiveFormsModule, BrowserAnimationsModule],
       providers: [
         { provide: ForumService, useValue: forumServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
@@ -104,6 +105,10 @@ describe('ThreadDetailComponent', () => {
       })
     );
     forumService.createPost.and.returnValue(of(mockPosts[0]));
+    forumService.deletePost.and.returnValue(of(void 0));
+    forumService.updatePost.and.returnValue(of(mockPosts[0]));
+    forumService.toggleLock.and.returnValue(of(mockThread));
+    forumService.togglePin.and.returnValue(of(mockThread));
 
     fixture = TestBed.createComponent(ThreadDetailComponent);
     component = fixture.componentInstance;

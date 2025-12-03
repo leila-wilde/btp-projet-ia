@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ThreadListComponent } from './thread-list.component';
 import { ForumService } from '../../../core/services/forum.service';
 import { AuthService } from '../../../core/services/auth.service';
@@ -55,7 +56,7 @@ describe('ThreadListComponent', () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [ThreadListComponent],
+      imports: [ThreadListComponent, BrowserAnimationsModule],
       providers: [
         { provide: ForumService, useValue: forumServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },

@@ -28,8 +28,9 @@ describe('AuthService', () => {
   describe('Login', () => {
     it('should store token on successful login', (done) => {
       const credentials = { usernameOrEmail: 'testuser', password: 'password' };
+      const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJ1c2VybmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJleHAiOjk5OTk5OTk5OTl9.fake-signature';
       const mockResponse = {
-        accessToken: 'jwt-token-xyz',
+        accessToken: validJwt,
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@example.com',
@@ -37,8 +38,8 @@ describe('AuthService', () => {
       };
 
       service.login(credentials).subscribe((response) => {
-        expect(response.accessToken).toBe('jwt-token-xyz');
-        expect(localStorage.getItem(environment.jwtTokenKey)).toBe('jwt-token-xyz');
+        expect(response.accessToken).toBe(validJwt);
+        expect(localStorage.getItem(environment.jwtTokenKey)).toBe(validJwt);
         expect(service.isAuthenticated()).toBe(true);
         done();
       });
@@ -50,8 +51,9 @@ describe('AuthService', () => {
 
     it('should emit current user on login', (done) => {
       const credentials = { usernameOrEmail: 'testuser', password: 'password' };
+      const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJ1c2VybmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJleHAiOjk5OTk5OTk5OTl9.fake-signature';
       const mockResponse = {
-        accessToken: 'jwt-token-xyz',
+        accessToken: validJwt,
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@example.com',
@@ -128,7 +130,8 @@ describe('AuthService', () => {
     it('should check authentication status', () => {
       expect(service.isAuthenticated()).toBe(false);
 
-      localStorage.setItem(environment.jwtTokenKey, 'test-token');
+      const validJwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJ1c2VybmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJleHAiOjk5OTk5OTk5OTl9.fake-signature';
+      localStorage.setItem(environment.jwtTokenKey, validJwt);
       expect(service.isAuthenticated()).toBe(true);
     });
   });
