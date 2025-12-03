@@ -94,7 +94,13 @@ describe('ThreadDetailComponent', () => {
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
     forumService.getThread.and.returnValue(of(mockThread));
-    forumService.getThreadPosts.and.returnValue(of(mockPosts));
+    forumService.getThreadPosts.and.returnValue(of({
+      data: mockPosts,
+      total: mockPosts.length,
+      page: 1,
+      pageSize: 10,
+      hasMore: false
+    }));
     forumService.createPost.and.returnValue(of(mockPosts[0]));
 
     fixture = TestBed.createComponent(ThreadDetailComponent);

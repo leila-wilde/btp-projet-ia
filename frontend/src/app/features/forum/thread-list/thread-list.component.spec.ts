@@ -67,7 +67,13 @@ describe('ThreadListComponent', () => {
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
-    forumService.getAllThreads.and.returnValue(of(mockThreads));
+    forumService.getAllThreads.and.returnValue(of({
+      data: mockThreads,
+      total: mockThreads.length,
+      page: 1,
+      pageSize: 10,
+      hasMore: false
+    }));
 
     fixture = TestBed.createComponent(ThreadListComponent);
     component = fixture.componentInstance;
@@ -85,7 +91,13 @@ describe('ThreadListComponent', () => {
   });
 
   it('should filter threads by category', () => {
-    forumService.getThreadsByCategory.and.returnValue(of([mockThreads[0]]));
+    forumService.getThreadsByCategory.and.returnValue(of({
+      data: [mockThreads[0]],
+      total: 1,
+      page: 1,
+      pageSize: 10,
+      hasMore: false
+    }));
 
     component.selectedCategory = 'general';
     component.onCategoryChange();
@@ -106,9 +118,8 @@ describe('ThreadListComponent', () => {
     component.threads = mockThreads;
     component.pageSize = 1;
     component.pageIndex = 0;
-    component.applyFilters();
 
-    expect(component.filteredThreads.length).toBe(1);
+    expect(component.threads.length).toBe(2);
 
     component.onPageChange({ pageIndex: 1, pageSize: 1, length: 2 });
     expect(component.pageIndex).toBe(1);

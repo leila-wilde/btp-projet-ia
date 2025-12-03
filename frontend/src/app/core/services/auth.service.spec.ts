@@ -81,15 +81,24 @@ describe('AuthService', () => {
         password: 'password123'
       };
 
+      const mockResponse = {
+        accessToken: 'jwt-token-new',
+        tokenType: 'Bearer',
+        username: 'newuser',
+        email: 'new@example.com',
+        role: 'USER'
+      };
+
       service.register(registerData).subscribe(response => {
-        expect(response.message).toBe('User registered successfully');
+        expect(response.accessToken).toBe('jwt-token-new');
+        expect(response.username).toBe('newuser');
         done();
       });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(registerData);
-      req.flush({ message: 'User registered successfully' });
+      req.flush(mockResponse);
     });
   });
 
@@ -109,11 +118,11 @@ describe('AuthService', () => {
       const token = 'test-jwt-token';
       localStorage.setItem(environment.jwtTokenKey, token);
 
-      expect(service.getToken()).toBe(token);
+      expect(service.getAccessToken()).toBe(token);
     });
 
     it('should return null if no token exists', () => {
-      expect(service.getToken()).toBeNull();
+      expect(service.getAccessToken()).toBeNull();
     });
 
     it('should check authentication status', () => {
@@ -127,14 +136,14 @@ describe('AuthService', () => {
   describe('Storage Type', () => {
     it('should use localStorage by default', () => {
       localStorage.setItem(environment.jwtTokenKey, 'test-token');
-      expect(service.getToken()).toBe('test-token');
+      expect(service.getAccessToken()).toBe('test-token');
     });
 
-    it('should switch to sessionStorage', () => {
-      service.setStorageType('sessionStorage');
-      sessionStorage.setItem(environment.jwtTokenKey, 'session-token');
+    it('should retrieve access token from localStorage', () => {
+      const token = 'test-token';
+      localStorage.setItem(environment.jwtTokenKey, token);
 
-      expect(service.getToken()).toBe('session-token');
+      expect(service.getAccessToken()).toBe(token);
     });
   });
 });

@@ -80,8 +80,8 @@ export class EventListComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: PaginatedResponse<Event>) => {
-          this.events = response.content;
-          this.totalElements = response.totalElements;
+          this.events = response.data;
+          this.totalElements = response.total;
           this.loading = false;
         },
         error: (err) => {
