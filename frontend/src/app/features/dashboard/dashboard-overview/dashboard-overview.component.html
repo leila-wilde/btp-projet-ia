@@ -1,0 +1,57 @@
+<mat-card class="overview-card">
+  <mat-card-header>
+    <mat-card-title>User Activity Overview</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading && !error" class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon events">
+          <mat-icon>event</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Total Events</p>
+          <p class="stat-value">{{ stats.totalEvents }}</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon registered">
+          <mat-icon>event_available</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Registered Events</p>
+          <p class="stat-value">{{ stats.registeredEvents }}</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon threads">
+          <mat-icon>forum</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Forum Threads</p>
+          <p class="stat-value">{{ stats.forumThreads }}</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon posts">
+          <mat-icon>comment</mat-icon>
+        </div>
+        <div class="stat-content">
+          <p class="stat-label">Forum Posts</p>
+          <p class="stat-value">{{ stats.forumPosts }}</p>
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

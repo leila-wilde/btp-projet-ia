@@ -1,0 +1,32 @@
+<div class="admin-container">
+  <div class="admin-header">
+    <h1>Admin Panel</h1>
+    <p class="subtitle">Manage users, moderate content, and view system statistics</p>
+  </div>
+
+  <mat-tab-group [(selectedIndex)]="selectedTabIndex" class="admin-tabs">
+    <mat-tab label="User Management">
+      <ng-template mat-tab-label>
+        <mat-icon>people</mat-icon>
+        <span>User Management</span>
+      </ng-template>
+      <app-user-management></app-user-management>
+    </mat-tab>
+
+    <mat-tab label="Moderation">
+      <ng-template mat-tab-label>
+        <mat-icon>gavel</mat-icon>
+        <span>Moderation</span>
+      </ng-template>
+      <app-moderation></app-moderation>
+    </mat-tab>
+
+    <mat-tab label="System Statistics">
+      <ng-template mat-tab-label>
+        <mat-icon>analytics</mat-icon>
+        <span>System Statistics</span>
+      </ng-template>
+      <app-system-statistics></app-system-statistics>
+    </mat-tab>
+  </mat-tab-group>
+</div>

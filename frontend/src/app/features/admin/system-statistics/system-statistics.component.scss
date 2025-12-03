@@ -1,0 +1,238 @@
+.system-statistics {
+  width: 100%;
+}
+
+.error-message {
+  color: #d32f2f;
+  padding: 12px;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.statistics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.health-card {
+  grid-column: 1 / -1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  mat-card-header {
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 1.2rem;
+      margin: 0;
+
+      mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+    }
+  }
+
+  mat-card-content {
+    padding: 20px;
+  }
+}
+
+.health-score {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+
+  .score-circle {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+
+    .score-value {
+      font-size: 2rem;
+      font-weight: 600;
+    }
+  }
+
+  .health-status {
+    flex: 1;
+
+    p {
+      margin: 8px 0;
+      font-size: 0.95rem;
+
+      &.status-label {
+        color: #1a1a1a;
+        font-size: 1rem;
+      }
+
+      &.uptime {
+        color: #666;
+      }
+
+      strong {
+        color: #667eea;
+      }
+    }
+  }
+}
+
+.health-metrics {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .metric {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #666;
+      text-transform: uppercase;
+    }
+
+    mat-progress-bar {
+      height: 6px;
+      border-radius: 3px;
+    }
+
+    .metric-value {
+      font-size: 0.85rem;
+      color: #999;
+      text-align: right;
+    }
+  }
+}
+
+.stats-card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+
+  mat-card-header {
+    margin-bottom: 16px;
+
+    mat-card-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 1.1rem;
+      margin: 0;
+
+      mat-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+
+  mat-card-content {
+    padding: 16px;
+  }
+}
+
+.stat-value {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0 0 8px 0;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.stat-detail {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 8px;
+}
+
+.stat-secondary {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 8px 0 0 0;
+}
+
+.avg-posts {
+  font-size: 0.85rem;
+  color: #999;
+  margin-top: 8px;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+}
+
+.users-stats {
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+
+  mat-card-header mat-icon {
+    color: #667eea;
+  }
+}
+
+.events-stats {
+  background: linear-gradient(135deg, rgba(240, 147, 251, 0.1) 0%, rgba(245, 87, 108, 0.1) 100%);
+
+  mat-card-header mat-icon {
+    color: #f093fb;
+  }
+}
+
+.forum-stats {
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+
+  mat-card-header mat-icon {
+    color: #4facfe;
+  }
+}
+
+@media (max-width: 1024px) {
+  .statistics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .statistics-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .health-score {
+    flex-direction: column;
+    text-align: center;
+
+    .score-circle {
+      margin: 0 auto;
+    }
+  }
+
+  .health-metrics {
+    .metric {
+      gap: 8px;
+    }
+  }
+}

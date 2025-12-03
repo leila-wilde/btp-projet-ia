@@ -1,0 +1,117 @@
+<mat-card class="user-management-card">
+  <mat-card-header>
+    <mat-card-title>User Management</mat-card-title>
+    <div class="header-actions">
+      <mat-form-field class="search-field">
+        <mat-label>Search users</mat-label>
+        <input matInput placeholder="Username or email" (ngModelChange)="onSearch($event)" [ngModel]="searchTerm">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field">
+        <mat-label>Role</mat-label>
+        <mat-select [(ngModel)]="selectedRole" (selectionChange)="onRoleChange()">
+          <mat-option value="">All Roles</mat-option>
+          <mat-option *ngFor="let role of roleOptions" [value]="role.value">
+            {{ role.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="filter-field">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="selectedStatus" (selectionChange)="onStatusChange()">
+          <mat-option value="">All Statuses</mat-option>
+          <mat-option *ngFor="let status of statusOptions" [value]="status.value">
+            {{ status.label }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading && !error" class="table-container">
+      <table mat-table [dataSource]="users" class="users-table">
+        <!-- Username Column -->
+        <ng-container matColumnDef="username">
+          <th mat-header-cell *matHeaderCellDef>Username</th>
+          <td mat-cell *matCellDef="let element">{{ element.username }}</td>
+        </ng-container>
+
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+        </ng-container>
+
+        <!-- Role Column -->
+        <ng-container matColumnDef="role">
+          <th mat-header-cell *matHeaderCellDef>Role</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-chip-set>
+              <mat-chip [color]="getRoleColor(element.role)" selected>
+                {{ element.role }}
+              </mat-chip>
+            </mat-chip-set>
+          </td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Status</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-chip-set>
+              <mat-chip [color]="getStatusColor(element.status)" selected>
+                {{ element.status }}
+              </mat-chip>
+            </mat-chip-set>
+          </td>
+        </ng-container>
+
+        <!-- Created At Column -->
+        <ng-container matColumnDef="createdAt">
+          <th mat-header-cell *matHeaderCellDef>Created</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.createdAt | date: 'short' }}
+          </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="action-buttons">
+              <button mat-icon-button matTooltip="Promote to Moderator" (click)="promoteToModerator(element.id)">
+                <mat-icon>shield_admin</mat-icon>
+              </button>
+              <button *ngIf="element.status !== 'BANNED'" mat-icon-button matTooltip="Ban User" color="warn" (click)="banUser(element.id)">
+                <mat-icon>block</mat-icon>
+              </button>
+              <button *ngIf="element.status === 'BANNED'" mat-icon-button matTooltip="Unban User" (click)="unbanUser(element.id)">
+                <mat-icon>done</mat-icon>
+              </button>
+              <button mat-icon-button matTooltip="Delete User" color="warn" (click)="deleteUser(element.id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [length]="totalUsers" [pageSize]="pageSize" [pageSizeOptions]="pageSizeOptions" (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
