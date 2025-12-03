@@ -1,6 +1,6 @@
 # Quick Start Guide
 
-## 🚀 Start Everything
+## 🚀 Option 1: Docker (Recommended for Deployment)
 
 ```bash
 cd /home/nyxx/Projects/btp-projet-ia
@@ -8,6 +8,39 @@ docker-compose up -d
 ```
 
 **Wait 30 seconds for services to start.**
+
+## 🚀 Option 2: Native Development (For Integration Testing)
+
+### Prerequisites
+- Java 21+ | Maven | Node.js 18+ | PostgreSQL running
+
+### Terminal 1: Backend
+```bash
+cd backend
+mvn clean install
+mvn spring-boot:run
+```
+✓ Wait for: "Application started"
+
+### Terminal 2: Frontend
+```bash
+cd frontend
+npm install  # First time only
+npm start
+```
+✓ Wait for: "Compiled successfully"
+✓ Opens: http://localhost:4200
+
+### Quick Integration Test (5 minutes)
+1. Register new user at http://localhost:4200/auth/register
+2. Login with your credentials
+3. Open DevTools (F12) → Network tab
+4. Click "Events" in navigation
+5. Find GET /api/events request
+6. Check Request Headers → **Authorization: Bearer eyJ...**
+7. ✅ If Authorization header present = Integration working!
+
+📖 **Full Testing Guide:** See [docs/INTEGRATION_TESTING_GUIDE.md](docs/INTEGRATION_TESTING_GUIDE.md)
 
 ## 🌐 Access Services
 
