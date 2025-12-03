@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserManagementComponent } from './user-management.component';
 import { UserService } from '../../../core/services/user.service';
+import { PaginatedResponse, User } from '../../../models/domain.model';
 import { of } from 'rxjs';
 
 describe('UserManagementComponent', () => {
@@ -18,7 +19,7 @@ describe('UserManagementComponent', () => {
 
     userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
 
-    const mockUsers = {
+    const mockUsers: PaginatedResponse<User> = {
       data: [
         {
           id: '1',

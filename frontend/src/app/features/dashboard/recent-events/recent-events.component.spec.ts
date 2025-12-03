@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RecentEventsComponent } from './recent-events.component';
 import { EventService } from '../../../core/services/event.service';
+import { PaginatedResponse, Event } from '../../../models/domain.model';
 import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
@@ -25,7 +26,7 @@ describe('RecentEventsComponent', () => {
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
-    const mockEvents = {
+    const mockEvents: PaginatedResponse<Event> = {
       data: [
         {
           id: '1',
