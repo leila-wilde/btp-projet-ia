@@ -3,9 +3,9 @@ spring:
     name: archipel-libre
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/archipellibre
-    username: ${DB_USERNAME:archipellibre}
-    password: ${DB_PASSWORD:changeme}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/archipellibre}
+    username: ${SPRING_DATASOURCE_USERNAME:${DB_USERNAME:archipellibre}}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD:changeme}}
     driver-class-name: org.postgresql.Driver
 
   jpa:
