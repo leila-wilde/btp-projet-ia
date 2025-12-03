@@ -16,7 +16,8 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [20.x]
+        node-version: [18.x, 20.x]
+      fail-fast: true
 
     steps:
     - uses: actions/checkout@v4
@@ -30,7 +31,7 @@ jobs:
 
     - name: Install dependencies
       working-directory: ./frontend
-      run: npm install
+      run: npm ci --prefer-offline --no-audit
 
     - name: Lint
       working-directory: ./frontend
@@ -44,16 +45,26 @@ jobs:
       working-directory: ./frontend
       run: npm run build -- --configuration=production
 
+    - name: Install Chromium (required for headless tests)
+      run: sudo apt-get update && sudo apt-get install -y chromium-browser
+
     - name: Test
       working-directory: ./frontend
+      env:
+        CHROME_BIN: /usr/bin/chromium-browser
       run: npm test -- --watch=false --browsers=ChromeHeadlessCI --code-coverage
-
-    - name: Accessibility check
-      working-directory: ./frontend
-      run: npm install --save-dev @axe-core/react axe-core && npx axe-core --help || true
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
         files: ./frontend/coverage/lcov.info
+        fail_ci_if_error: true
+
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-node-${{ matrix.node-version }}
+        path: frontend/coverage/
+        retention-days: 7
 
