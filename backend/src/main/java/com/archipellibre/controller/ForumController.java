@@ -11,9 +11,6 @@ import com.archipellibre.dto.UserResponse;
 import com.archipellibre.model.ForumPost;
 import com.archipellibre.model.ForumThread;
 import com.archipellibre.service.ForumService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -29,8 +26,6 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/forum")
 @RequiredArgsConstructor
-@Tag(name = "Forum Management", description = "Forum threads, posts, and moderation")
-@SecurityRequirement(name = "Bearer Authentication")
 public class ForumController {
 
     private final ForumService forumService;
@@ -38,7 +33,6 @@ public class ForumController {
     // ===== THREAD ENDPOINTS =====
 
     @PostMapping("/threads")
-    @Operation(summary = "Create forum thread")
     public ResponseEntity<ForumThreadResponse> createThread(
             @RequestParam UUID creatorId,
             @Valid @RequestBody ForumThreadCreateRequest request) {
@@ -47,21 +41,18 @@ public class ForumController {
     }
 
     @GetMapping("/threads/{id}")
-    @Operation(summary = "Get thread by ID")
     public ResponseEntity<ForumThreadResponse> getThreadById(@PathVariable UUID id) {
         ForumThread thread = forumService.getThreadById(id);
         return ResponseEntity.ok(mapThreadToResponse(thread));
     }
 
     @GetMapping("/threads")
-    @Operation(summary = "Get all threads", description = "Retrieve all threads ordered by recent activity")
     public ResponseEntity<Page<ForumThreadResponse>> getAllThreads(Pageable pageable) {
         Page<ForumThread> threads = forumService.getAllThreads(pageable);
         return ResponseEntity.ok(threads.map(this::mapThreadToResponse));
     }
 
     @GetMapping("/threads/category/{category}")
-    @Operation(summary = "Get threads by category")
     public ResponseEntity<Page<ForumThreadResponse>> getThreadsByCategory(
             @PathVariable String category,
             Pageable pageable) {
@@ -70,7 +61,6 @@ public class ForumController {
     }
 
     @GetMapping("/threads/creator/{creatorId}")
-    @Operation(summary = "Get threads by creator")
     public ResponseEntity<Page<ForumThreadResponse>> getThreadsByCreator(
             @PathVariable UUID creatorId,
             Pageable pageable) {
@@ -79,14 +69,12 @@ public class ForumController {
     }
 
     @GetMapping("/threads/pinned")
-    @Operation(summary = "Get pinned threads (sticky)")
     public ResponseEntity<List<ForumThreadResponse>> getPinnedThreads() {
         List<ForumThread> threads = forumService.getPinnedThreads();
         return ResponseEntity.ok(threads.stream().map(this::mapThreadToResponse).toList());
     }
 
     @PutMapping("/threads/{id}")
-    @Operation(summary = "Update thread", description = "Update thread title, content, or category")
     public ResponseEntity<ForumThreadResponse> updateThread(
             @PathVariable UUID id,
             @Valid @RequestBody ForumThreadUpdateRequest request) {
@@ -95,7 +83,6 @@ public class ForumController {
     }
 
     @GetMapping("/threads/{id}/stats")
-    @Operation(summary = "Get thread statistics")
     public ResponseEntity<ApiResponse> getThreadStats(@PathVariable UUID id) {
         var stats = forumService.getThreadStats(id);
         String message = String.format(
@@ -112,7 +99,6 @@ public class ForumController {
 
     @PostMapping("/threads/{id}/pin")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    @Operation(summary = "Pin thread (sticky)")
     public ResponseEntity<ForumThreadResponse> pinThread(@PathVariable UUID id) {
         ForumThread pinned = forumService.pinThread(id);
         return ResponseEntity.ok(mapThreadToResponse(pinned));
@@ -120,7 +106,6 @@ public class ForumController {
 
     @PostMapping("/threads/{id}/unpin")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    @Operation(summary = "Unpin thread")
     public ResponseEntity<ForumThreadResponse> unpinThread(@PathVariable UUID id) {
         ForumThread unpinned = forumService.unpinThread(id);
         return ResponseEntity.ok(mapThreadToResponse(unpinned));
@@ -128,7 +113,6 @@ public class ForumController {
 
     @PostMapping("/threads/{id}/lock")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    @Operation(summary = "Lock thread (no new posts)")
     public ResponseEntity<ForumThreadResponse> lockThread(
             @PathVariable UUID id,
             @RequestParam(required = false) String reason) {
@@ -138,14 +122,12 @@ public class ForumController {
 
     @PostMapping("/threads/{id}/unlock")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    @Operation(summary = "Unlock thread")
     public ResponseEntity<ForumThreadResponse> unlockThread(@PathVariable UUID id) {
         ForumThread unlocked = forumService.unlockThread(id);
         return ResponseEntity.ok(mapThreadToResponse(unlocked));
     }
 
     @GetMapping("/threads/{id}/locked")
-    @Operation(summary = "Check if thread is locked")
     public ResponseEntity<ApiResponse> isThreadLocked(@PathVariable UUID id) {
         boolean locked = forumService.isThreadLocked(id);
         return ResponseEntity.ok(new ApiResponse(true, locked ? "Thread is locked" : "Thread is unlocked"));
@@ -153,7 +135,6 @@ public class ForumController {
 
     @DeleteMapping("/threads/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    @Operation(summary = "Delete thread (moderator/admin only)")
     public ResponseEntity<ApiResponse> deleteThread(@PathVariable UUID id) {
         forumService.deleteThread(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -163,7 +144,6 @@ public class ForumController {
     // ===== POST ENDPOINTS =====
 
     @PostMapping("/threads/{threadId}/posts")
-    @Operation(summary = "Create post in thread")
     public ResponseEntity<ForumPostResponse> createPost(
             @PathVariable UUID threadId,
             @RequestParam UUID authorId,
@@ -173,14 +153,12 @@ public class ForumController {
     }
 
     @GetMapping("/posts/{id}")
-    @Operation(summary = "Get post by ID")
     public ResponseEntity<ForumPostResponse> getPostById(@PathVariable UUID id) {
         ForumPost post = forumService.getPostById(id);
         return ResponseEntity.ok(mapPostToResponse(post));
     }
 
     @GetMapping("/threads/{threadId}/posts")
-    @Operation(summary = "Get posts in thread")
     public ResponseEntity<Page<ForumPostResponse>> getPostsByThread(
             @PathVariable UUID threadId,
             Pageable pageable) {
@@ -189,7 +167,6 @@ public class ForumController {
     }
 
     @GetMapping("/posts/author/{authorId}")
-    @Operation(summary = "Get posts by author")
     public ResponseEntity<Page<ForumPostResponse>> getPostsByAuthor(
             @PathVariable UUID authorId,
             Pageable pageable) {
@@ -198,7 +175,6 @@ public class ForumController {
     }
 
     @PutMapping("/posts/{id}")
-    @Operation(summary = "Update post")
     public ResponseEntity<ForumPostResponse> updatePost(
             @PathVariable UUID id,
             @Valid @RequestBody ForumPostUpdateRequest request) {
@@ -208,7 +184,6 @@ public class ForumController {
 
     @DeleteMapping("/posts/{id}")
     @PreAuthorize("hasRole('MODERATOR') or hasRole('ADMIN')")
-    @Operation(summary = "Delete post (moderator/admin only)")
     public ResponseEntity<ApiResponse> deletePost(@PathVariable UUID id) {
         forumService.deletePost(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT)
@@ -216,14 +191,12 @@ public class ForumController {
     }
 
     @GetMapping("/threads/{threadId}/posts/count")
-    @Operation(summary = "Get post count in thread")
     public ResponseEntity<ApiResponse> getPostCount(@PathVariable UUID threadId) {
         long count = forumService.getPostCount(threadId);
         return ResponseEntity.ok(new ApiResponse(true, "Posts: " + count));
     }
 
     @GetMapping("/posts/{id}/stats")
-    @Operation(summary = "Get post statistics")
     public ResponseEntity<ApiResponse> getPostStats(@PathVariable UUID id) {
         var stats = forumService.getPostStats(id);
         String message = String.format(
@@ -236,7 +209,6 @@ public class ForumController {
     }
 
     @PostMapping("/posts/{id}/flag")
-    @Operation(summary = "Flag post for moderation")
     public ResponseEntity<ApiResponse> flagPost(
             @PathVariable UUID id,
             @RequestParam String reason) {
