@@ -10,6 +10,8 @@ import com.archipellibre.dto.ForumThreadUpdateRequest;
 import com.archipellibre.dto.UserResponse;
 import com.archipellibre.model.ForumPost;
 import com.archipellibre.model.ForumThread;
+import com.archipellibre.model.User;
+import com.archipellibre.repository.UserRepository;
 import com.archipellibre.service.ForumService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,14 +33,24 @@ import java.util.UUID;
 public class ForumController {
 
     private final ForumService forumService;
+    private final UserRepository userRepository;
 
     // ===== THREAD ENDPOINTS =====
 
     @PostMapping("/threads")
     public ResponseEntity<ForumThreadResponse> createThread(
-            @RequestParam UUID creatorId,
             @Valid @RequestBody ForumThreadCreateRequest request) {
-        ForumThread thread = forumService.createThread(creatorId, request);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(null);
+        }
+        
+        String username = authentication.getName();
+        User creator = userRepository.findByUsername(username)
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
+        
+        ForumThread thread = forumService.createThread(creator.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapThreadToResponse(thread));
     }
 
