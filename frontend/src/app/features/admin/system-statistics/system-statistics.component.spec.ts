@@ -48,7 +48,7 @@ describe('SystemStatisticsComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  xit('should load system statistics on init', (done) => {
+  it('should load system statistics on init', (done) => {
     fixture.detectChanges();
 
     setTimeout(() => {
@@ -59,7 +59,7 @@ describe('SystemStatisticsComponent', () => {
     }, 100);
   });
 
-  xit('should calculate stats correctly', (done) => {
+  it('should calculate stats correctly', (done) => {
     fixture.detectChanges();
 
     setTimeout(() => {
