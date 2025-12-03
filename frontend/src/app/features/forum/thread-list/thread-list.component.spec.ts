@@ -24,7 +24,7 @@ describe('ThreadListComponent', () => {
       creator: { id: 'user1', username: 'admin' },
       postCount: 5,
       createdAt: new Date(),
-      lastActivityAt: new Date()
+      lastActivityAt: new Date(),
     },
     {
       id: '2',
@@ -36,8 +36,8 @@ describe('ThreadListComponent', () => {
       creator: { id: 'user2', username: 'member' },
       postCount: 10,
       createdAt: new Date(),
-      lastActivityAt: new Date()
-    }
+      lastActivityAt: new Date(),
+    },
   ];
 
   beforeEach(async () => {
@@ -45,11 +45,11 @@ describe('ThreadListComponent', () => {
       'getAllThreads',
       'getThreadsByCategory',
       'togglePin',
-      'toggleLock'
+      'toggleLock',
     ]);
 
     const authServiceSpy = jasmine.createSpyObj('AuthService', [], {
-      isAuthenticated$: new BehaviorSubject(true)
+      isAuthenticated$: new BehaviorSubject(true),
     });
 
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -59,21 +59,23 @@ describe('ThreadListComponent', () => {
       providers: [
         { provide: ForumService, useValue: forumServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
     authService = TestBed.inject(AuthService) as jasmine.SpyObj<AuthService>;
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
-    forumService.getAllThreads.and.returnValue(of({
-      data: mockThreads,
-      total: mockThreads.length,
-      page: 1,
-      pageSize: 10,
-      hasMore: false
-    }));
+    forumService.getAllThreads.and.returnValue(
+      of({
+        data: mockThreads,
+        total: mockThreads.length,
+        page: 1,
+        pageSize: 10,
+        hasMore: false,
+      })
+    );
 
     fixture = TestBed.createComponent(ThreadListComponent);
     component = fixture.componentInstance;
@@ -91,13 +93,15 @@ describe('ThreadListComponent', () => {
   });
 
   it('should filter threads by category', () => {
-    forumService.getThreadsByCategory.and.returnValue(of({
-      data: [mockThreads[0]],
-      total: 1,
-      page: 1,
-      pageSize: 10,
-      hasMore: false
-    }));
+    forumService.getThreadsByCategory.and.returnValue(
+      of({
+        data: [mockThreads[0]],
+        total: 1,
+        page: 1,
+        pageSize: 10,
+        hasMore: false,
+      })
+    );
 
     component.selectedCategory = 'general';
     component.onCategoryChange();
@@ -158,7 +162,7 @@ describe('ThreadListComponent', () => {
 
   it('should handle errors when loading threads', () => {
     forumService.getAllThreads.and.returnValue(
-      new Observable(observer => observer.error('Load failed'))
+      new Observable((observer) => observer.error('Load failed'))
     );
 
     component.loadThreads();

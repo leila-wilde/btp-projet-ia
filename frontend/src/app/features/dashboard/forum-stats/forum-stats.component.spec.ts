@@ -27,9 +27,9 @@ describe('ForumStatsComponent', () => {
 
     const mockThreads = {
       data: [
-        { 
-          id: '1', 
-          title: 'Thread 1', 
+        {
+          id: '1',
+          title: 'Thread 1',
           content: 'Content 1',
           category: 'Tech',
           pinned: false,
@@ -37,11 +37,11 @@ describe('ForumStatsComponent', () => {
           creator: { id: 'user1', username: 'john' },
           postCount: 10,
           createdAt: new Date(),
-          lastActivityAt: new Date()
+          lastActivityAt: new Date(),
         },
-        { 
-          id: '2', 
-          title: 'Thread 2', 
+        {
+          id: '2',
+          title: 'Thread 2',
           content: 'Content 2',
           category: 'Tech',
           pinned: false,
@@ -49,11 +49,11 @@ describe('ForumStatsComponent', () => {
           creator: { id: 'user2', username: 'jane' },
           postCount: 5,
           createdAt: new Date(),
-          lastActivityAt: new Date()
+          lastActivityAt: new Date(),
         },
-        { 
-          id: '3', 
-          title: 'Thread 3', 
+        {
+          id: '3',
+          title: 'Thread 3',
           content: 'Content 3',
           category: 'General',
           pinned: false,
@@ -61,13 +61,13 @@ describe('ForumStatsComponent', () => {
           creator: { id: 'user3', username: 'bob' },
           postCount: 20,
           createdAt: new Date(),
-          lastActivityAt: new Date()
+          lastActivityAt: new Date(),
         },
       ],
       total: 3,
       page: 0,
       pageSize: 10,
-      hasMore: false
+      hasMore: false,
     };
 
     forumService.getAllThreads.and.returnValue(of(mockThreads));

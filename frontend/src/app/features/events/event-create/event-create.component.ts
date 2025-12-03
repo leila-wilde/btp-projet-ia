@@ -28,10 +28,10 @@ import { CreateEventRequest } from '../../../models/domain.model';
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressSpinnerModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './event-create.component.html',
-  styleUrls: ['./event-create.component.scss']
+  styleUrls: ['./event-create.component.scss'],
 })
 export class EventCreateComponent implements OnInit, OnDestroy {
   form!: FormGroup;
@@ -59,10 +59,13 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   initializeForm(): void {
     this.form = this.formBuilder.group({
       title: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
-      description: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(2000)]],
+      description: [
+        '',
+        [Validators.required, Validators.minLength(10), Validators.maxLength(2000)],
+      ],
       date: ['', Validators.required],
       location: ['', [Validators.required, Validators.minLength(3)]],
-      capacity: [30, [Validators.required, Validators.min(1), Validators.max(1000)]]
+      capacity: [30, [Validators.required, Validators.min(1), Validators.max(1000)]],
     });
   }
 
@@ -81,10 +84,11 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       description: formValue.description,
       date: new Date(formValue.date),
       location: formValue.location,
-      capacity: parseInt(formValue.capacity, 10)
+      capacity: parseInt(formValue.capacity, 10),
     };
 
-    this.eventService.createEvent(request)
+    this.eventService
+      .createEvent(request)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (event) => {
@@ -95,7 +99,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
           this.error = 'Failed to create event';
           this.loading = false;
           console.error('Error creating event:', err);
-        }
+        },
       });
   }
 
@@ -125,7 +129,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
   formatFieldName(name: string): string {
     return name
       .replace(/([A-Z])/g, ' $1')
-      .replace(/^./, str => str.toUpperCase())
+      .replace(/^./, (str) => str.toUpperCase())
       .trim();
   }
 

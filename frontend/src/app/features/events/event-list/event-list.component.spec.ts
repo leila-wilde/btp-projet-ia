@@ -24,7 +24,7 @@ describe('EventListComponent', () => {
       registeredCount: 5,
       status: 'SCHEDULED',
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     },
     {
       id: '2',
@@ -37,8 +37,8 @@ describe('EventListComponent', () => {
       registeredCount: 50,
       status: 'SCHEDULED',
       createdAt: new Date(),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    },
   ];
 
   const mockResponse: PaginatedResponse<Event> = {
@@ -46,14 +46,14 @@ describe('EventListComponent', () => {
     total: 2,
     page: 0,
     pageSize: 10,
-    hasMore: false
+    hasMore: false,
   };
 
   beforeEach(async () => {
     const eventServiceSpy = jasmine.createSpyObj('EventService', [
       'getAllEvents',
       'getAvailableSpots',
-      'isEventFull'
+      'isEventFull',
     ]);
 
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
@@ -62,8 +62,8 @@ describe('EventListComponent', () => {
       imports: [EventListComponent, BrowserAnimationsModule],
       providers: [
         { provide: EventService, useValue: eventServiceSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
@@ -130,7 +130,7 @@ describe('EventListComponent', () => {
       expect(eventService.getAllEvents).toHaveBeenCalledWith({
         page: 0,
         size: 10,
-        status: 'SCHEDULED'
+        status: 'SCHEDULED',
       });
     });
 
@@ -237,7 +237,7 @@ describe('EventListComponent', () => {
         total: 0,
         page: 0,
         pageSize: 10,
-        hasMore: false
+        hasMore: false,
       };
 
       eventService.getAllEvents.and.returnValue(of(emptyResponse));

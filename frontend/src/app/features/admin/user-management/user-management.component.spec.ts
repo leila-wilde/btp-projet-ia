@@ -27,7 +27,7 @@ describe('UserManagementComponent', () => {
           role: 'USER',
           status: 'ACTIVE',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: '2',
@@ -36,13 +36,13 @@ describe('UserManagementComponent', () => {
           role: 'MODERATOR',
           status: 'ACTIVE',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
       ],
       total: 2,
       page: 0,
       pageSize: 10,
-      hasMore: false
+      hasMore: false,
     };
 
     userService.getAllUsers.and.returnValue(of(mockUsers));

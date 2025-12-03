@@ -23,7 +23,7 @@ describe('EventCreateComponent', () => {
     registeredCount: 0,
     status: 'SCHEDULED',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 
   beforeEach(async () => {
@@ -34,8 +34,8 @@ describe('EventCreateComponent', () => {
       imports: [EventCreateComponent, BrowserAnimationsModule],
       providers: [
         { provide: EventService, useValue: eventServiceSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
@@ -115,7 +115,7 @@ describe('EventCreateComponent', () => {
         description: 'Learn Angular basics and advanced concepts',
         date: new Date('2025-12-10T10:00:00'),
         location: 'Paris',
-        capacity: 30
+        capacity: 30,
       });
 
       expect(component.form.valid).toBe(true);
@@ -123,7 +123,7 @@ describe('EventCreateComponent', () => {
 
     it('should validate capacity range', () => {
       const capacityField = component.form.get('capacity');
-      
+
       capacityField?.setValue(0);
       expect(capacityField?.hasError('min')).toBe(true);
 
@@ -144,7 +144,7 @@ describe('EventCreateComponent', () => {
         startTime: new Date('2025-12-10T10:00:00'),
         endTime: new Date('2025-12-10T12:00:00'),
         location: 'Paris',
-        maxParticipants: 30
+        maxParticipants: 30,
       });
     });
 
@@ -170,7 +170,7 @@ describe('EventCreateComponent', () => {
 
     it('should not submit invalid form', () => {
       component.form.patchValue({
-        title: '' // Invalid - required
+        title: '', // Invalid - required
       });
 
       component.onSubmit();
@@ -187,7 +187,7 @@ describe('EventCreateComponent', () => {
         description: 'Learn Angular basics and advanced concepts',
         date: eventDate,
         location: 'Paris',
-        capacity: 30
+        capacity: 30,
       });
 
       eventService.createEvent.and.returnValue(of(mockCreatedEvent));

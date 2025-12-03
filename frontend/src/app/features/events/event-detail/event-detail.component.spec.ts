@@ -24,7 +24,7 @@ describe('EventDetailComponent', () => {
     registeredCount: 2,
     status: 'SCHEDULED',
     createdAt: new Date(),
-    updatedAt: new Date()
+    updatedAt: new Date(),
   };
 
   beforeEach(async () => {
@@ -34,13 +34,13 @@ describe('EventDetailComponent', () => {
       'unregisterFromEvent',
       'isUserRegistered',
       'getAvailableSpots',
-      'isEventFull'
+      'isEventFull',
     ]);
 
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     activatedRoute = {
-      params: of({ id: '1' })
+      params: of({ id: '1' }),
     };
 
     await TestBed.configureTestingModule({
@@ -48,8 +48,8 @@ describe('EventDetailComponent', () => {
       providers: [
         { provide: EventService, useValue: eventServiceSpy },
         { provide: Router, useValue: routerSpy },
-        { provide: ActivatedRoute, useValue: activatedRoute }
-      ]
+        { provide: ActivatedRoute, useValue: activatedRoute },
+      ],
     }).compileComponents();
 
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
@@ -295,10 +295,10 @@ describe('EventDetailComponent', () => {
       const mockRegistration = { userId: 'user1', eventId: '1', registeredAt: new Date() };
       eventService.registerForEvent.and.returnValue(of(mockRegistration));
       spyOn(component, 'loadEvent');
-      
+
       expect(component.registering).toBe(false);
       component.joinEvent();
-      
+
       setTimeout(() => {
         expect(component.registering).toBe(false);
         done();

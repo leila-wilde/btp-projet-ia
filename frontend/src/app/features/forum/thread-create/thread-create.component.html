@@ -34,11 +34,12 @@
         <!-- Title -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Thread Title</mat-label>
-          <input 
-            matInput 
+          <input
+            matInput
             formControlName="title"
             placeholder="What's your discussion about?"
-            maxlength="200">
+            maxlength="200"
+          />
           <mat-hint align="end">
             {{ getCharacterCount('title') }}/{{ getCharacterLimit('title') }}
           </mat-hint>
@@ -56,12 +57,13 @@
         <!-- Content -->
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Discussion Content</mat-label>
-          <textarea 
-            matInput 
+          <textarea
+            matInput
             formControlName="content"
             rows="10"
             placeholder="Share your thoughts, ideas, and questions..."
-            maxlength="5000"></textarea>
+            maxlength="5000"
+          ></textarea>
           <mat-hint align="end">
             {{ getCharacterCount('content') }}/{{ getCharacterLimit('content') }}
           </mat-hint>
@@ -92,19 +94,16 @@
 
         <!-- Form Actions -->
         <div class="form-actions">
-          <button 
-            mat-raised-button 
-            type="button"
-            (click)="cancel()"
-            [disabled]="submitting">
+          <button mat-raised-button type="button" (click)="cancel()" [disabled]="submitting">
             <mat-icon>close</mat-icon>
             Cancel
           </button>
-          <button 
-            mat-raised-button 
+          <button
+            mat-raised-button
             color="primary"
             type="submit"
-            [disabled]="!createForm.valid || submitting">
+            [disabled]="!createForm.valid || submitting"
+          >
             <mat-icon *ngIf="!submitting">add</mat-icon>
             <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
             {{ submitting ? 'Creating...' : 'Create Thread' }}
@@ -122,7 +121,9 @@
         Tips for a Great Thread
       </h3>
       <ul>
-        <li><strong>Clear Title:</strong> Use a descriptive title that summarizes the discussion</li>
+        <li>
+          <strong>Clear Title:</strong> Use a descriptive title that summarizes the discussion
+        </li>
         <li><strong>Context:</strong> Provide background information to help others understand</li>
         <li><strong>Specific:</strong> Ask specific questions or raise specific points</li>
         <li><strong>Formatting:</strong> Use paragraphs and line breaks for readability</li>

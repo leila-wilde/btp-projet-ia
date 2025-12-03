@@ -20,8 +20,10 @@ import { AuthService } from '../../../core/services/auth.service';
             type="text"
             style="width: 100%; padding: 8px; box-sizing: border-box;"
           />
-          <p *ngIf="form.get('username')?.invalid && form.get('username')?.touched"
-             style="color: red; font-size: 12px; margin: 5px 0 0 0;">
+          <p
+            *ngIf="form.get('username')?.invalid && form.get('username')?.touched"
+            style="color: red; font-size: 12px; margin: 5px 0 0 0;"
+          >
             Required
           </p>
         </div>
@@ -34,8 +36,10 @@ import { AuthService } from '../../../core/services/auth.service';
             type="email"
             style="width: 100%; padding: 8px; box-sizing: border-box;"
           />
-          <p *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
-             style="color: red; font-size: 12px; margin: 5px 0 0 0;">
+          <p
+            *ngIf="form.get('email')?.invalid && form.get('email')?.touched"
+            style="color: red; font-size: 12px; margin: 5px 0 0 0;"
+          >
             Invalid email
           </p>
         </div>
@@ -48,8 +52,10 @@ import { AuthService } from '../../../core/services/auth.service';
             type="password"
             style="width: 100%; padding: 8px; box-sizing: border-box;"
           />
-          <p *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
-             style="color: red; font-size: 12px; margin: 5px 0 0 0;">
+          <p
+            *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+            style="color: red; font-size: 12px; margin: 5px 0 0 0;"
+          >
             Min 6 characters
           </p>
         </div>
@@ -71,7 +77,7 @@ import { AuthService } from '../../../core/services/auth.service';
       </p>
     </div>
   `,
-  styles: []
+  styles: [],
 })
 export class RegisterComponent implements OnInit {
   form!: FormGroup;
@@ -89,7 +95,7 @@ export class RegisterComponent implements OnInit {
     this.form = this.fb.group({
       username: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      password: ['', [Validators.required, Validators.minLength(6)]],
     });
   }
 
@@ -108,7 +114,7 @@ export class RegisterComponent implements OnInit {
       error: (err) => {
         this.error = err.error?.message || 'Registration failed';
         this.loading = false;
-      }
+      },
     });
   }
 }

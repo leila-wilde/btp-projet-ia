@@ -30,9 +30,23 @@ describe('DashboardOverviewComponent', () => {
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
 
-    userService.getCurrentUser.and.returnValue(of({ id: '1', username: 'user1', email: 'user@example.com', role: 'USER', status: 'ACTIVE', createdAt: new Date(), updatedAt: new Date() } as any));
-    eventService.getAllEvents.and.returnValue(of({ total: 10, data: [], page: 0, pageSize: 10, hasMore: false }));
-    forumService.getAllThreads.and.returnValue(of({ total: 5, data: [], page: 0, pageSize: 10, hasMore: false }));
+    userService.getCurrentUser.and.returnValue(
+      of({
+        id: '1',
+        username: 'user1',
+        email: 'user@example.com',
+        role: 'USER',
+        status: 'ACTIVE',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as any)
+    );
+    eventService.getAllEvents.and.returnValue(
+      of({ total: 10, data: [], page: 0, pageSize: 10, hasMore: false })
+    );
+    forumService.getAllThreads.and.returnValue(
+      of({ total: 5, data: [], page: 0, pageSize: 10, hasMore: false })
+    );
 
     fixture = TestBed.createComponent(DashboardOverviewComponent);
     component = fixture.componentInstance;

@@ -17,7 +17,10 @@ import { User } from '../../models/user.model';
       <div *ngIf="!isLoggedIn" class="not-logged-in">
         <div class="not-logged-in-card">
           <h2>Profile</h2>
-          <p>You are not logged in. Please <a href="javascript:void(0)" (click)="navigateToAuth()">login</a> to view your profile.</p>
+          <p>
+            You are not logged in. Please
+            <a href="javascript:void(0)" (click)="navigateToAuth()">login</a> to view your profile.
+          </p>
         </div>
       </div>
 
@@ -35,22 +38,21 @@ import { User } from '../../models/user.model';
         </div>
 
         <div class="profile-tabs">
-          <button 
-            class="tab-btn" 
-            [class.active]="activeTab === 'info'"
-            (click)="switchTab('info')">
+          <button class="tab-btn" [class.active]="activeTab === 'info'" (click)="switchTab('info')">
             Profile Info
           </button>
-          <button 
-            class="tab-btn" 
+          <button
+            class="tab-btn"
             [class.active]="activeTab === 'settings'"
-            (click)="switchTab('settings')">
+            (click)="switchTab('settings')"
+          >
             Settings
           </button>
-          <button 
-            class="tab-btn" 
+          <button
+            class="tab-btn"
             [class.active]="activeTab === 'security'"
-            (click)="switchTab('security')">
+            (click)="switchTab('security')"
+          >
             Security
           </button>
         </div>
@@ -87,46 +89,47 @@ import { User } from '../../models/user.model';
             <form [formGroup]="settingsForm" (ngSubmit)="updateProfile()">
               <div class="form-group">
                 <label for="username">Username:</label>
-                <input 
+                <input
                   id="username"
-                  type="text" 
-                  formControlName="username" 
+                  type="text"
+                  formControlName="username"
                   class="form-control"
-                  [disabled]="!editMode">
+                  [disabled]="!editMode"
+                />
               </div>
 
               <div class="form-group">
                 <label for="email">Email:</label>
-                <input 
+                <input
                   id="email"
-                  type="email" 
-                  formControlName="email" 
+                  type="email"
+                  formControlName="email"
                   class="form-control"
-                  [disabled]="!editMode">
+                  [disabled]="!editMode"
+                />
               </div>
 
               <div class="form-group">
                 <label for="bio">Bio:</label>
-                <textarea 
+                <textarea
                   id="bio"
-                  formControlName="bio" 
+                  formControlName="bio"
                   class="form-control"
                   rows="4"
                   placeholder="Tell us about yourself..."
-                  [disabled]="!editMode"></textarea>
+                  [disabled]="!editMode"
+                ></textarea>
               </div>
 
               <div class="button-group">
-                <button 
-                  type="button" 
-                  class="btn btn-secondary"
-                  (click)="toggleEditMode()">
+                <button type="button" class="btn btn-secondary" (click)="toggleEditMode()">
                   {{ editMode ? 'Cancel' : 'Edit Profile' }}
                 </button>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   class="btn btn-primary"
-                  [disabled]="!editMode || settingsForm.invalid || isSaving">
+                  [disabled]="!editMode || settingsForm.invalid || isSaving"
+                >
                   {{ isSaving ? 'Saving...' : 'Save Changes' }}
                 </button>
               </div>
@@ -148,51 +151,70 @@ import { User } from '../../models/user.model';
             <form [formGroup]="passwordForm" (ngSubmit)="changePassword()">
               <div class="form-group">
                 <label for="currentPassword">Current Password:</label>
-                <input 
+                <input
                   id="currentPassword"
-                  type="password" 
-                  formControlName="currentPassword" 
+                  type="password"
+                  formControlName="currentPassword"
                   class="form-control"
-                  placeholder="Enter your current password">
-                <small *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched" 
-                  class="error-text">
+                  placeholder="Enter your current password"
+                />
+                <small
+                  *ngIf="
+                    passwordForm.get('currentPassword')?.invalid &&
+                    passwordForm.get('currentPassword')?.touched
+                  "
+                  class="error-text"
+                >
                   Password is required
                 </small>
               </div>
 
               <div class="form-group">
                 <label for="newPassword">New Password:</label>
-                <input 
+                <input
                   id="newPassword"
-                  type="password" 
-                  formControlName="newPassword" 
+                  type="password"
+                  formControlName="newPassword"
                   class="form-control"
-                  placeholder="Enter new password">
-                <small *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched" 
-                  class="error-text">
+                  placeholder="Enter new password"
+                />
+                <small
+                  *ngIf="
+                    passwordForm.get('newPassword')?.invalid &&
+                    passwordForm.get('newPassword')?.touched
+                  "
+                  class="error-text"
+                >
                   Password must be at least 8 characters
                 </small>
               </div>
 
               <div class="form-group">
                 <label for="confirmPassword">Confirm New Password:</label>
-                <input 
+                <input
                   id="confirmPassword"
-                  type="password" 
-                  formControlName="confirmPassword" 
+                  type="password"
+                  formControlName="confirmPassword"
                   class="form-control"
-                  placeholder="Confirm new password">
-                <small *ngIf="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched" 
-                  class="error-text">
+                  placeholder="Confirm new password"
+                />
+                <small
+                  *ngIf="
+                    passwordForm.get('confirmPassword')?.invalid &&
+                    passwordForm.get('confirmPassword')?.touched
+                  "
+                  class="error-text"
+                >
                   Passwords must match
                 </small>
               </div>
 
               <div class="button-group">
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   class="btn btn-primary"
-                  [disabled]="passwordForm.invalid || isChangingPassword">
+                  [disabled]="passwordForm.invalid || isChangingPassword"
+                >
                   {{ isChangingPassword ? 'Changing...' : 'Change Password' }}
                 </button>
               </div>
@@ -213,316 +235,322 @@ import { User } from '../../models/user.model';
       </div>
     </div>
   `,
-  styles: [`
-    .profile-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      min-height: 80vh;
-    }
-
-    .not-logged-in {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 60vh;
-    }
-
-    .not-logged-in-card {
-      background-color: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      max-width: 500px;
-    }
-
-    .not-logged-in-card h2 {
-      color: #2c3e50;
-      margin-bottom: 20px;
-    }
-
-    .not-logged-in-card a {
-      color: #3498db;
-      cursor: pointer;
-      text-decoration: underline;
-      font-weight: bold;
-    }
-
-    .not-logged-in-card a:hover {
-      color: #2980b9;
-    }
-
-    .profile-wrapper {
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      overflow: hidden;
-    }
-
-    .profile-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      padding: 40px 20px;
-      color: white;
-    }
-
-    .avatar-section {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background-color: rgba(255, 255, 255, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 32px;
-      font-weight: bold;
-      border: 3px solid white;
-    }
-
-    .user-basic-info h1 {
-      margin: 0;
-      font-size: 28px;
-    }
-
-    .user-basic-info p {
-      margin: 5px 0 0 0;
-    }
-
-    .role-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-      text-transform: uppercase;
-    }
-
-    .role-user {
-      background-color: rgba(255, 255, 255, 0.3);
-      color: white;
-    }
-
-    .role-moderator {
-      background-color: #f39c12;
-      color: white;
-    }
-
-    .role-admin {
-      background-color: #e74c3c;
-      color: white;
-    }
-
-    .profile-tabs {
-      display: flex;
-      border-bottom: 1px solid #eee;
-      background-color: #f8f9fa;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 16px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      color: #555;
-      border-bottom: 3px solid transparent;
-      transition: all 0.3s ease;
-    }
-
-    .tab-btn:hover {
-      background-color: #f0f0f0;
-    }
-
-    .tab-btn.active {
-      color: #667eea;
-      border-bottom-color: #667eea;
-    }
-
-    .tab-content {
-      animation: fadeIn 0.3s ease-in;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .profile-card {
-      padding: 30px;
-    }
-
-    .profile-card h2 {
-      color: #2c3e50;
-      margin-bottom: 25px;
-      border-bottom: 2px solid #f0f0f0;
-      padding-bottom: 15px;
-    }
-
-    .info-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    @media (max-width: 600px) {
-      .info-grid {
-        grid-template-columns: 1fr;
+  styles: [
+    `
+      .profile-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 20px;
+        min-height: 80vh;
       }
-    }
 
-    .info-item {
-      padding: 15px;
-      background-color: #f8f9fa;
-      border-radius: 6px;
-    }
+      .not-logged-in {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+      }
 
-    .info-item label {
-      font-weight: bold;
-      color: #2c3e50;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    .info-item p {
-      color: #555;
-      margin: 0;
-    }
-
-    .form-group {
-      margin-bottom: 20px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .form-group label {
-      font-weight: bold;
-      color: #2c3e50;
-      margin-bottom: 8px;
-    }
-
-    .form-control {
-      padding: 10px 12px;
-      border: 1px solid #ddd;
-      border-radius: 6px;
-      font-size: 14px;
-      font-family: inherit;
-    }
-
-    .form-control:focus {
-      outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-    }
-
-    .form-control:disabled {
-      background-color: #f8f9fa;
-      cursor: not-allowed;
-    }
-
-    .error-text {
-      color: #e74c3c;
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .button-group {
-      display: flex;
-      gap: 12px;
-      margin-top: 25px;
-    }
-
-    .btn {
-      padding: 12px 24px;
-      font-size: 14px;
-      font-weight: bold;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn-primary {
-      background-color: #667eea;
-      color: white;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background-color: #5568d3;
-    }
-
-    .btn-secondary {
-      background-color: #95a5a6;
-      color: white;
-    }
-
-    .btn-secondary:hover {
-      background-color: #7f8c8d;
-    }
-
-    .btn-danger {
-      background-color: #e74c3c;
-      color: white;
-    }
-
-    .btn-danger:hover {
-      background-color: #c0392b;
-    }
-
-    .btn:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .alert {
-      padding: 12px 16px;
-      border-radius: 6px;
-      margin-top: 16px;
-      font-size: 14px;
-    }
-
-    .alert-success {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
-
-    .alert-error {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-
-    .profile-footer {
-      padding: 20px 30px;
-      background-color: #f8f9fa;
-      border-top: 1px solid #eee;
-      display: flex;
-      justify-content: flex-end;
-    }
-
-    @media (max-width: 600px) {
-      .avatar-section {
-        flex-direction: column;
+      .not-logged-in-card {
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
         text-align: center;
+        max-width: 500px;
+      }
+
+      .not-logged-in-card h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+      }
+
+      .not-logged-in-card a {
+        color: #3498db;
+        cursor: pointer;
+        text-decoration: underline;
+        font-weight: bold;
+      }
+
+      .not-logged-in-card a:hover {
+        color: #2980b9;
+      }
+
+      .profile-wrapper {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        overflow: hidden;
+      }
+
+      .profile-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        padding: 40px 20px;
+        color: white;
+      }
+
+      .avatar-section {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+      }
+
+      .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+        font-weight: bold;
+        border: 3px solid white;
       }
 
       .user-basic-info h1 {
-        font-size: 24px;
+        margin: 0;
+        font-size: 28px;
+      }
+
+      .user-basic-info p {
+        margin: 5px 0 0 0;
+      }
+
+      .role-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+        text-transform: uppercase;
+      }
+
+      .role-user {
+        background-color: rgba(255, 255, 255, 0.3);
+        color: white;
+      }
+
+      .role-moderator {
+        background-color: #f39c12;
+        color: white;
+      }
+
+      .role-admin {
+        background-color: #e74c3c;
+        color: white;
+      }
+
+      .profile-tabs {
+        display: flex;
+        border-bottom: 1px solid #eee;
+        background-color: #f8f9fa;
+      }
+
+      .tab-btn {
+        flex: 1;
+        padding: 16px;
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 500;
+        color: #555;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .tab-btn:hover {
+        background-color: #f0f0f0;
+      }
+
+      .tab-btn.active {
+        color: #667eea;
+        border-bottom-color: #667eea;
+      }
+
+      .tab-content {
+        animation: fadeIn 0.3s ease-in;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .profile-card {
+        padding: 30px;
+      }
+
+      .profile-card h2 {
+        color: #2c3e50;
+        margin-bottom: 25px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 15px;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+
+      @media (max-width: 600px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .info-item {
+        padding: 15px;
+        background-color: #f8f9fa;
+        border-radius: 6px;
+      }
+
+      .info-item label {
+        font-weight: bold;
+        color: #2c3e50;
+        display: block;
+        margin-bottom: 8px;
+      }
+
+      .info-item p {
+        color: #555;
+        margin: 0;
+      }
+
+      .form-group {
+        margin-bottom: 20px;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .form-group label {
+        font-weight: bold;
+        color: #2c3e50;
+        margin-bottom: 8px;
+      }
+
+      .form-control {
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+      }
+
+      .form-control:focus {
+        outline: none;
+        border-color: #667eea;
+        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      }
+
+      .form-control:disabled {
+        background-color: #f8f9fa;
+        cursor: not-allowed;
+      }
+
+      .error-text {
+        color: #e74c3c;
+        font-size: 12px;
+        margin-top: 4px;
       }
 
       .button-group {
-        flex-direction: column;
+        display: flex;
+        gap: 12px;
+        margin-top: 25px;
       }
-    }
-  `]
+
+      .btn {
+        padding: 12px 24px;
+        font-size: 14px;
+        font-weight: bold;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background-color: #667eea;
+        color: white;
+      }
+
+      .btn-primary:hover:not(:disabled) {
+        background-color: #5568d3;
+      }
+
+      .btn-secondary {
+        background-color: #95a5a6;
+        color: white;
+      }
+
+      .btn-secondary:hover {
+        background-color: #7f8c8d;
+      }
+
+      .btn-danger {
+        background-color: #e74c3c;
+        color: white;
+      }
+
+      .btn-danger:hover {
+        background-color: #c0392b;
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .alert {
+        padding: 12px 16px;
+        border-radius: 6px;
+        margin-top: 16px;
+        font-size: 14px;
+      }
+
+      .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
+
+      .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+
+      .profile-footer {
+        padding: 20px 30px;
+        background-color: #f8f9fa;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      @media (max-width: 600px) {
+        .avatar-section {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .user-basic-info h1 {
+          font-size: 24px;
+        }
+
+        .button-group {
+          flex-direction: column;
+        }
+      }
+    `,
+  ],
 })
 export class ProfileComponent implements OnInit, OnDestroy {
   user: User | null = null;
@@ -567,14 +595,17 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.settingsForm = this.fb.group({
       username: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
-      bio: ['', [Validators.maxLength(500)]]
+      bio: ['', [Validators.maxLength(500)]],
     });
 
-    this.passwordForm = this.fb.group({
-      currentPassword: ['', [Validators.required]],
-      newPassword: ['', [Validators.required, Validators.minLength(8)]],
-      confirmPassword: ['', [Validators.required]]
-    }, { validators: this.passwordMatchValidator });
+    this.passwordForm = this.fb.group(
+      {
+        currentPassword: ['', [Validators.required]],
+        newPassword: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.required]],
+      },
+      { validators: this.passwordMatchValidator }
+    );
   }
 
   private passwordMatchValidator(group: FormGroup): { [key: string]: boolean } | null {
@@ -588,7 +619,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   private loadUserProfile() {
-    this.userService.getCurrentUser()
+    this.userService
+      .getCurrentUser()
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (user: User) => {
@@ -596,13 +628,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
           this.settingsForm.patchValue({
             username: user.username,
             email: user.email,
-            bio: user.bio || ''
+            bio: user.bio || '',
           });
         },
         error: (error) => {
           console.error('Error loading user profile:', error);
           this.errorMessage = 'Failed to load profile';
-        }
+        },
       });
   }
 
@@ -620,7 +652,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
       this.settingsForm.reset({
         username: this.user?.username,
         email: this.user?.email,
-        bio: this.user?.bio || ''
+        bio: this.user?.bio || '',
       });
     }
   }
@@ -634,7 +666,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.successMessage = '';
     this.errorMessage = '';
 
-    this.userService.updateUser(this.user.id, this.settingsForm.value)
+    this.userService
+      .updateUser(this.user.id, this.settingsForm.value)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (updatedUser: User) => {
@@ -649,7 +682,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.isSaving = false;
           this.errorMessage = error.error?.message || 'Failed to update profile';
-        }
+        },
       });
   }
 
@@ -664,7 +697,8 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
     const { currentPassword, newPassword } = this.passwordForm.value;
 
-    this.userService.changePassword(currentPassword, newPassword)
+    this.userService
+      .changePassword(currentPassword, newPassword)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -678,7 +712,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.isChangingPassword = false;
           this.passwordErrorMessage = error.error?.message || 'Failed to change password';
-        }
+        },
       });
   }
 

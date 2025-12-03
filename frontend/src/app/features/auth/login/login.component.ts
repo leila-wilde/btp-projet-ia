@@ -13,15 +13,19 @@ import { AuthService } from '../../../core/services/auth.service';
       <h2>Login</h2>
       <form [formGroup]="form" (ngSubmit)="onSubmit()">
         <div style="margin-bottom: 15px;">
-          <label for="usernameOrEmail" style="display: block; margin-bottom: 5px;">Username or Email</label>
+          <label for="usernameOrEmail" style="display: block; margin-bottom: 5px;"
+            >Username or Email</label
+          >
           <input
             id="usernameOrEmail"
             formControlName="usernameOrEmail"
             type="text"
             style="width: 100%; padding: 8px; box-sizing: border-box;"
           />
-          <p *ngIf="form.get('usernameOrEmail')?.invalid && form.get('usernameOrEmail')?.touched"
-             style="color: red; font-size: 12px; margin: 5px 0 0 0;">
+          <p
+            *ngIf="form.get('usernameOrEmail')?.invalid && form.get('usernameOrEmail')?.touched"
+            style="color: red; font-size: 12px; margin: 5px 0 0 0;"
+          >
             Required
           </p>
         </div>
@@ -34,8 +38,10 @@ import { AuthService } from '../../../core/services/auth.service';
             type="password"
             style="width: 100%; padding: 8px; box-sizing: border-box;"
           />
-          <p *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
-             style="color: red; font-size: 12px; margin: 5px 0 0 0;">
+          <p
+            *ngIf="form.get('password')?.invalid && form.get('password')?.touched"
+            style="color: red; font-size: 12px; margin: 5px 0 0 0;"
+          >
             Required
           </p>
         </div>
@@ -52,11 +58,16 @@ import { AuthService } from '../../../core/services/auth.service';
       </form>
 
       <p style="text-align: center; margin-top: 15px;">
-        Don't have an account? <a [routerLink]="['/auth/register']" style="color: #007bff; text-decoration: none; cursor: pointer;">Register</a>
+        Don't have an account?
+        <a
+          [routerLink]="['/auth/register']"
+          style="color: #007bff; text-decoration: none; cursor: pointer;"
+          >Register</a
+        >
       </p>
     </div>
   `,
-  styles: []
+  styles: [],
 })
 export class LoginComponent implements OnInit {
   form!: FormGroup;
@@ -73,7 +84,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     this.form = this.fb.group({
       usernameOrEmail: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
   }
 
@@ -91,7 +102,7 @@ export class LoginComponent implements OnInit {
       error: (err) => {
         this.error = err.error?.message || 'Login failed';
         this.loading = false;
-      }
+      },
     });
   }
 }

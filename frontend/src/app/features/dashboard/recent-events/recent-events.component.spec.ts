@@ -38,7 +38,7 @@ describe('RecentEventsComponent', () => {
           description: 'Event 1 description',
           status: 'SCHEDULED',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
         {
           id: '2',
@@ -51,13 +51,13 @@ describe('RecentEventsComponent', () => {
           description: 'Event 2 description',
           status: 'SCHEDULED',
           createdAt: new Date(),
-          updatedAt: new Date()
+          updatedAt: new Date(),
         },
       ],
       total: 2,
       page: 0,
       pageSize: 5,
-      hasMore: false
+      hasMore: false,
     };
 
     eventService.getUpcomingEvents.and.returnValue(of(mockEvents));

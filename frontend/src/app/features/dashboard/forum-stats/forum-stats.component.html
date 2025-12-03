@@ -41,7 +41,11 @@
       <!-- Top Threads -->
       <div *ngIf="stats.topThreads.length > 0" class="top-threads">
         <h3>Top Threads</h3>
-        <div *ngFor="let thread of stats.topThreads" class="thread-item" (click)="navigateToThread(thread.id)">
+        <div
+          *ngFor="let thread of stats.topThreads"
+          class="thread-item"
+          (click)="navigateToThread(thread.id)"
+        >
           <div class="thread-title">{{ thread.title }}</div>
           <div class="thread-posts">
             <span class="post-count">{{ thread.postCount }} posts</span>

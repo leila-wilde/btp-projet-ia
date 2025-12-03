@@ -13,7 +13,12 @@
 
   <div *ngIf="!loading && event" class="event-detail">
     <mat-card class="event-header-card">
-      <img *ngIf="event.imageUrl" [src]="event.imageUrl" alt="{{ event.title }}" class="event-header-image">
+      <img
+        *ngIf="event.imageUrl"
+        [src]="event.imageUrl"
+        alt="{{ event.title }}"
+        class="event-header-image"
+      />
       <div class="event-header-overlay">
         <h1>{{ event.title }}</h1>
         <mat-chip-set>
@@ -80,18 +85,24 @@
               <span class="stat-label">Max Capacity</span>
             </div>
             <span class="stat-separator">=</span>
-            <div class="stat" [ngClass]="{ 'available': !isEventFull(), 'full': isEventFull() }">
+            <div class="stat" [ngClass]="{ available: !isEventFull(), full: isEventFull() }">
               <span class="stat-value">{{ getAvailableSpots() }}</span>
               <span class="stat-label">Available Spots</span>
             </div>
           </div>
 
           <div class="availability-bar">
-            <div class="filled" [style.width.%]="(event.participants?.length || 0) / event.maxParticipants * 100"></div>
+            <div
+              class="filled"
+              [style.width.%]="((event.participants?.length || 0) / event.maxParticipants) * 100"
+            ></div>
           </div>
         </div>
 
-        <div *ngIf="event.participants && event.participants.length > 0" class="participants-section">
+        <div
+          *ngIf="event.participants && event.participants.length > 0"
+          class="participants-section"
+        >
           <h3>Participants</h3>
           <div class="participants-list">
             <div *ngFor="let participant of event.participants" class="participant-item">
@@ -104,20 +115,24 @@
 
       <mat-card class="event-actions">
         <div class="action-buttons">
-          <button *ngIf="canJoin()" 
-                  mat-raised-button 
-                  color="primary" 
-                  (click)="joinEvent()"
-                  [disabled]="registering">
+          <button
+            *ngIf="canJoin()"
+            mat-raised-button
+            color="primary"
+            (click)="joinEvent()"
+            [disabled]="registering"
+          >
             <mat-icon *ngIf="!registering">add</mat-icon>
             <mat-spinner *ngIf="registering" diameter="20"></mat-spinner>
             {{ registering ? 'Joining...' : 'Join Event' }}
           </button>
 
-          <button *ngIf="isRegistered && !registering" 
-                  mat-stroked-button 
-                  (click)="leaveEvent()"
-                  [disabled]="registering">
+          <button
+            *ngIf="isRegistered && !registering"
+            mat-stroked-button
+            (click)="leaveEvent()"
+            [disabled]="registering"
+          >
             <mat-icon>remove</mat-icon>
             Leave Event
           </button>
@@ -143,8 +158,6 @@
   <div *ngIf="!loading && !event" class="not-found">
     <mat-icon>search_off</mat-icon>
     <p>Event not found</p>
-    <button mat-raised-button color="primary" (click)="goBack()">
-      Back to Events
-    </button>
+    <button mat-raised-button color="primary" (click)="goBack()">Back to Events</button>
   </div>
 </div>

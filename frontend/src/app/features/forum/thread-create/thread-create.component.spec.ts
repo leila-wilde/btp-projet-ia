@@ -22,7 +22,7 @@ describe('ThreadCreateComponent', () => {
     creator: { id: 'user1', username: 'testuser' },
     postCount: 0,
     createdAt: new Date(),
-    lastActivityAt: new Date()
+    lastActivityAt: new Date(),
   };
 
   beforeEach(async () => {
@@ -33,8 +33,8 @@ describe('ThreadCreateComponent', () => {
       imports: [ThreadCreateComponent, ReactiveFormsModule],
       providers: [
         { provide: ForumService, useValue: forumServiceSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
@@ -107,7 +107,7 @@ describe('ThreadCreateComponent', () => {
     component.createForm.patchValue({
       title: 'Test Thread Title',
       content: 'This is a test thread content that is long enough',
-      category: 'general'
+      category: 'general',
     });
 
     component.submitForm();
@@ -116,7 +116,7 @@ describe('ThreadCreateComponent', () => {
       jasmine.objectContaining({
         title: 'Test Thread Title',
         content: 'This is a test thread content that is long enough',
-        category: 'general'
+        category: 'general',
       })
     );
   });
@@ -125,7 +125,7 @@ describe('ThreadCreateComponent', () => {
     component.createForm.patchValue({
       title: 'ab',
       content: 'short',
-      category: ''
+      category: '',
     });
 
     component.submitForm();
@@ -137,7 +137,7 @@ describe('ThreadCreateComponent', () => {
     component.createForm.patchValue({
       title: 'Test Thread Title',
       content: 'This is a test thread content that is long enough',
-      category: 'general'
+      category: 'general',
     });
 
     component.submitForm();
@@ -150,7 +150,7 @@ describe('ThreadCreateComponent', () => {
 
   it('should handle creation error', (done) => {
     forumService.createThread.and.returnValue(
-      new Observable(observer => {
+      new Observable((observer) => {
         observer.error({ error: { message: 'Server error' } });
       })
     );
@@ -158,7 +158,7 @@ describe('ThreadCreateComponent', () => {
     component.createForm.patchValue({
       title: 'Test Thread Title',
       content: 'This is a test thread content that is long enough',
-      category: 'general'
+      category: 'general',
     });
 
     component.submitForm();
@@ -184,7 +184,7 @@ describe('ThreadCreateComponent', () => {
   it('should count characters', () => {
     component.createForm.patchValue({
       title: 'Hello World',
-      content: 'This is a test'
+      content: 'This is a test',
     });
 
     expect(component.getCharacterCount('title')).toBe(11);
@@ -201,7 +201,7 @@ describe('ThreadCreateComponent', () => {
     component.createForm.patchValue({
       title: 'ab',
       content: 'short',
-      category: ''
+      category: '',
     });
 
     expect(component.createForm.valid).toBe(false);
@@ -209,11 +209,11 @@ describe('ThreadCreateComponent', () => {
 
   it('should display all categories', () => {
     expect(component.categories.length).toBe(5);
-    expect(component.categories.map(c => c.value)).toContain('general');
-    expect(component.categories.map(c => c.value)).toContain('projects');
-    expect(component.categories.map(c => c.value)).toContain('help');
-    expect(component.categories.map(c => c.value)).toContain('announcements');
-    expect(component.categories.map(c => c.value)).toContain('events');
+    expect(component.categories.map((c) => c.value)).toContain('general');
+    expect(component.categories.map((c) => c.value)).toContain('projects');
+    expect(component.categories.map((c) => c.value)).toContain('help');
+    expect(component.categories.map((c) => c.value)).toContain('announcements');
+    expect(component.categories.map((c) => c.value)).toContain('events');
   });
 });
 

@@ -18,7 +18,9 @@ describe('ModerationComponent', () => {
 
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
 
-    forumService.getAllThreads.and.returnValue(of({ data: [], total: 0, page: 0, pageSize: 10, hasMore: false }));
+    forumService.getAllThreads.and.returnValue(
+      of({ data: [], total: 0, page: 0, pageSize: 10, hasMore: false })
+    );
 
     fixture = TestBed.createComponent(ModerationComponent);
     component = fixture.componentInstance;

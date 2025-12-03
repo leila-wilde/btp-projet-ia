@@ -33,24 +33,24 @@ interface CategoryOption {
     MatInputModule,
     MatProgressSpinnerModule,
     MatSelectModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './thread-create.component.html',
-  styleUrls: ['./thread-create.component.scss']
+  styleUrls: ['./thread-create.component.scss'],
 })
 export class ThreadCreateComponent implements OnInit, OnDestroy {
   createForm: FormGroup;
   submitting = false;
   error: string | null = null;
-  
+
   categories: CategoryOption[] = [
     { value: 'general', label: 'General Discussion' },
     { value: 'projects', label: 'Projects & Ideas' },
     { value: 'help', label: 'Help & Support' },
     { value: 'announcements', label: 'Announcements' },
-    { value: 'events', label: 'Events Discussion' }
+    { value: 'events', label: 'Events Discussion' },
   ];
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -61,7 +61,7 @@ export class ThreadCreateComponent implements OnInit, OnDestroy {
     this.createForm = this.fb.group({
       title: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(200)]],
       content: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(5000)]],
-      category: ['general', Validators.required]
+      category: ['general', Validators.required],
     });
   }
 
@@ -83,10 +83,11 @@ export class ThreadCreateComponent implements OnInit, OnDestroy {
     const request: CreateThreadRequest = {
       title: this.createForm.get('title')!.value,
       content: this.createForm.get('content')!.value,
-      category: this.createForm.get('category')!.value
+      category: this.createForm.get('category')!.value,
     };
 
-    this.forumService.createThread(request)
+    this.forumService
+      .createThread(request)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (thread: ForumThread) => {
@@ -97,7 +98,7 @@ export class ThreadCreateComponent implements OnInit, OnDestroy {
           this.submitting = false;
           this.error = err.error?.message || 'Failed to create thread. Please try again.';
           console.error('Error creating thread:', err);
-        }
+        },
       });
   }
 
@@ -106,7 +107,7 @@ export class ThreadCreateComponent implements OnInit, OnDestroy {
   }
 
   getCategoryLabel(value: string): string {
-    const category = this.categories.find(c => c.value === value);
+    const category = this.categories.find((c) => c.value === value);
     return category?.label || value;
   }
 
@@ -116,8 +117,8 @@ export class ThreadCreateComponent implements OnInit, OnDestroy {
 
   getCharacterLimit(field: string): number {
     const limits: Record<string, number> = {
-      'title': 200,
-      'content': 5000
+      title: 200,
+      content: 5000,
     };
     return limits[field] || 0;
   }

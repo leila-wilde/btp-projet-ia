@@ -11,8 +11,11 @@ import { JwtResponse } from '../../models/user.model';
   template: `
     <div style="padding: 20px;">
       <h1>Welcome to Archipel Libre</h1>
-      
-      <div *ngIf="currentUser$ | async as user; else notLoggedIn" style="background: #f0f0f0; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
+
+      <div
+        *ngIf="currentUser$ | async as user; else notLoggedIn"
+        style="background: #f0f0f0; padding: 15px; border-radius: 4px; margin-bottom: 20px;"
+      >
         <h3>Hello, {{ user.username }}!</h3>
         <p>Email: {{ user.email }}</p>
         <p>Role: {{ user.role }}</p>
@@ -27,7 +30,9 @@ import { JwtResponse } from '../../models/user.model';
       <ng-template #notLoggedIn>
         <div style="background: #e7f3ff; padding: 15px; border-radius: 4px; margin-bottom: 20px;">
           <p>You are not logged in.</p>
-          <a routerLink="/auth/login" style="color: #007bff; text-decoration: underline;">Go to login</a>
+          <a routerLink="/auth/login" style="color: #007bff; text-decoration: underline;"
+            >Go to login</a
+          >
         </div>
       </ng-template>
 
@@ -48,7 +53,7 @@ import { JwtResponse } from '../../models/user.model';
       </ul>
     </div>
   `,
-  styles: []
+  styles: [],
 })
 export class HomeComponent implements OnInit {
   currentUser$!: any;

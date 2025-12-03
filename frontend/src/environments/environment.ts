@@ -6,7 +6,7 @@ export const environment = {
   jwt: {
     storage: 'localStorage', // 'localStorage' or 'sessionStorage'
     expirationTime: 3600000, // 1 hour in milliseconds
-    refreshPath: '/auth/refresh'
+    refreshPath: '/auth/refresh',
   },
   // API Configuration
   api: {
@@ -15,12 +15,12 @@ export const environment = {
       login: '/auth/login',
       register: '/auth/register',
       logout: '/auth/logout',
-      refresh: '/auth/refresh'
+      refresh: '/auth/refresh',
     },
     // User endpoints
     users: {
       profile: '/users/me',
-      changePassword: '/users/change-password'
+      changePassword: '/users/change-password',
     },
     // Event endpoints
     events: {
@@ -28,7 +28,7 @@ export const environment = {
       create: '/events',
       detail: '/events/:id',
       register: '/events/:id/register',
-      unregister: '/events/:id/unregister'
+      unregister: '/events/:id/unregister',
     },
     // Forum endpoints
     forum: {
@@ -36,7 +36,7 @@ export const environment = {
       posts: '/forum/posts',
       threadDetail: '/forum/threads/:id',
       userThreads: '/forum/user/threads',
-      userPosts: '/forum/user/posts'
+      userPosts: '/forum/user/posts',
     },
     // Workshop endpoints
     workshops: {
@@ -45,7 +45,7 @@ export const environment = {
       detail: '/workshops/:id',
       vote: '/workshops/:id/vote',
       approve: '/workshops/:id/approve',
-      reject: '/workshops/:id/reject'
-    }
-  }
+      reject: '/workshops/:id/reject',
+    },
+  },
 };

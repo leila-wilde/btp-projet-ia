@@ -1,6 +1,12 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormsModule,
+  ReactiveFormsModule,
+  FormBuilder,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -34,10 +40,10 @@ import { ForumThread, ForumPost, CreatePostRequest } from '../../../models/domai
     MatDividerModule,
     MatMenuModule,
     MatTooltipModule,
-    MatChipsModule
+    MatChipsModule,
   ],
   templateUrl: './thread-detail.component.html',
-  styleUrls: ['./thread-detail.component.scss']
+  styleUrls: ['./thread-detail.component.scss'],
 })
 export class ThreadDetailComponent implements OnInit, OnDestroy {
   thread: ForumThread | null = null;
@@ -45,14 +51,14 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
   loading = false;
   postsLoading = false;
   error: string | null = null;
-  
+
   replyForm: FormGroup;
   submittingReply = false;
-  
+
   isAuthenticated = false;
   currentUserId: string = '';
   userRole: string = '';
-  
+
   private threadId: string = '';
   private destroy$ = new Subject<void>();
 
@@ -64,21 +70,19 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
     private fb: FormBuilder
   ) {
     this.replyForm = this.fb.group({
-      content: ['', [Validators.required, Validators.minLength(3)]]
+      content: ['', [Validators.required, Validators.minLength(3)]],
     });
   }
 
   ngOnInit(): void {
     this.checkAuthentication();
-    this.route.paramMap
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(params => {
-        this.threadId = params.get('id') || '';
-        if (this.threadId) {
-          this.loadThread();
-          this.loadPosts();
-        }
-      });
+    this.route.paramMap.pipe(takeUntil(this.destroy$)).subscribe((params) => {
+      this.threadId = params.get('id') || '';
+      if (this.threadId) {
+        this.loadThread();
+        this.loadPosts();
+      }
+    });
   }
 
   ngOnDestroy(): void {
@@ -87,27 +91,24 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
   }
 
   private checkAuthentication(): void {
-    this.authService.isAuthenticated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(isAuth => {
-        this.isAuthenticated = isAuth;
-      });
+    this.authService.isAuthenticated$.pipe(takeUntil(this.destroy$)).subscribe((isAuth) => {
+      this.isAuthenticated = isAuth;
+    });
 
-    this.authService.currentUser$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(user => {
-        if (user) {
-          this.currentUserId = user.id || '';
-          this.userRole = user.role;
-        }
-      });
+    this.authService.currentUser$.pipe(takeUntil(this.destroy$)).subscribe((user) => {
+      if (user) {
+        this.currentUserId = user.id || '';
+        this.userRole = user.role;
+      }
+    });
   }
 
   private loadThread(): void {
     this.loading = true;
     this.error = null;
 
-    this.forumService.getThread(this.threadId)
+    this.forumService
+      .getThread(this.threadId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (thread: ForumThread) => {
@@ -118,14 +119,15 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
           this.error = 'Failed to load thread';
           this.loading = false;
           console.error('Error loading thread:', err);
-        }
+        },
       });
   }
 
   private loadPosts(): void {
     this.postsLoading = true;
 
-    this.forumService.getThreadPosts(this.threadId)
+    this.forumService
+      .getThreadPosts(this.threadId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: any) => {
@@ -135,7 +137,7 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
         error: (err: any) => {
           console.error('Error loading posts:', err);
           this.postsLoading = false;
-        }
+        },
       });
   }
 
@@ -147,10 +149,11 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
     this.submittingReply = true;
     const request: CreatePostRequest = {
       content: this.replyForm.get('content')!.value,
-      threadId: this.threadId
+      threadId: this.threadId,
     };
 
-    this.forumService.createPost(request)
+    this.forumService
+      .createPost(request)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (newPost: ForumPost) => {
@@ -161,21 +164,22 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
         error: (err) => {
           console.error('Error submitting reply:', err);
           this.submittingReply = false;
-        }
+        },
       });
   }
 
   deletePost(postId: string): void {
     if (confirm('Are you sure you want to delete this post?')) {
-      this.forumService.deletePost(postId)
+      this.forumService
+        .deletePost(postId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
-            this.posts = this.posts.filter(p => p.id !== postId);
+            this.posts = this.posts.filter((p) => p.id !== postId);
           },
           error: (err) => {
             console.error('Error deleting post:', err);
-          }
+          },
         });
     }
   }
@@ -183,25 +187,27 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
   editPost(post: ForumPost): void {
     const newContent = prompt('Edit post:', post.content);
     if (newContent && newContent.trim()) {
-      this.forumService.updatePost(post.id, newContent)
+      this.forumService
+        .updatePost(post.id, newContent)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (updatedPost: ForumPost) => {
-            const index = this.posts.findIndex(p => p.id === post.id);
+            const index = this.posts.findIndex((p) => p.id === post.id);
             if (index !== -1) {
               this.posts[index] = updatedPost;
             }
           },
           error: (err) => {
             console.error('Error updating post:', err);
-          }
+          },
         });
     }
   }
 
   toggleThreadLock(): void {
     if (this.thread && this.canModerate()) {
-      this.forumService.toggleLock(this.thread.id)
+      this.forumService
+        .toggleLock(this.thread.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (updatedThread: ForumThread) => {
@@ -209,14 +215,15 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
           },
           error: (err) => {
             console.error('Error toggling lock:', err);
-          }
+          },
         });
     }
   }
 
   toggleThreadPin(): void {
     if (this.thread && this.canModerate()) {
-      this.forumService.togglePin(this.thread.id)
+      this.forumService
+        .togglePin(this.thread.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (updatedThread: ForumThread) => {
@@ -224,7 +231,7 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
           },
           error: (err) => {
             console.error('Error toggling pin:', err);
-          }
+          },
         });
     }
   }
@@ -235,7 +242,8 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
     }
 
     if (confirm('Are you sure you want to delete this thread?')) {
-      this.forumService.deleteThread(this.thread.id)
+      this.forumService
+        .deleteThread(this.thread.id)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: () => {
@@ -243,7 +251,7 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
           },
           error: (err) => {
             console.error('Error deleting thread:', err);
-          }
+          },
         });
     }
   }
@@ -263,7 +271,7 @@ export class ThreadDetailComponent implements OnInit, OnDestroy {
       day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 

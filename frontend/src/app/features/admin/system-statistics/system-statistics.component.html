@@ -23,7 +23,9 @@
             <span class="score-value">{{ stats.systemHealthScore }}%</span>
           </div>
           <div class="health-status">
-            <p class="status-label">Status: <strong>{{ serverHealth.status | uppercase }}</strong></p>
+            <p class="status-label">
+              Status: <strong>{{ serverHealth.status | uppercase }}</strong>
+            </p>
             <p class="uptime">Uptime: {{ serverHealth.uptime }}</p>
           </div>
         </div>
@@ -36,12 +38,18 @@
           </div>
           <div class="metric">
             <label>Memory Usage</label>
-            <mat-progress-bar [value]="serverHealth.memoryUsage" mode="determinate"></mat-progress-bar>
+            <mat-progress-bar
+              [value]="serverHealth.memoryUsage"
+              mode="determinate"
+            ></mat-progress-bar>
             <span class="metric-value">{{ serverHealth.memoryUsage }}%</span>
           </div>
           <div class="metric">
             <label>Disk Usage</label>
-            <mat-progress-bar [value]="serverHealth.diskUsage" mode="determinate"></mat-progress-bar>
+            <mat-progress-bar
+              [value]="serverHealth.diskUsage"
+              mode="determinate"
+            ></mat-progress-bar>
             <span class="metric-value">{{ serverHealth.diskUsage }}%</span>
           </div>
         </div>
@@ -59,9 +67,16 @@
       <mat-card-content>
         <div class="stat-value">{{ stats.totalUsers }}</div>
         <p class="stat-label">Total Users</p>
-        <mat-progress-bar [value]="(stats.activeUsers / stats.totalUsers * 100) || 0" mode="determinate">
+        <mat-progress-bar
+          [value]="(stats.activeUsers / stats.totalUsers) * 100 || 0"
+          mode="determinate"
+        >
         </mat-progress-bar>
-        <p class="stat-detail">{{ stats.activeUsers }} active ({{ ((stats.activeUsers / stats.totalUsers * 100) || 0) | number: '1.0-0' }}%)</p>
+        <p class="stat-detail">
+          {{ stats.activeUsers }} active ({{
+            (stats.activeUsers / stats.totalUsers) * 100 || 0 | number: '1.0-0'
+          }}%)
+        </p>
       </mat-card-content>
     </mat-card>
 
@@ -75,9 +90,16 @@
       <mat-card-content>
         <div class="stat-value">{{ stats.totalEvents }}</div>
         <p class="stat-label">Total Events</p>
-        <mat-progress-bar [value]="(stats.upcomingEvents / stats.totalEvents * 100) || 0" mode="determinate">
+        <mat-progress-bar
+          [value]="(stats.upcomingEvents / stats.totalEvents) * 100 || 0"
+          mode="determinate"
+        >
         </mat-progress-bar>
-        <p class="stat-detail">{{ stats.upcomingEvents }} upcoming ({{ ((stats.upcomingEvents / stats.totalEvents * 100) || 0) | number: '1.0-0' }}%)</p>
+        <p class="stat-detail">
+          {{ stats.upcomingEvents }} upcoming ({{
+            (stats.upcomingEvents / stats.totalEvents) * 100 || 0 | number: '1.0-0'
+          }}%)
+        </p>
       </mat-card-content>
     </mat-card>
 
@@ -92,7 +114,9 @@
         <div class="stat-value">{{ stats.totalThreads }}</div>
         <p class="stat-label">Threads</p>
         <p class="stat-secondary">{{ stats.totalPosts }} total posts</p>
-        <div class="avg-posts">Avg: {{ (stats.totalPosts / stats.totalThreads || 0) | number: '1.1-1' }} posts/thread</div>
+        <div class="avg-posts">
+          Avg: {{ stats.totalPosts / stats.totalThreads || 0 | number: '1.1-1' }} posts/thread
+        </div>
       </mat-card-content>
     </mat-card>
   </div>

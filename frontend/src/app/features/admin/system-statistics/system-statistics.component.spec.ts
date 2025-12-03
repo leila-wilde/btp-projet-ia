@@ -30,9 +30,15 @@ describe('SystemStatisticsComponent', () => {
     eventService = TestBed.inject(EventService) as jasmine.SpyObj<EventService>;
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
 
-    userService.getAllUsers.and.returnValue(of({ total: 100, data: [], page: 0, pageSize: 10, hasMore: false }));
-    eventService.getAllEvents.and.returnValue(of({ total: 50, data: [], page: 0, pageSize: 10, hasMore: false }));
-    forumService.getAllThreads.and.returnValue(of({ total: 30, data: [], page: 0, pageSize: 10, hasMore: false }));
+    userService.getAllUsers.and.returnValue(
+      of({ total: 100, data: [], page: 0, pageSize: 10, hasMore: false })
+    );
+    eventService.getAllEvents.and.returnValue(
+      of({ total: 50, data: [], page: 0, pageSize: 10, hasMore: false })
+    );
+    forumService.getAllThreads.and.returnValue(
+      of({ total: 30, data: [], page: 0, pageSize: 10, hasMore: false })
+    );
 
     fixture = TestBed.createComponent(SystemStatisticsComponent);
     component = fixture.componentInstance;

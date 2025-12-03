@@ -25,7 +25,7 @@ describe('ThreadDetailComponent', () => {
     creator: { id: 'user1', username: 'testuser' },
     postCount: 2,
     createdAt: new Date(),
-    lastActivityAt: new Date()
+    lastActivityAt: new Date(),
   };
 
   const mockPosts: ForumPost[] = [
@@ -36,7 +36,7 @@ describe('ThreadDetailComponent', () => {
       threadId: '1',
       edited: false,
       createdAt: new Date(),
-      updatedAt: new Date()
+      updatedAt: new Date(),
     },
     {
       id: 'post2',
@@ -45,15 +45,15 @@ describe('ThreadDetailComponent', () => {
       threadId: '1',
       edited: true,
       createdAt: new Date(),
-      updatedAt: new Date()
-    }
+      updatedAt: new Date(),
+    },
   ];
 
   const mockUser = {
     id: 'user1',
     username: 'testuser',
     email: 'test@example.com',
-    role: 'USER'
+    role: 'USER',
   };
 
   beforeEach(async () => {
@@ -65,18 +65,18 @@ describe('ThreadDetailComponent', () => {
       'deletePost',
       'togglePin',
       'toggleLock',
-      'deleteThread'
+      'deleteThread',
     ]);
 
     const authServiceSpy = jasmine.createSpyObj('AuthService', [], {
       isAuthenticated$: new BehaviorSubject(true),
-      currentUser$: new BehaviorSubject(mockUser)
+      currentUser$: new BehaviorSubject(mockUser),
     });
 
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     activatedRoute = {
-      paramMap: of(new Map([['id', '1']]))
+      paramMap: of(new Map([['id', '1']])),
     };
 
     await TestBed.configureTestingModule({
@@ -85,8 +85,8 @@ describe('ThreadDetailComponent', () => {
         { provide: ForumService, useValue: forumServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
         { provide: Router, useValue: routerSpy },
-        { provide: ActivatedRoute, useValue: activatedRoute }
-      ]
+        { provide: ActivatedRoute, useValue: activatedRoute },
+      ],
     }).compileComponents();
 
     forumService = TestBed.inject(ForumService) as jasmine.SpyObj<ForumService>;
@@ -94,13 +94,15 @@ describe('ThreadDetailComponent', () => {
     router = TestBed.inject(Router) as jasmine.SpyObj<Router>;
 
     forumService.getThread.and.returnValue(of(mockThread));
-    forumService.getThreadPosts.and.returnValue(of({
-      data: mockPosts,
-      total: mockPosts.length,
-      page: 1,
-      pageSize: 10,
-      hasMore: false
-    }));
+    forumService.getThreadPosts.and.returnValue(
+      of({
+        data: mockPosts,
+        total: mockPosts.length,
+        page: 1,
+        pageSize: 10,
+        hasMore: false,
+      })
+    );
     forumService.createPost.and.returnValue(of(mockPosts[0]));
 
     fixture = TestBed.createComponent(ThreadDetailComponent);
@@ -129,7 +131,7 @@ describe('ThreadDetailComponent', () => {
     fixture.detectChanges();
 
     component.replyForm.patchValue({
-      content: 'This is my reply'
+      content: 'This is my reply',
     });
 
     component.submitReply();

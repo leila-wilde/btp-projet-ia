@@ -28,28 +28,28 @@ import { Event, PaginatedResponse } from '../../../models/domain.model';
     MatProgressSpinnerModule,
     MatSelectModule,
     MatFormFieldModule,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './event-list.component.html',
-  styleUrls: ['./event-list.component.scss']
+  styleUrls: ['./event-list.component.scss'],
 })
 export class EventListComponent implements OnInit, OnDestroy {
   events: Event[] = [];
   loading = false;
   error: string | null = null;
-  
+
   pageSize = 10;
   pageIndex = 0;
   totalElements = 0;
-  
+
   selectedStatus: string = '';
   statusOptions = [
     { value: '', label: 'All Events' },
     { value: 'SCHEDULED', label: 'Scheduled' },
     { value: 'IN_PROGRESS', label: 'In Progress' },
-    { value: 'COMPLETED', label: 'Completed' }
+    { value: 'COMPLETED', label: 'Completed' },
   ];
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -73,10 +73,11 @@ export class EventListComponent implements OnInit, OnDestroy {
     const filter: EventFilterOptions = {
       page: this.pageIndex,
       size: this.pageSize,
-      ...(this.selectedStatus && { status: this.selectedStatus })
+      ...(this.selectedStatus && { status: this.selectedStatus }),
     };
 
-    this.eventService.getAllEvents(filter)
+    this.eventService
+      .getAllEvents(filter)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (response: PaginatedResponse<Event>) => {
@@ -88,7 +89,7 @@ export class EventListComponent implements OnInit, OnDestroy {
           this.error = 'Failed to load events';
           this.loading = false;
           console.error('Error loading events:', err);
-        }
+        },
       });
   }
 
@@ -113,10 +114,10 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   getStatusColor(status: string): string {
     const colors: Record<string, string> = {
-      'SCHEDULED': 'primary',
-      'IN_PROGRESS': 'accent',
-      'COMPLETED': 'success',
-      'CANCELLED': 'warn'
+      SCHEDULED: 'primary',
+      IN_PROGRESS: 'accent',
+      COMPLETED: 'success',
+      CANCELLED: 'warn',
     };
     return colors[status] || 'primary';
   }
@@ -131,12 +132,12 @@ export class EventListComponent implements OnInit, OnDestroy {
 
   formatDate(date: Date | string): string {
     const d = typeof date === 'string' ? new Date(date) : date;
-    return d.toLocaleDateString('en-US', { 
-      month: 'short', 
-      day: 'numeric', 
+    return d.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 }

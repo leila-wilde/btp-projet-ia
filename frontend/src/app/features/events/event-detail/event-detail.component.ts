@@ -22,10 +22,10 @@ import { Event } from '../../../models/domain.model';
     MatChipsModule,
     MatProgressSpinnerModule,
     MatIconModule,
-    MatDialogModule
+    MatDialogModule,
   ],
   templateUrl: './event-detail.component.html',
-  styleUrls: ['./event-detail.component.scss']
+  styleUrls: ['./event-detail.component.scss'],
 })
 export class EventDetailComponent implements OnInit, OnDestroy {
   event: Event | null = null;
@@ -33,7 +33,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   error: string | null = null;
   isRegistered = false;
   registering = false;
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -44,7 +44,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.route.params.pipe(takeUntil(this.destroy$)).subscribe(params => {
+    this.route.params.pipe(takeUntil(this.destroy$)).subscribe((params) => {
       const eventId = params['id'];
       this.loadEvent(eventId);
     });
@@ -59,7 +59,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     this.loading = true;
     this.error = null;
 
-    this.eventService.getEvent(eventId)
+    this.eventService
+      .getEvent(eventId)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: (event: Event) => {
@@ -71,7 +72,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.error = 'Failed to load event';
           this.loading = false;
           console.error('Error loading event:', err);
-        }
+        },
       });
   }
 
@@ -84,7 +85,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     if (!this.event) return;
 
     this.registering = true;
-    this.eventService.registerForEvent(this.event.id)
+    this.eventService
+      .registerForEvent(this.event.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -97,7 +99,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.error = 'Failed to join event';
           this.registering = false;
           console.error('Error joining event:', err);
-        }
+        },
       });
   }
 
@@ -105,7 +107,8 @@ export class EventDetailComponent implements OnInit, OnDestroy {
     if (!this.event) return;
 
     this.registering = true;
-    this.eventService.unregisterFromEvent(this.event.id)
+    this.eventService
+      .unregisterFromEvent(this.event.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
@@ -118,7 +121,7 @@ export class EventDetailComponent implements OnInit, OnDestroy {
           this.error = 'Failed to leave event';
           this.registering = false;
           console.error('Error leaving event:', err);
-        }
+        },
       });
   }
 
@@ -138,13 +141,13 @@ export class EventDetailComponent implements OnInit, OnDestroy {
 
   formatDate(date: Date | string): string {
     const d = typeof date === 'string' ? new Date(date) : date;
-    return d.toLocaleDateString('en-US', { 
+    return d.toLocaleDateString('en-US', {
       weekday: 'long',
-      month: 'long', 
-      day: 'numeric', 
+      month: 'long',
+      day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 

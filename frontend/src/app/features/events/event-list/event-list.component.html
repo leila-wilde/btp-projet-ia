@@ -34,7 +34,12 @@
   <div class="events-grid">
     <mat-card *ngFor="let event of events" class="event-card" (click)="navigateToDetail(event.id)">
       <mat-card-header>
-        <img *ngIf="event.imageUrl" [src]="event.imageUrl" alt="{{ event.title }}" class="event-image">
+        <img
+          *ngIf="event.imageUrl"
+          [src]="event.imageUrl"
+          alt="{{ event.title }}"
+          class="event-image"
+        />
         <div class="event-header-content">
           <h2>{{ event.title }}</h2>
           <mat-chip-set>
@@ -63,18 +68,18 @@
           </div>
           <div class="detail-item">
             <mat-icon>group</mat-icon>
-            <span>{{ event.participants?.length || 0 }}/{{ event.maxParticipants }} participants</span>
+            <span
+              >{{ event.participants?.length || 0 }}/{{ event.maxParticipants }} participants</span
+            >
           </div>
         </div>
 
         <div class="availability">
-          <div [ngClass]="{ 'available': !isEventFull(event), 'full': isEventFull(event) }">
+          <div [ngClass]="{ available: !isEventFull(event), full: isEventFull(event) }">
             <span *ngIf="!isEventFull(event)">
               {{ getAvailableSpots(event) }} spots available
             </span>
-            <span *ngIf="isEventFull(event)">
-              Event is full
-            </span>
+            <span *ngIf="isEventFull(event)"> Event is full </span>
           </div>
         </div>
       </mat-card-content>
@@ -92,6 +97,7 @@
     [pageSize]="pageSize"
     [pageSizeOptions]="[5, 10, 25, 50]"
     (page)="onPageChange($event)"
-    showFirstLastButtons>
+    showFirstLastButtons
+  >
   </mat-paginator>
 </div>

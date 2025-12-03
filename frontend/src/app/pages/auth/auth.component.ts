@@ -10,38 +10,38 @@ import { FormsModule } from '@angular/forms';
     <div class="auth-container">
       <div class="auth-card">
         <h2>{{ isLoginMode ? 'Login' : 'Sign Up' }}</h2>
-        
+
         <form (ngSubmit)="onSubmit()">
           <div class="form-group">
             <label>Email</label>
-            <input 
-              type="email" 
-              [(ngModel)]="formData.email" 
+            <input
+              type="email"
+              [(ngModel)]="formData.email"
               name="email"
               required
               placeholder="Enter your email"
-            >
+            />
           </div>
 
           <div class="form-group">
             <label>Password</label>
-            <input 
-              type="password" 
-              [(ngModel)]="formData.password" 
+            <input
+              type="password"
+              [(ngModel)]="formData.password"
               name="password"
               required
               placeholder="Enter your password"
-            >
+            />
           </div>
 
           <div *ngIf="!isLoginMode" class="form-group">
             <label>Confirm Password</label>
-            <input 
-              type="password" 
-              [(ngModel)]="formData.confirmPassword" 
+            <input
+              type="password"
+              [(ngModel)]="formData.confirmPassword"
               name="confirmPassword"
               placeholder="Confirm your password"
-            >
+            />
           </div>
 
           <button type="submit" class="submit-btn">
@@ -62,110 +62,112 @@ import { FormsModule } from '@angular/forms';
       </div>
     </div>
   `,
-  styles: [`
-    .auth-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 60vh;
-      padding: 20px;
-    }
+  styles: [
+    `
+      .auth-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 60vh;
+        padding: 20px;
+      }
 
-    .auth-card {
-      background-color: white;
-      padding: 40px;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      width: 100%;
-      max-width: 400px;
-    }
+      .auth-card {
+        background-color: white;
+        padding: 40px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        width: 100%;
+        max-width: 400px;
+      }
 
-    h2 {
-      text-align: center;
-      color: #2c3e50;
-      margin-bottom: 30px;
-    }
+      h2 {
+        text-align: center;
+        color: #2c3e50;
+        margin-bottom: 30px;
+      }
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
 
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 5px;
-    }
+      .form-group {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
 
-    label {
-      font-weight: bold;
-      color: #333;
-    }
+      label {
+        font-weight: bold;
+        color: #333;
+      }
 
-    input {
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      font-size: 14px;
-      transition: border-color 0.3s;
-    }
+      input {
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 14px;
+        transition: border-color 0.3s;
+      }
 
-    input:focus {
-      outline: none;
-      border-color: #3498db;
-      box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
-    }
+      input:focus {
+        outline: none;
+        border-color: #3498db;
+        box-shadow: 0 0 5px rgba(52, 152, 219, 0.2);
+      }
 
-    .submit-btn {
-      background-color: #27ae60;
-      color: white;
-      padding: 12px;
-      font-size: 16px;
-      font-weight: bold;
-      margin-top: 10px;
-    }
+      .submit-btn {
+        background-color: #27ae60;
+        color: white;
+        padding: 12px;
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 10px;
+      }
 
-    .submit-btn:hover {
-      background-color: #229954;
-    }
+      .submit-btn:hover {
+        background-color: #229954;
+      }
 
-    .toggle-mode {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 14px;
-      color: #666;
-    }
+      .toggle-mode {
+        text-align: center;
+        margin-top: 20px;
+        font-size: 14px;
+        color: #666;
+      }
 
-    .toggle-mode a {
-      color: #3498db;
-      cursor: pointer;
-      text-decoration: underline;
-    }
+      .toggle-mode a {
+        color: #3498db;
+        cursor: pointer;
+        text-decoration: underline;
+      }
 
-    .toggle-mode a:hover {
-      color: #2980b9;
-    }
+      .toggle-mode a:hover {
+        color: #2980b9;
+      }
 
-    .message {
-      margin-top: 15px;
-      padding: 12px;
-      border-radius: 4px;
-      text-align: center;
-    }
+      .message {
+        margin-top: 15px;
+        padding: 12px;
+        border-radius: 4px;
+        text-align: center;
+      }
 
-    .message.success {
-      background-color: #d4edda;
-      color: #155724;
-      border: 1px solid #c3e6cb;
-    }
+      .message.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+      }
 
-    .message.error {
-      background-color: #f8d7da;
-      color: #721c24;
-      border: 1px solid #f5c6cb;
-    }
-  `]
+      .message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+      }
+    `,
+  ],
 })
 export class AuthComponent implements OnInit {
   isLoginMode = true;
@@ -174,7 +176,7 @@ export class AuthComponent implements OnInit {
   formData = {
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
   };
 
   ngOnInit() {

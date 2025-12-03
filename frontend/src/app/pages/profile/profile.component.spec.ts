@@ -20,7 +20,7 @@ describe('ProfileComponent', () => {
     email: 'test@example.com',
     role: 'USER',
     bio: 'Test bio',
-    createdAt: new Date('2025-10-30')
+    createdAt: new Date('2025-10-30'),
   };
 
   beforeEach(async () => {
@@ -30,13 +30,10 @@ describe('ProfileComponent', () => {
       'updateUser',
       'getAllUsers',
       'deleteUser',
-      'changePassword'
+      'changePassword',
     ]);
 
-    const authServiceSpy = jasmine.createSpyObj('AuthService', [
-      'isLoggedIn',
-      'logout'
-    ]);
+    const authServiceSpy = jasmine.createSpyObj('AuthService', ['isLoggedIn', 'logout']);
 
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
@@ -45,8 +42,8 @@ describe('ProfileComponent', () => {
       providers: [
         { provide: UserService, useValue: userServiceSpy },
         { provide: AuthService, useValue: authServiceSpy },
-        { provide: Router, useValue: routerSpy }
-      ]
+        { provide: Router, useValue: routerSpy },
+      ],
     }).compileComponents();
 
     userService = TestBed.inject(UserService) as jasmine.SpyObj<UserService>;
@@ -187,7 +184,7 @@ describe('ProfileComponent', () => {
       component.settingsForm.patchValue({
         username: 'testuser',
         email: 'test@example.com',
-        bio: 'Test bio'
+        bio: 'Test bio',
       });
     });
 
@@ -207,7 +204,7 @@ describe('ProfileComponent', () => {
       component.settingsForm.patchValue({
         username: 'modified',
         email: 'modified@example.com',
-        bio: 'Modified bio'
+        bio: 'Modified bio',
       });
 
       component.toggleEditMode();
@@ -226,7 +223,7 @@ describe('ProfileComponent', () => {
       component.settingsForm.patchValue({
         username: 'testuser',
         email: 'test@example.com',
-        bio: 'Updated bio'
+        bio: 'Updated bio',
       });
     });
 
@@ -240,7 +237,7 @@ describe('ProfileComponent', () => {
         expect(userService.updateUser).toHaveBeenCalledWith('1', {
           username: 'testuser',
           email: 'test@example.com',
-          bio: 'Updated bio'
+          bio: 'Updated bio',
         });
         expect(component.user).toEqual(updatedUser);
         expect(component.editMode).toBeFalse();
@@ -295,7 +292,7 @@ describe('ProfileComponent', () => {
       component.passwordForm.patchValue({
         currentPassword: 'oldPassword123',
         newPassword: 'newPassword123',
-        confirmPassword: 'newPassword123'
+        confirmPassword: 'newPassword123',
       });
     });
 
@@ -305,10 +302,7 @@ describe('ProfileComponent', () => {
       component.changePassword();
 
       setTimeout(() => {
-        expect(userService.changePassword).toHaveBeenCalledWith(
-          'oldPassword123',
-          'newPassword123'
-        );
+        expect(userService.changePassword).toHaveBeenCalledWith('oldPassword123', 'newPassword123');
         expect(component.passwordForm.get('currentPassword')?.value).toBeNull();
         expect(component.passwordSuccessMessage).toBe('Password changed successfully!');
         done();
@@ -339,7 +333,7 @@ describe('ProfileComponent', () => {
     it('should require matching passwords', () => {
       component.passwordForm.patchValue({
         newPassword: 'password123',
-        confirmPassword: 'different123'
+        confirmPassword: 'different123',
       });
 
       const validators = component.passwordForm.validator!(component.passwordForm);

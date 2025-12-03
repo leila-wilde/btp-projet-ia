@@ -19,7 +19,11 @@
       </div>
 
       <div *ngIf="recentEvents.length > 0" class="events-list">
-        <div *ngFor="let event of recentEvents" class="event-item" (click)="navigateToEvent(event.id)">
+        <div
+          *ngFor="let event of recentEvents"
+          class="event-item"
+          (click)="navigateToEvent(event.id)"
+        >
           <div class="event-date">
             <div class="date-day">{{ event.startDate | date: 'dd' }}</div>
             <div class="date-month">{{ event.startDate | date: 'MMM' }}</div>

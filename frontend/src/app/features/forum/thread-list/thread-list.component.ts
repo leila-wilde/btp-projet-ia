@@ -42,36 +42,36 @@ interface ThreadCategory {
     MatMenuModule,
     MatChipsModule,
     MatDividerModule,
-    MatTooltipModule
+    MatTooltipModule,
   ],
   templateUrl: './thread-list.component.html',
-  styleUrls: ['./thread-list.component.scss']
+  styleUrls: ['./thread-list.component.scss'],
 })
 export class ThreadListComponent implements OnInit, OnDestroy {
   threads: ForumThread[] = [];
   filteredThreads: ForumThread[] = [];
   loading = false;
   error: string | null = null;
-  
+
   selectedCategory: string = '';
   searchQuery: string = '';
-  
+
   pageSize = 10;
   pageIndex = 0;
   totalElements = 0;
-  
+
   categories: ThreadCategory[] = [
     { value: '', label: 'All Categories' },
     { value: 'general', label: 'General Discussion' },
     { value: 'projects', label: 'Projects & Ideas' },
     { value: 'help', label: 'Help & Support' },
     { value: 'announcements', label: 'Announcements' },
-    { value: 'events', label: 'Events Discussion' }
+    { value: 'events', label: 'Events Discussion' },
   ];
-  
+
   isAuthenticated = false;
   userRole: string = '';
-  
+
   private destroy$ = new Subject<void>();
 
   constructor(
@@ -91,11 +91,9 @@ export class ThreadListComponent implements OnInit, OnDestroy {
   }
 
   private checkAuthentication(): void {
-    this.authService.isAuthenticated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(isAuth => {
-        this.isAuthenticated = isAuth;
-      });
+    this.authService.isAuthenticated$.pipe(takeUntil(this.destroy$)).subscribe((isAuth) => {
+      this.isAuthenticated = isAuth;
+    });
   }
 
   loadThreads(): void {
@@ -103,7 +101,8 @@ export class ThreadListComponent implements OnInit, OnDestroy {
     this.error = null;
 
     if (this.selectedCategory) {
-      this.forumService.getThreadsByCategory(this.selectedCategory)
+      this.forumService
+        .getThreadsByCategory(this.selectedCategory)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response: any) => {
@@ -115,10 +114,11 @@ export class ThreadListComponent implements OnInit, OnDestroy {
             this.error = 'Failed to load forum threads';
             this.loading = false;
             console.error('Error loading threads:', err);
-          }
+          },
         });
     } else {
-      this.forumService.getAllThreads()
+      this.forumService
+        .getAllThreads()
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (response: any) => {
@@ -130,16 +130,17 @@ export class ThreadListComponent implements OnInit, OnDestroy {
             this.error = 'Failed to load forum threads';
             this.loading = false;
             console.error('Error loading threads:', err);
-          }
+          },
         });
     }
   }
 
   private applyFilters(): void {
-    this.filteredThreads = this.threads.filter(thread =>
-      this.searchQuery === '' || 
-      thread.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-      thread.content.toLowerCase().includes(this.searchQuery.toLowerCase())
+    this.filteredThreads = this.threads.filter(
+      (thread) =>
+        this.searchQuery === '' ||
+        thread.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        thread.content.toLowerCase().includes(this.searchQuery.toLowerCase())
     );
 
     this.totalElements = this.filteredThreads.length;
@@ -183,7 +184,7 @@ export class ThreadListComponent implements OnInit, OnDestroy {
       day: 'numeric',
       year: 'numeric',
       hour: '2-digit',
-      minute: '2-digit'
+      minute: '2-digit',
     });
   }
 
@@ -200,11 +201,12 @@ export class ThreadListComponent implements OnInit, OnDestroy {
 
   toggleThreadPin(threadId: string): void {
     if (this.canModerate()) {
-      this.forumService.togglePin(threadId)
+      this.forumService
+        .togglePin(threadId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (updatedThread: ForumThread) => {
-            const index = this.threads.findIndex(t => t.id === threadId);
+            const index = this.threads.findIndex((t) => t.id === threadId);
             if (index !== -1) {
               this.threads[index] = updatedThread;
               this.applyFilters();
@@ -212,18 +214,19 @@ export class ThreadListComponent implements OnInit, OnDestroy {
           },
           error: (err) => {
             console.error('Error toggling pin:', err);
-          }
+          },
         });
     }
   }
 
   toggleThreadLock(threadId: string): void {
     if (this.canModerate()) {
-      this.forumService.toggleLock(threadId)
+      this.forumService
+        .toggleLock(threadId)
         .pipe(takeUntil(this.destroy$))
         .subscribe({
           next: (updatedThread: ForumThread) => {
-            const index = this.threads.findIndex(t => t.id === threadId);
+            const index = this.threads.findIndex((t) => t.id === threadId);
             if (index !== -1) {
               this.threads[index] = updatedThread;
               this.applyFilters();
@@ -231,7 +234,7 @@ export class ThreadListComponent implements OnInit, OnDestroy {
           },
           error: (err) => {
             console.error('Error toggling lock:', err);
-          }
+          },
         });
     }
   }

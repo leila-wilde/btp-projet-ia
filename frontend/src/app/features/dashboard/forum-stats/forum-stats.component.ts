@@ -62,22 +62,25 @@ export class ForumStatsComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response: any) => {
           this.stats.totalThreads = response.total || 0;
-          this.stats.activeThreads = response.data?.filter((t: any) => t.status !== 'LOCKED').length || 0;
+          this.stats.activeThreads =
+            response.data?.filter((t: any) => t.status !== 'LOCKED').length || 0;
 
           // Calculate total posts from threads
-          this.stats.totalPosts = response.data?.reduce((sum: number, thread: any) => {
-            return sum + (thread.postCount || 0);
-          }, 0) || 0;
+          this.stats.totalPosts =
+            response.data?.reduce((sum: number, thread: any) => {
+              return sum + (thread.postCount || 0);
+            }, 0) || 0;
 
           // Get top threads by post count
-          this.stats.topThreads = response.data
-            ?.sort((a: any, b: any) => (b.postCount || 0) - (a.postCount || 0))
-            .slice(0, 5)
-            .map((t: any) => ({
-              id: t.id,
-              title: t.title,
-              postCount: t.postCount || 0,
-            })) || [];
+          this.stats.topThreads =
+            response.data
+              ?.sort((a: any, b: any) => (b.postCount || 0) - (a.postCount || 0))
+              .slice(0, 5)
+              .map((t: any) => ({
+                id: t.id,
+                title: t.title,
+                postCount: t.postCount || 0,
+              })) || [];
 
           this.loading = false;
         },

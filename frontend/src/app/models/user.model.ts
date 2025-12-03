@@ -28,4 +28,3 @@ export interface JwtResponse {
   email: string;
   role: string;
 }
-
