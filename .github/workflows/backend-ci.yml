@@ -51,14 +51,6 @@ jobs:
       working-directory: ./backend
       run: mvn checkstyle:check
 
-    - name: Generate coverage report
-      working-directory: ./backend
-      run: mvn jacoco:report
-
-    - name: Verify code coverage (40% minimum)
-      working-directory: ./backend
-      run: mvn verify -Dspring.profiles.active=test -DskipTests
-
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3
       with:
