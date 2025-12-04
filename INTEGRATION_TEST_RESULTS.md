@@ -1,7 +1,7 @@
 # L'Archipel Libre - Integration Testing Report
 **Date**: 2025-12-03  
-**Last Updated**: 2025-12-04T00:50:34Z  
-**Status**: ✅ PRIORITY 1 ISSUES RESOLVED - Event Creation Fixed, Frontend Tests 87.4% Passing (216/247)
+**Last Updated**: 2025-12-04T01:08:00Z  
+**Status**: ✅ CRITICAL FEATURES VERIFIED - All Core API Endpoints Working (Auth, Events, Forum, User Profiles)
 
 ## 🟢 Working Features
 
@@ -14,6 +14,16 @@
 - JWT token generation working
 - Returns username, email, role correctly
 - Token is valid format
+
+✅ **User Profile Management** - Fully functional
+- Get current user via `/auth/me`
+- Get user by ID
+- Get user by username
+- Update profile (username, bio, avatar URL)
+- Change password with validation
+- Search users by username
+- Check username availability
+- Check email availability
 
 ✅ **Event Retrieval** - Partially working
 - `GET /api/events` returns paginated list
@@ -67,9 +77,44 @@
   }
   ```
 
-## 🔴 Remaining Issues
+### 4. ✅ User Profile Management [NEWLY VERIFIED]
+- **Status**: ✅ FULLY WORKING
+- **Operations Tested**:
+  - Get current user profile via `/auth/me` ✅
+  - Get user by ID ✅
+  - Get user by username ✅
+  - Update profile (username, bio, avatar) ✅
+  - Change password ✅
+  - Search users by username ✅
+  - Check username availability ✅
+  - Check email availability ✅
+- **Test Results**: All endpoints working correctly with proper authentication
+  ```bash
+  PUT /api/users/{id}/profile - Update profile ✅
+  PATCH /api/users/{id}/password - Change password ✅
+  GET /api/users/search?query=... - Search users ✅
+  GET /api/users/check/username?username=... - Check availability ✅
+### 5. ✅ Fixed Forum Post Creation [NEWLY VERIFIED]
+- **Status**: ✅ VERIFIED WORKING
+- **Issue**: Previously required explicit `authorId` query parameter
+- **Solution**: Now extracts author from JWT authentication (consistent with threads and events)
+- **Code Changes**: 
+  - Removed `@RequestParam UUID authorId` from createPost method
+  - Added SecurityContext extraction to get current user
+  - User is now automatically set as post author
+- **Test Result**: Successfully creates forum posts without requiring author ID:
+  ```json
+  {
+    "id": "6b2a4389-e5bb-40c5-a0e6-45421ddec0e4",
+    "content": "This is my first post in the thread!",
+    "author": { "id": "...", "username": "profiletestuser_updated" },
+    "threadId": "06d98b30-3f27-42ea-941c-a46715ea24da",
+    "edited": false
+  }
+  ```
+  - Get posts in thread works correctly ✅
+  - Thread post count updates properly ✅
 
-### Frontend Test Failures: 31 tests (12.6% failure rate)
 - **Status**: In progress
 - **Passing**: 216/247 tests (87.4%)
 - **Most failures**: EventDetailComponent (date formatting), EventCreateComponent, AuthGuard edge cases
@@ -86,8 +131,8 @@
 | List Events | ✅ PASS | Pagination working |
 | Create Forum Thread | ✅ PASS | Now extracts user from JWT |
 | List Forum Threads | ✅ PASS | Returns data correctly |
-| Create Forum Post | ⚠️ UNKNOWN | Parameter format unclear |
-| User Profile Management | ⚠️ UNKNOWN | Not tested |
+| Create Forum Post | ✅ PASS | Author extracted from JWT automatically, posts creating successfully |
+| User Profile Management | ✅ PASS | All CRUD operations working, password change functional, search & availability checks working |
 | Frontend Unit Tests | ✅ 87.9% | 216 passing, 31 failing |
 
 ## 🔧 Required Fixes (Priority Order)

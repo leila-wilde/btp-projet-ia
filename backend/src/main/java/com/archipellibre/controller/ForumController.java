@@ -160,9 +160,18 @@ public class ForumController {
     @PostMapping("/threads/{threadId}/posts")
     public ResponseEntity<ForumPostResponse> createPost(
             @PathVariable UUID threadId,
-            @RequestParam UUID authorId,
             @Valid @RequestBody ForumPostCreateRequest request) {
-        ForumPost post = forumService.createPost(threadId, authorId, request);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(null);
+        }
+        
+        String username = authentication.getName();
+        User author = userRepository.findByUsername(username)
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
+        
+        ForumPost post = forumService.createPost(threadId, author.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapPostToResponse(post));
     }
 
