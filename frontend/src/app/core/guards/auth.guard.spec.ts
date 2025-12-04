@@ -46,7 +46,10 @@ describe('AuthGuard', () => {
     const result = guard.canActivate(mockRoute, mockRouterStateSnapshot);
 
     expect(result).toBe(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/auth/login'], jasmine.objectContaining({ queryParams: { returnUrl: '/events' } }));
+    expect(router.navigate).toHaveBeenCalledWith(
+      ['/auth/login'],
+      jasmine.objectContaining({ queryParams: { returnUrl: '/events' } })
+    );
   });
 
   it('should work with canActivate', () => {
