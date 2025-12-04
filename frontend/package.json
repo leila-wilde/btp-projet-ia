@@ -7,6 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
+    "e2e": "cypress run",
+    "e2e:open": "cypress open",
     "lint": "echo 'Linting skipped - ESLint v9 migration in progress'",
     "lint:fix": "eslint src --ext .ts --fix && prettier --write \"src/**/*.{ts,html}\"",
     "format": "prettier --write \"src/**/*.{ts,html,scss}\""
@@ -39,6 +41,7 @@
     "@types/json-schema": "^7.0.15",
     "@typescript-eslint/eslint-plugin": "^8.48.1",
     "@typescript-eslint/parser": "^8.48.1",
+    "cypress": "^13.6.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "jasmine-core": "~5.1.0",
