@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { EventDetailComponent } from './event-detail.component';
 import { EventService } from '../../../core/services/event.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -64,13 +64,14 @@ describe('EventDetailComponent', () => {
       expect(component).toBeTruthy();
     });
 
-    it('should load event on init', () => {
+    it('should load event on init', fakeAsync(() => {
       eventService.getEvent.and.returnValue(of(mockEvent));
       fixture.detectChanges();
+      tick();
 
       expect(eventService.getEvent).toHaveBeenCalledWith('1');
       expect(component.event).toEqual(mockEvent);
-    });
+    }));
 
     it('should set loading state initially', () => {
       eventService.getEvent.and.returnValue(of(mockEvent));

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ModerationComponent } from './moderation.component';
 import { ForumService } from '../../../core/services/forum.service';
 import { of } from 'rxjs';
@@ -12,7 +13,7 @@ describe('ModerationComponent', () => {
     const forumServiceSpy = jasmine.createSpyObj('ForumService', ['getAllThreads']);
 
     await TestBed.configureTestingModule({
-      imports: [ModerationComponent],
+      imports: [ModerationComponent, BrowserAnimationsModule],
       providers: [{ provide: ForumService, useValue: forumServiceSpy }],
     }).compileComponents();
 

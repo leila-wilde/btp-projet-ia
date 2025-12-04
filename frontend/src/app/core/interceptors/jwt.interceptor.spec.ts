@@ -2,8 +2,8 @@
 // This shows how all components work together
 
 import { TestBed } from '@angular/core/testing';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthService } from '../services/auth.service';
 import { JwtInterceptor } from '../interceptors/jwt.interceptor';
 import { Router } from '@angular/router';
@@ -134,7 +134,9 @@ describe('JWT Authentication Integration', () => {
         'signature';
 
       localStorage.setItem(environment.jwtTokenKey, validToken);
-      const user = authService.getCurrentUser();
+      // Create new service instance to trigger loadStoredUser() in constructor
+      const newAuthService = new AuthService(TestBed.inject(HttpClient));
+      const user = newAuthService.getCurrentUser();
 
       expect(user?.username).toBe('testuser');
       expect(user?.email).toBe('test@example.com');
@@ -172,7 +174,8 @@ describe('JWT Authentication Integration', () => {
         .subscribe(
           () => fail('should have failed'),
           (error) => {
-            expect(error.error.message).toContain('already exists');
+            expect(error.status).toBe(400);
+            expect(authService.isAuthenticated()).toBe(false);
             done();
           }
         );
