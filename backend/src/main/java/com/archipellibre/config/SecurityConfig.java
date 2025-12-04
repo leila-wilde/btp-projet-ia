@@ -76,6 +76,8 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/events/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/forum/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/api/workshops/**").permitAll()
+                // Public user check endpoints (signup form validation)
+                .requestMatchers("/api/users/check/username", "/api/users/check/email").permitAll()
                 // Everything else requires authentication
                 .anyRequest().authenticated()
             )
