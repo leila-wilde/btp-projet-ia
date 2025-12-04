@@ -43,6 +43,9 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
+  show-actuator: false
+  paths-to-match: /api/**
+  packages-to-scan: com.archipellibre.controller
 
 # Logging
 logging:
