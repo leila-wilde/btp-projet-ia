@@ -1,14 +1,15 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { LanguageService } from '../../core/i18n/language.service';
 
 interface NewsItem {
   id: number;
-  title: string;
-  content: string;
+  titleKey: string;
+  contentKey: string;
   date: string;
   author: string;
-  category?: string;
+  categoryKey: string;
 }
 
 @Component({
@@ -20,55 +21,55 @@ interface NewsItem {
       <!-- Hero Section -->
       <section class="hero">
         <div class="hero-content">
-          <h1>Welcome to L'Archipel Libre</h1>
-          <p class="hero-subtitle">Des îlots de technologie au service du lien social</p>
-          <p class="hero-description">Join our community platform built on open-source technology, connecting people through events, discussions, and collaborative workshops.</p>
+          <h1>{{ t.home.title }}</h1>
+          <p class="hero-subtitle">{{ t.home.tagline }}</p>
+          <p class="hero-description">{{ t.home.description }}</p>
           <div class="hero-actions">
-            <button class="btn-primary" routerLink="/auth/register">Get Started</button>
-            <button class="btn-secondary" routerLink="/forum">Explore</button>
+            <button class="btn-primary" routerLink="/auth/register">{{ t.home.getStarted }}</button>
+            <button class="btn-secondary" routerLink="/forum">{{ t.home.explore }}</button>
           </div>
         </div>
       </section>
 
       <!-- Features Section -->
       <section class="features">
-        <h2>Our Features</h2>
+        <h2>{{ t.home.features }}</h2>
         <div class="features-grid">
           <div class="feature-card">
             <div class="feature-icon">📅</div>
-            <h3>Events</h3>
-            <p>Discover and organize community events in your area</p>
+            <h3>{{ t.home.events }}</h3>
+            <p>{{ t.home.eventsDesc }}</p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">💬</div>
-            <h3>Forum</h3>
-            <p>Engage in meaningful discussions with the community</p>
+            <h3>{{ t.home.forum }}</h3>
+            <p>{{ t.home.forumDesc }}</p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">🛠️</div>
-            <h3>Workshops</h3>
-            <p>Share and learn through collaborative workshops</p>
+            <h3>{{ t.home.workshops }}</h3>
+            <p>{{ t.home.workshopsDesc }}</p>
           </div>
           <div class="feature-card">
             <div class="feature-icon">👥</div>
-            <h3>Community</h3>
-            <p>Connect with like-minded individuals</p>
+            <h3>{{ t.home.community }}</h3>
+            <p>{{ t.home.communityDesc }}</p>
           </div>
         </div>
       </section>
 
       <!-- News Section -->
       <section class="news-section">
-        <h2>Latest News & Updates</h2>
+        <h2>{{ t.home.latestNews }}</h2>
         <div class="news-list">
           <article *ngFor="let item of newsItems" class="news-card">
             <div class="news-header">
-              <h3>{{ item.title }}</h3>
-              <span *ngIf="item.category" class="badge badge-primary">{{ item.category }}</span>
+              <h3>{{ getNewsTitle(item.titleKey) }}</h3>
+              <span class="badge badge-primary">{{ getNewsCategory(item.categoryKey) }}</span>
             </div>
-            <p class="news-meta">By <strong>{{ item.author }}</strong> · {{ formatDate(item.date) }}</p>
-            <p class="news-content">{{ item.content }}</p>
-            <a href="#" class="read-more">Read more →</a>
+            <p class="news-meta">{{ t.home.by }} <strong>{{ item.author }}</strong> · {{ formatDate(item.date) }}</p>
+            <p class="news-content">{{ getNewsContent(item.contentKey) }}</p>
+            <a href="#" class="read-more">{{ t.home.readMore }}</a>
           </article>
         </div>
       </section>
@@ -80,7 +81,6 @@ interface NewsItem {
         width: 100%;
       }
 
-      /* Hero Section */
       .hero {
         background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
         border-radius: 12px;
@@ -125,7 +125,6 @@ interface NewsItem {
         font-size: 1.1rem;
       }
 
-      /* Features Section */
       .features {
         margin-bottom: 4rem;
       }
@@ -173,7 +172,6 @@ interface NewsItem {
         margin: 0;
       }
 
-      /* News Section */
       .news-section {
         margin-bottom: 3rem;
       }
@@ -206,7 +204,7 @@ interface NewsItem {
       .news-header {
         display: flex;
         justify-content: space-between;
-        align-items: start;
+        align-items: flex-start;
         gap: 1rem;
         margin-bottom: 0.75rem;
       }
@@ -263,39 +261,62 @@ interface NewsItem {
     `,
   ],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
+  t: any;
+
   newsItems: NewsItem[] = [
     {
       id: 1,
-      title: "Welcome to L'Archipel Libre",
-      content:
-        "We're excited to launch our new web platform. This is a community-driven space built with modern, open-source technology. Explore events, join discussions, and collaborate with fellow community members.",
+      titleKey: 'welcomeTitle',
+      contentKey: 'welcomeContent',
       date: '2025-12-04',
       author: 'Admin',
-      category: 'Announcement',
+      categoryKey: 'announcement',
     },
     {
       id: 2,
-      title: 'Platform Features Now Live',
-      content:
-        "All core features are now available! Create and manage events, start forum discussions, propose workshops, and build meaningful connections with your community.",
+      titleKey: 'featuresTitle',
+      contentKey: 'featuresContent',
       date: '2025-12-03',
       author: 'Team',
-      category: 'Update',
+      categoryKey: 'update',
     },
     {
       id: 3,
-      title: 'Security & Privacy First',
-      content:
-        'Your data is protected with industry-standard encryption and security practices. We respect your privacy and give you full control over your information.',
+      titleKey: 'securityTitle',
+      contentKey: 'securityContent',
       date: '2025-12-02',
       author: 'Security Team',
-      category: 'Security',
+      categoryKey: 'security',
     },
   ];
 
+  constructor(private languageService: LanguageService) {
+    this.t = this.languageService.getTranslations();
+  }
+
+  ngOnInit(): void {
+    this.languageService.currentLanguage$.subscribe(() => {
+      this.t = this.languageService.getTranslations();
+    });
+  }
+
+  getNewsTitle(key: string): string {
+    return (this.t.news as any)[key] || key;
+  }
+
+  getNewsContent(key: string): string {
+    return (this.t.news as any)[key] || key;
+  }
+
+  getNewsCategory(key: string): string {
+    return (this.t.home as any)[key] || key;
+  }
+
   formatDate(dateStr: string): string {
     const date = new Date(dateStr);
-    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+    const lang = this.languageService.getCurrentLanguage();
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    return date.toLocaleDateString(lang === 'fr' ? 'fr-FR' : 'en-US', options);
   }
 }

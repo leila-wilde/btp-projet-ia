@@ -1,0 +1,108 @@
+export const translations = {
+  fr: {
+    nav: {
+      home: 'Accueil',
+      events: 'Événements',
+      forum: 'Forum',
+      dashboard: 'Tableau de bord',
+      login: 'Connexion',
+      register: "S'inscrire",
+      logout: 'Déconnexion',
+      language: 'Langue',
+    },
+    footer: {
+      copyright: '© 2025 L\'Archipel Libre. Tous droits réservés.',
+      privacy: 'Confidentialité',
+      terms: 'Conditions',
+      contact: 'Contact',
+    },
+    home: {
+      title: 'Bienvenue sur L\'Archipel Libre',
+      tagline: 'Des îlots de technologie au service du lien social',
+      description:
+        'Rejoignez notre plateforme communautaire construite sur la technologie open-source, reliant les gens par le biais d\'événements, de discussions et d\'ateliers collaboratifs.',
+      getStarted: 'Commencer',
+      explore: 'Explorer',
+      features: 'Nos fonctionnalités',
+      events: 'Événements',
+      eventsDesc: 'Découvrez et organisez des événements communautaires dans votre région',
+      forum: 'Forum',
+      forumDesc: 'Engagez-vous dans des discussions significatives avec la communauté',
+      workshops: 'Ateliers',
+      workshopsDesc: 'Partagez et apprenez par le biais d\'ateliers collaboratifs',
+      community: 'Communauté',
+      communityDesc: 'Connectez-vous avec des personnes aux idées similaires',
+      latestNews: 'Dernières nouvelles et mises à jour',
+      readMore: 'Lire plus →',
+      announcement: 'Annonce',
+      update: 'Mise à jour',
+      security: 'Sécurité',
+      by: 'Par',
+    },
+    news: {
+      welcomeTitle: 'Bienvenue sur L\'Archipel Libre',
+      welcomeContent:
+        'Nous sommes heureux de lancer notre nouvelle plateforme Web. C\'est un espace communautaire construit avec la technologie moderne et open-source. Explorez les événements, rejoignez les discussions et collaborez avec les autres membres de la communauté.',
+      featuresTitle: 'Les fonctionnalités de la plateforme sont maintenant actives',
+      featuresContent:
+        'Toutes les fonctionnalités principales sont maintenant disponibles ! Créez et gérez des événements, commencez des discussions de forum, proposez des ateliers et construisez des connexions significatives avec votre communauté.',
+      securityTitle: 'La sécurité et la confidentialité d\'abord',
+      securityContent:
+        'Vos données sont protégées par des pratiques de sécurité et de chiffrement conformes aux normes industrielles. Nous respectons votre vie privée et vous donnez le contrôle total de vos informations.',
+    },
+  },
+  en: {
+    nav: {
+      home: 'Home',
+      events: 'Events',
+      forum: 'Forum',
+      dashboard: 'Dashboard',
+      login: 'Login',
+      register: 'Register',
+      logout: 'Logout',
+      language: 'Language',
+    },
+    footer: {
+      copyright: '© 2025 L\'Archipel Libre. All rights reserved.',
+      privacy: 'Privacy',
+      terms: 'Terms',
+      contact: 'Contact',
+    },
+    home: {
+      title: 'Welcome to L\'Archipel Libre',
+      tagline: 'Islands of technology serving social connection',
+      description:
+        'Join our community platform built on open-source technology, connecting people through events, discussions, and collaborative workshops.',
+      getStarted: 'Get Started',
+      explore: 'Explore',
+      features: 'Our Features',
+      events: 'Events',
+      eventsDesc: 'Discover and organize community events in your area',
+      forum: 'Forum',
+      forumDesc: 'Engage in meaningful discussions with the community',
+      workshops: 'Workshops',
+      workshopsDesc: 'Share and learn through collaborative workshops',
+      community: 'Community',
+      communityDesc: 'Connect with like-minded individuals',
+      latestNews: 'Latest News & Updates',
+      readMore: 'Read more →',
+      announcement: 'Announcement',
+      update: 'Update',
+      security: 'Security',
+      by: 'By',
+    },
+    news: {
+      welcomeTitle: 'Welcome to L\'Archipel Libre',
+      welcomeContent:
+        'We\'re excited to launch our new web platform. This is a community-driven space built with modern, open-source technology. Explore events, join discussions, and collaborate with fellow community members.',
+      featuresTitle: 'Platform Features Now Live',
+      featuresContent:
+        'All core features are now available! Create and manage events, start forum discussions, propose workshops, and build meaningful connections with your community.',
+      securityTitle: 'Security & Privacy First',
+      securityContent:
+        'Your data is protected with industry-standard encryption and security practices. We respect your privacy and give you full control over your information.',
+    },
+  },
+};
+
+export type Language = 'fr' | 'en';
