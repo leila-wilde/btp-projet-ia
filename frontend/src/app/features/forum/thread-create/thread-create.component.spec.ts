@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { ThreadCreateComponent } from './thread-create.component';
 import { ForumService } from '../../../core/services/forum.service';
@@ -30,7 +31,7 @@ describe('ThreadCreateComponent', () => {
     const routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
-      imports: [ThreadCreateComponent, ReactiveFormsModule],
+      imports: [ThreadCreateComponent, ReactiveFormsModule, BrowserAnimationsModule],
       providers: [
         { provide: ForumService, useValue: forumServiceSpy },
         { provide: Router, useValue: routerSpy },

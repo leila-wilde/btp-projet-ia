@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserManagementComponent } from './user-management.component';
 import { UserService } from '../../../core/services/user.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 
 describe('UserManagementComponent', () => {
@@ -12,7 +13,7 @@ describe('UserManagementComponent', () => {
     const userServiceSpy = jasmine.createSpyObj('UserService', ['getAllUsers']);
 
     await TestBed.configureTestingModule({
-      imports: [UserManagementComponent],
+      imports: [UserManagementComponent, BrowserAnimationsModule],
       providers: [{ provide: UserService, useValue: userServiceSpy }],
     }).compileComponents();
 

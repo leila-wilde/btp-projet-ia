@@ -150,7 +150,7 @@ export class ThreadListComponent implements OnInit, OnDestroy {
   private updatePaginatedThreads(): void {
     const start = this.pageIndex * this.pageSize;
     const end = start + this.pageSize;
-    this.filteredThreads = this.threads.slice(start, end);
+    this.filteredThreads = this.filteredThreads.slice(start, end);
   }
 
   onCategoryChange(): void {

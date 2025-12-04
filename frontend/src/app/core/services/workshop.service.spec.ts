@@ -156,7 +156,7 @@ describe('WorkshopService', () => {
       });
 
       const req = httpMock.expectOne(`${apiUrl}/workshop1/approve`);
-      expect(req.request.method).toBe('PATCH');
+      expect(req.request.method).toBe('POST');
       req.flush(mockProposal);
     });
   });
@@ -169,7 +169,7 @@ describe('WorkshopService', () => {
       });
 
       const req = httpMock.expectOne(`${apiUrl}/workshop1/reject`);
-      expect(req.request.method).toBe('PATCH');
+      expect(req.request.method).toBe('POST');
       req.flush(mockProposal);
     });
   });
