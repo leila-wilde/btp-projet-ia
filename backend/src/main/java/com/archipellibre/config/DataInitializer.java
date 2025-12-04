@@ -10,12 +10,11 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Component
 @Profile("!test")
 @RequiredArgsConstructor
+@SuppressWarnings("null")
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
@@ -41,6 +40,7 @@ public class DataInitializer implements CommandLineRunner {
             "Admin de L'Archipel",
             "Marseille, Provence"
         );
+        if (admin == null) return;
 
         User moderator1 = createUser(
             "marie_marseille",
@@ -50,6 +50,7 @@ public class DataInitializer implements CommandLineRunner {
             "Marie Dubois",
             "Marseille"
         );
+        if (moderator1 == null) return;
 
         User moderator2 = createUser(
             "pierre_aix",
@@ -59,6 +60,7 @@ public class DataInitializer implements CommandLineRunner {
             "Pierre Moreau",
             "Aix-en-Provence"
         );
+        if (moderator2 == null) return;
 
         User user1 = createUser(
             "jean_marseille",
@@ -68,6 +70,7 @@ public class DataInitializer implements CommandLineRunner {
             "Jean Leclerc",
             "Marseille - Vieux Port"
         );
+        if (user1 == null) return;
 
         User user2 = createUser(
             "sophie_aix",
@@ -77,6 +80,7 @@ public class DataInitializer implements CommandLineRunner {
             "Sophie Bernard",
             "Aix-en-Provence"
         );
+        if (user2 == null) return;
 
         User user3 = createUser(
             "luc_avignon",
@@ -86,6 +90,7 @@ public class DataInitializer implements CommandLineRunner {
             "Luc Garnier",
             "Avignon, Provence"
         );
+        if (user3 == null) return;
 
         User user4 = createUser(
             "alice_salon",
@@ -95,6 +100,7 @@ public class DataInitializer implements CommandLineRunner {
             "Alice Fontaine",
             "Salon-de-Provence"
         );
+        if (user4 == null) return;
 
         User user5 = createUser(
             "thomas_aubagne",
@@ -104,6 +110,7 @@ public class DataInitializer implements CommandLineRunner {
             "Thomas Rousseau",
             "Aubagne, Provence"
         );
+        if (user5 == null) return;
 
         // Create forum threads - Community discussions about Provence
         ForumThread thread1 = createForumThread(
@@ -116,6 +123,7 @@ public class DataInitializer implements CommandLineRunner {
             false,
             false
         );
+        if (thread1 == null) return;
 
         ForumThread thread2 = createForumThread(
             "Initiatives numériques à Marseille",
@@ -126,6 +134,7 @@ public class DataInitializer implements CommandLineRunner {
             true,
             false
         );
+        if (thread2 == null) return;
 
         ForumThread thread3 = createForumThread(
             "Événements culturels Aix-en-Provence",
@@ -136,6 +145,7 @@ public class DataInitializer implements CommandLineRunner {
             false,
             false
         );
+        if (thread3 == null) return;
 
         ForumThread thread4 = createForumThread(
             "Challenges technologiques pour la souveraineté numérique",
@@ -146,6 +156,7 @@ public class DataInitializer implements CommandLineRunner {
             false,
             false
         );
+        if (thread4 == null) return;
 
         // Create forum posts
         createForumPost(
