@@ -12,6 +12,12 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: never
+    include-exception: false
 
 logging:
   level:

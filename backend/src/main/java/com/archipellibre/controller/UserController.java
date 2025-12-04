@@ -20,7 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
-public class UserController {
+public class UserController extends BaseApiController {
 
     private final UserService userService;
 

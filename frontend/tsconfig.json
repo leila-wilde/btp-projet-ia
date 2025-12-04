@@ -17,6 +17,9 @@
     "module": "es2022",
     "target": "es2022",
     "useDefineForClassFields": false,
+    "skipLibCheck": true,
+    "typeRoots": ["./node_modules/@types"],
+    "types": ["jasmine", "node"],
     "lib": [
       "es2022",
       "dom"

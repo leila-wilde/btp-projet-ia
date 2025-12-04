@@ -28,6 +28,11 @@ server:
   port: 8080
   servlet:
     context-path: /
+  error:
+    include-message: always
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
 
 # JWT Configuration
 app:
@@ -43,6 +48,11 @@ springdoc:
     path: /swagger-ui.html
     operationsSorter: method
     tagsSorter: alpha
+  show-actuator: false
+  paths-to-match: /api/**
+  packages-to-scan: com.archipellibre.controller
+  enable-spring-security: true
+  use-management-port: false
 
 # Logging
 logging:

@@ -19,6 +19,7 @@ This document serves as a central hub for all project documentation. Use this gu
 - **[repo-design.md](./repo-design.md)** - Project structure and file organization
 - **[system-design.md](./system-design.md)** - System architecture and design patterns
 - **[authentication-guide.md](./authentication-guide.md)** - JWT, BCrypt, Spring Security implementation
+- **[EXCEPTION_HANDLING.md](./EXCEPTION_HANDLING.md)** - Exception handling architecture and error responses
 - **[database-schema.md](./database-schema.md)** - Database design and entity relationships
 - **[tech-stack.md](./tech-stack.md)** - Technology choices and justifications
 
@@ -98,6 +99,9 @@ This document serves as a central hub for all project documentation. Use this gu
 ### Understanding Project Architecture
 → See [repo-design.md](./repo-design.md) and [system-design.md](./system-design.md)
 
+### Understanding Exception Handling & Error Responses
+→ See [EXCEPTION_HANDLING.md](./EXCEPTION_HANDLING.md)
+
 ### Learning About AI Development Process
 → See [AGENTS.md](../AGENTS.md) and [prompts.md](./prompts.md)
 
@@ -122,5 +126,5 @@ This document serves as a central hub for all project documentation. Use this gu
 
 ---
 
-**Last Updated:** 2025-10-30  
-**Version:** Aligned with project v0.1.0+
+**Last Updated:** 2025-12-04  
+**Version:** Aligned with project v0.1.0+ (Exception Handling & Swagger UI fixes)
