@@ -62,10 +62,13 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
-                // Public endpoints
-                .requestMatchers("/", "/index.html", "/favicon.ico").permitAll()
-                .requestMatchers("/v3/api-docs", "/v3/api-docs/**", "/v3/api-docs.yaml").permitAll()
-                .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/swagger-resources/**").permitAll()
+                // Public endpoints - Swagger/OpenAPI (must come first)
+                .requestMatchers("/swagger-ui.html", "/swagger-ui/", "/swagger-ui/**").permitAll()
+                .requestMatchers("/v3/api-docs", "/v3/api-docs/**").permitAll()
+                .requestMatchers("/swagger-resources/**", "/webjars/**").permitAll()
+                // Error and static resources
+                .requestMatchers("/error", "/", "/index.html", "/favicon.ico", "/static/**", "/assets/**").permitAll()
+                // Health checks
                 .requestMatchers("/actuator/health", "/actuator/health/**").permitAll()
                 // Authentication endpoints
                 .requestMatchers("/api/auth/**").permitAll()
@@ -75,6 +78,11 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET, "/api/workshops/**").permitAll()
                 // Everything else requires authentication
                 .anyRequest().authenticated()
+            )
+            .exceptionHandling(exceptions -> exceptions
+                .authenticationEntryPoint((request, response, authException) -> {
+                    response.sendError(401, "Unauthorized");
+                })
             );
 
         http.authenticationProvider(authenticationProvider());
