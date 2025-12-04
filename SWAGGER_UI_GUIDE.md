@@ -1,8 +1,19 @@
 # Swagger UI / OpenAPI Documentation
 
 **Status**: ✅ Enabled and Configured  
-**Version**: Springdoc-OpenAPI 2.6.0 with Spring Boot 3.5.0  
+**Version**: Springdoc-OpenAPI 2.3.0 with Spring Boot 3.5.0  
 **Last Updated**: 2025-12-04
+
+---
+
+## ⚠️ IMPORTANT: Springdoc Limitation
+
+Due to Springdoc 2.3.0 compatibility with Spring Boot 3.5.0:
+
+- ✅ Use: `http://localhost:8080/swagger-ui.html` (WORKS)
+- ❌ Avoid: `http://localhost:8080/swagger-ui/` (returns 404)
+
+**Always use the `.html` URL for full Swagger UI functionality.**
 
 ---
 
@@ -18,7 +29,7 @@ http://localhost:8080/swagger-ui.html
 
 ### API Endpoints
 
-- **Swagger UI**: `http://localhost:8080/swagger-ui.html`
+- **Swagger UI**: `http://localhost:8080/swagger-ui.html` ✅
 - **OpenAPI JSON**: `http://localhost:8080/v3/api-docs`
 - **OpenAPI YAML**: `http://localhost:8080/v3/api-docs.yaml`
 
@@ -197,15 +208,26 @@ Features:
 
 ## Troubleshooting
 
+### Swagger UI Path Issues
+
+**Problem**: `/swagger-ui/` returns 404
+
+**Root Cause**: Springdoc 2.3.0 with Spring Boot 3.5.0 limitation
+
+**Solution**: 
+- ✅ Always use: `http://localhost:8080/swagger-ui.html`
+- ❌ Don't use: `http://localhost:8080/swagger-ui/`
+
 ### Swagger UI Not Loading
 
 **Problem**: Page shows blank or 404
 
 **Solutions**:
-1. Check Springdoc dependency is enabled in pom.xml
-2. Verify Spring Boot is running: `mvn spring-boot:run`
-3. Check port is 8080: `curl http://localhost:8080/swagger-ui.html`
-4. Clear browser cache (Ctrl+F5)
+1. Check you're using `/swagger-ui.html` (with .html extension)
+2. Check Springdoc dependency is enabled in pom.xml
+3. Verify Spring Boot is running: `mvn spring-boot:run`
+4. Check port is 8080: `curl http://localhost:8080/swagger-ui.html`
+5. Clear browser cache (Ctrl+F5)
 
 ### Authorization Not Working
 
