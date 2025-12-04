@@ -15,7 +15,10 @@ import { Language } from './core/i18n/translations';
         <div class="navbar-content">
           <div class="navbar-brand">
             <img src="assets/logo.png" alt="L'Archipel Libre Logo" class="logo-img" />
-            <h1>L'Archipel Libre</h1>
+            <div class="brand-text">
+              <h1>L'Archipel Libre</h1>
+              <p class="brand-tagline">plus qu'un lieu, un lien</p>
+            </div>
           </div>
           <nav class="nav-links">
             <a routerLink="/" class="nav-link">{{ t.nav.home }}</a>
@@ -117,13 +120,28 @@ import { Language } from './core/i18n/translations';
 
       .navbar-brand h1 {
         font-size: 1.5rem;
+        color: var(--accent);
+        margin: 0;
+        font-weight: 900;
+        font-family: 'Courier New', 'Courier', 'JetBrains Mono', monospace;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      }
+
+      .brand-text {
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+      }
+
+      .brand-tagline {
+        font-size: 0.75rem;
         color: white;
         margin: 0;
-        font-weight: 700;
-        background: linear-gradient(135deg, #ffffff 0%, #e0d4ff 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        opacity: 0.9;
       }
 
       .nav-links {
