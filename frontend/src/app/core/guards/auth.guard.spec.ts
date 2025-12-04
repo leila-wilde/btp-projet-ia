@@ -28,7 +28,10 @@ describe('AuthGuard', () => {
   it('should allow access if user is authenticated', () => {
     authService.isAuthenticated.and.returnValue(true);
 
-    const result = guard.canActivate(null as any, null as any);
+    const mockRoute = {} as any;
+    const mockRouterStateSnapshot = { url: '/events' } as any;
+
+    const result = guard.canActivate(mockRoute, mockRouterStateSnapshot);
 
     expect(result).toBe(true);
     expect(router.navigate).not.toHaveBeenCalled();
@@ -37,16 +40,22 @@ describe('AuthGuard', () => {
   it('should deny access and redirect to login if not authenticated', () => {
     authService.isAuthenticated.and.returnValue(false);
 
-    const result = guard.canActivate(null as any, null as any);
+    const mockRoute = {} as any;
+    const mockRouterStateSnapshot = { url: '/events' } as any;
+
+    const result = guard.canActivate(mockRoute, mockRouterStateSnapshot);
 
     expect(result).toBe(false);
-    expect(router.navigate).toHaveBeenCalledWith(['/auth/login']);
+    expect(router.navigate).toHaveBeenCalledWith(['/auth/login'], jasmine.objectContaining({ queryParams: { returnUrl: '/events' } }));
   });
 
   it('should work with canActivate', () => {
     authService.isAuthenticated.and.returnValue(true);
 
-    const result = guard.canActivate(null as any, null as any);
+    const mockRoute = {} as any;
+    const mockRouterStateSnapshot = { url: '/events' } as any;
+
+    const result = guard.canActivate(mockRoute, mockRouterStateSnapshot);
 
     expect(result).toBe(true);
   });

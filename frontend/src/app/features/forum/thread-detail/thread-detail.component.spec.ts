@@ -129,7 +129,7 @@ describe('ThreadDetailComponent', () => {
     fixture.detectChanges();
 
     expect(forumService.getThreadPosts).toHaveBeenCalledWith('1');
-    expect(component.posts.length).toBe(2);
+    expect(component.posts.length).toBe(mockPosts.length);
   });
 
   it('should submit reply', () => {

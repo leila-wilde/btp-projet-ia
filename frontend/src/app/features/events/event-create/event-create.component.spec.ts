@@ -143,9 +143,10 @@ describe('EventCreateComponent', () => {
       component.form.patchValue({
         title: 'Angular Workshop',
         description: 'Learn Angular basics and advanced concepts',
-        date: new Date('2025-12-10T10:00:00'),
+        startTime: new Date('2025-12-10T10:00:00'),
+        endTime: new Date('2025-12-10T12:00:00'),
         location: 'Paris',
-        capacity: 30,
+        maxCapacity: 30,
       });
     });
 

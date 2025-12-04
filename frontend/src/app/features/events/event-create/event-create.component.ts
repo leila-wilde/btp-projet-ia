@@ -67,6 +67,7 @@ export class EventCreateComponent implements OnInit, OnDestroy {
       endTime: ['', Validators.required],
       location: ['', [Validators.required, Validators.minLength(3)]],
       maxCapacity: [30, [Validators.required, Validators.min(1), Validators.max(1000)]],
+      imageUrl: [''],
     });
   }
 
