@@ -27,11 +27,12 @@ describe('EventService', () => {
     id: '1',
     title: 'Angular Workshop',
     description: 'Learn Angular',
-    date: new Date('2025-12-10T10:00:00'),
+    startTime: new Date('2025-12-10T10:00:00'),
+    endTime: new Date('2025-12-10T12:00:00'),
     location: 'Paris',
     organizer: 'john_doe',
-    capacity: 30,
-    registeredCount: 5,
+    maxParticipants: 30,
+    participantCount: 5,
     status: 'SCHEDULED',
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -103,9 +104,10 @@ describe('EventService', () => {
       const createRequest: CreateEventRequest = {
         title: 'React Workshop',
         description: 'Learn React',
-        date: new Date('2025-12-15T14:00:00'),
+        startTime: new Date('2025-12-15T14:00:00'),
+        endTime: new Date('2025-12-15T16:00:00'),
         location: 'Lyon',
-        capacity: 50,
+        maxCapacity: 50,
       };
 
       service.createEvent(createRequest).subscribe((event) => {

@@ -63,9 +63,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
         '',
         [Validators.required, Validators.minLength(10), Validators.maxLength(2000)],
       ],
-      date: ['', Validators.required],
+      startTime: ['', Validators.required],
+      endTime: ['', Validators.required],
       location: ['', [Validators.required, Validators.minLength(3)]],
-      capacity: [30, [Validators.required, Validators.min(1), Validators.max(1000)]],
+      maxCapacity: [30, [Validators.required, Validators.min(1), Validators.max(1000)]],
     });
   }
 
@@ -82,9 +83,10 @@ export class EventCreateComponent implements OnInit, OnDestroy {
     const request: CreateEventRequest = {
       title: formValue.title,
       description: formValue.description,
-      date: new Date(formValue.date),
+      startTime: new Date(formValue.startTime),
+      endTime: new Date(formValue.endTime),
       location: formValue.location,
-      capacity: parseInt(formValue.capacity, 10),
+      maxCapacity: parseInt(formValue.maxCapacity, 10),
     };
 
     this.eventService

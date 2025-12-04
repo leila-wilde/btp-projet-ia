@@ -2,12 +2,13 @@ export interface Event {
   id: string;
   title: string;
   description: string;
-  date: Date;
+  startTime: Date;
+  endTime: Date;
   location: string;
   organizer: string;
-  capacity: number;
-  registeredCount: number;
-  status: 'SCHEDULED' | 'ONGOING' | 'COMPLETED' | 'CANCELLED';
+  maxParticipants: number;
+  participantCount: number;
+  status: 'SCHEDULED' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELLED';
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,9 +16,10 @@ export interface Event {
 export interface CreateEventRequest {
   title: string;
   description: string;
-  date: Date;
+  startTime: Date;
+  endTime: Date;
   location: string;
-  capacity: number;
+  maxCapacity: number;
 }
 
 export interface EventRegistration {

@@ -16,11 +16,12 @@ describe('EventCreateComponent', () => {
     id: '1',
     title: 'Angular Workshop',
     description: 'Learn Angular basics',
-    date: new Date('2025-12-10T10:00:00'),
+    startTime: new Date('2025-12-10T10:00:00'),
+    endTime: new Date('2025-12-10T12:00:00'),
     location: 'Paris',
     organizer: 'john_doe',
-    capacity: 30,
-    registeredCount: 0,
+    maxParticipants: 30,
+    participantCount: 0,
     status: 'SCHEDULED',
     createdAt: new Date(),
     updatedAt: new Date(),
@@ -59,7 +60,7 @@ describe('EventCreateComponent', () => {
     });
 
     it('should set default capacity to 30', () => {
-      expect(component.form.get('capacity')?.value).toBe(30);
+      expect(component.form.get('maxCapacity')?.value).toBe(30);
     });
 
     it('should set min date to today', () => {
@@ -103,26 +104,27 @@ describe('EventCreateComponent', () => {
       expect(locField?.hasError('required')).toBe(true);
     });
 
-    it('should require date', () => {
-      const dateField = component.form.get('date');
-      dateField?.setValue('');
-      expect(dateField?.hasError('required')).toBe(true);
+    it('should require start time', () => {
+      const startTimeField = component.form.get('startTime');
+      startTimeField?.setValue('');
+      expect(startTimeField?.hasError('required')).toBe(true);
     });
 
     it('should accept valid form', () => {
       component.form.patchValue({
         title: 'Angular Workshop',
         description: 'Learn Angular basics and advanced concepts',
-        date: new Date('2025-12-10T10:00:00'),
+        startTime: new Date('2025-12-10T10:00:00'),
+        endTime: new Date('2025-12-10T12:00:00'),
         location: 'Paris',
-        capacity: 30,
+        maxCapacity: 30,
       });
 
       expect(component.form.valid).toBe(true);
     });
 
-    it('should validate capacity range', () => {
-      const capacityField = component.form.get('capacity');
+    it('should validate max capacity range', () => {
+      const capacityField = component.form.get('maxCapacity');
 
       capacityField?.setValue(0);
       expect(capacityField?.hasError('min')).toBe(true);
@@ -179,21 +181,24 @@ describe('EventCreateComponent', () => {
     });
 
     it('should format dates correctly when submitting', () => {
-      const eventDate = new Date('2025-12-10T10:00:00');
+      const startDate = new Date('2025-12-10T10:00:00');
+      const endDate = new Date('2025-12-10T12:00:00');
 
       component.form.patchValue({
         title: 'Angular Workshop',
         description: 'Learn Angular basics and advanced concepts',
-        date: eventDate,
+        startTime: startDate,
+        endTime: endDate,
         location: 'Paris',
-        capacity: 30,
+        maxCapacity: 30,
       });
 
       eventService.createEvent.and.returnValue(of(mockCreatedEvent));
       component.onSubmit();
 
       const call = eventService.createEvent.calls.mostRecent();
-      expect(call.args[0].date).toEqual(jasmine.any(Date));
+      expect(call.args[0].startTime).toEqual(jasmine.any(Date));
+      expect(call.args[0].endTime).toEqual(jasmine.any(Date));
     });
   });
 
