@@ -6,9 +6,9 @@
  */
 Cypress.Commands.add('login', (username: string, password: string) => {
   cy.visit('/login');
-  cy.get('input[formControlName="usernameOrEmail"]').type(username);
-  cy.get('input[formControlName="password"]').type(password);
-  cy.get('button[type="submit"]').click();
+  cy.get('input#usernameOrEmail').type(username);
+  cy.get('input#password').type(password);
+  cy.get('button').contains('Login').click();
   cy.url().should('include', '/dashboard');
 });
 
@@ -18,10 +18,10 @@ Cypress.Commands.add('login', (username: string, password: string) => {
  */
 Cypress.Commands.add('register', (username: string, email: string, password: string) => {
   cy.visit('/register');
-  cy.get('input[formControlName="username"]').type(username);
-  cy.get('input[formControlName="email"]').type(email);
-  cy.get('input[formControlName="password"]').type(password);
-  cy.get('button[type="submit"]').click();
+  cy.get('input#username').type(username);
+  cy.get('input#email').type(email);
+  cy.get('input#password').type(password);
+  cy.get('button').contains('Register').click();
   cy.url().should('include', '/login');
 });
 
@@ -30,7 +30,7 @@ Cypress.Commands.add('register', (username: string, email: string, password: str
  * Usage: cy.logout()
  */
 Cypress.Commands.add('logout', () => {
-  cy.get('[data-cy=logout-btn]').click();
+  cy.get('button').contains('Logout').click();
   cy.url().should('include', '/');
 });
 
