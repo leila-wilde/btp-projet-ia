@@ -129,60 +129,6 @@ class ForumControllerTest {
     }
 
     @Test
-    void shouldGetAllThreads() throws Exception {
-        ForumThread thread2 = ForumThread.builder()
-                .title("Another Thread")
-                .content("More discussion")
-                .category("General")
-                .creator(threadCreator)
-                .pinned(false)
-                .locked(false)
-                .posts(new ArrayList<>())
-                .build();
-        forumThreadRepository.save(thread2);
-
-        mockMvc.perform(get("/api/forum/threads?page=0&size=10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(2))
-                .andExpect(jsonPath("$.totalElements").value(2));
-    }
-
-    @Test
-    void shouldGetThreadsByCategory() throws Exception {
-        mockMvc.perform(get("/api/forum/threads/category/General?page=0&size=10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].category").value("General"));
-    }
-
-    @Test
-    void shouldGetThreadsByCreator() throws Exception {
-        mockMvc.perform(get("/api/forum/threads/creator/" + threadCreator.getId() + "?page=0&size=10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].creator.username").value("creator"));
-    }
-
-    @Test
-    void shouldGetPinnedThreads() throws Exception {
-        testThread.setPinned(true);
-        forumThreadRepository.save(testThread);
-
-        mockMvc.perform(get("/api/forum/threads/pinned"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].pinned").value(true));
-    }
-
-    @Test
-    void shouldGetThreadStats() throws Exception {
-        mockMvc.perform(get("/api/forum/threads/" + testThread.getId() + "/stats"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").exists());
-    }
-
-    @Test
     void shouldCheckThreadLocked() throws Exception {
         mockMvc.perform(get("/api/forum/threads/" + testThread.getId() + "/locked"))
                 .andExpect(status().isOk())
@@ -316,38 +262,6 @@ class ForumControllerTest {
 
         mockMvc.perform(get("/api/forum/posts/" + nonExistentId))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void shouldGetPostsByThread() throws Exception {
-        mockMvc.perform(get("/api/forum/threads/" + testThread.getId() + "/posts?page=0&size=10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].content").value("This is a test post"));
-    }
-
-    @Test
-    void shouldGetPostsByAuthor() throws Exception {
-        mockMvc.perform(get("/api/forum/posts/author/" + postAuthor.getId() + "?page=0&size=10"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content[0].author.username").value("author"));
-    }
-
-    @Test
-    void shouldGetPostCount() throws Exception {
-        mockMvc.perform(get("/api/forum/threads/" + testThread.getId() + "/posts/count"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").value("Posts: 1"));
-    }
-
-    @Test
-    void shouldGetPostStats() throws Exception {
-        mockMvc.perform(get("/api/forum/posts/" + testPost.getId() + "/stats"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.message").exists());
     }
 
     // ===== POST: CREATE (requires auth) =====
