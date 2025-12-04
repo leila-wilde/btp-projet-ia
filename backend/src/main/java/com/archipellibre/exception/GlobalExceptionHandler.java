@@ -6,14 +6,16 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-@RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<ApiResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex, WebRequest request) {
         log.error("Resource not found: {}", ex.getMessage());
@@ -22,6 +24,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(BusinessLogicException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiResponse> handleBusinessLogicException(
             BusinessLogicException ex, WebRequest request) {
         log.error("Business logic error: {}", ex.getMessage());
@@ -30,6 +33,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiResponse> handleValidationException(
             MethodArgumentNotValidException ex, WebRequest request) {
         StringBuilder errors = new StringBuilder();
@@ -42,6 +46,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ResponseEntity<ApiResponse> handleGlobalException(
             Exception ex, WebRequest request) {
         log.error("Unexpected error: ", ex);
