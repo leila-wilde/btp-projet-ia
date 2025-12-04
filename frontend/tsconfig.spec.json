@@ -6,7 +6,8 @@
       "jasmine"
     ],
     "esModuleInterop": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "skipLibCheck": true
   },
   "include": [
     "src/**/*.spec.ts",
