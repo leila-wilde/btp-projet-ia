@@ -308,8 +308,11 @@ Errors:
 Authorization: Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0dXNlciIsImlhdCI6MTcwMzE2NDcwMCwiZXhwIjoxNzAzMjUxMTAwfQ...
 ```
 
-### Postman Collection
-Import the swagger URL for full API documentation:
+### Postman Collection & Swagger UI
+Access the interactive Swagger UI documentation at:
+`http://localhost:8080/swagger-ui.html`
+
+For OpenAPI JSON format (Postman import):
 `http://localhost:8080/v3/api-docs`
 
 ### Performance
