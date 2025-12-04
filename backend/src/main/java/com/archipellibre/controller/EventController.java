@@ -7,6 +7,8 @@ import com.archipellibre.dto.EventUpdateRequest;
 import com.archipellibre.dto.UserResponse;
 import com.archipellibre.model.Event;
 import com.archipellibre.model.EventStatus;
+import com.archipellibre.model.User;
+import com.archipellibre.repository.UserRepository;
 import com.archipellibre.service.EventService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -25,14 +29,24 @@ import java.util.UUID;
 public class EventController {
 
     private final EventService eventService;
+    private final UserRepository userRepository;
 
     // ===== CREATE ENDPOINTS =====
 
     @PostMapping
     public ResponseEntity<EventResponse> createEvent(
-            @RequestParam UUID organizerId,
             @Valid @RequestBody EventCreateRequest request) {
-        Event event = eventService.createEvent(organizerId, request);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(null);
+        }
+        
+        String username = authentication.getName();
+        User organizer = userRepository.findByUsername(username)
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
+        
+        Event event = eventService.createEvent(organizer.getId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(mapToResponse(event));
     }
 
