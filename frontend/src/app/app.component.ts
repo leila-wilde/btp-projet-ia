@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterOutlet, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from './core/services/auth.service';
+import { LanguageService } from './core/i18n/language.service';
+import { Language } from './core/i18n/translations';
 
 @Component({
   selector: 'app-root',
@@ -16,20 +18,38 @@ import { AuthService } from './core/services/auth.service';
             <h1>L'Archipel Libre</h1>
           </div>
           <nav class="nav-links">
-            <a routerLink="/" class="nav-link">Home</a>
-            <a routerLink="/events" class="nav-link">Events</a>
-            <a routerLink="/forum" class="nav-link">Forum</a>
-            <a routerLink="/dashboard" class="nav-link">Dashboard</a>
+            <a routerLink="/" class="nav-link">{{ t.nav.home }}</a>
+            <a routerLink="/events" class="nav-link">{{ t.nav.events }}</a>
+            <a routerLink="/forum" class="nav-link">{{ t.nav.forum }}</a>
+            <a routerLink="/dashboard" class="nav-link">{{ t.nav.dashboard }}</a>
+
+            <div class="language-switcher">
+              <button 
+                (click)="setLanguage('fr')" 
+                class="language-btn"
+                [class.active]="currentLanguage === 'fr'"
+              >
+                FR
+              </button>
+              <span class="language-divider">|</span>
+              <button 
+                (click)="setLanguage('en')" 
+                class="language-btn"
+                [class.active]="currentLanguage === 'en'"
+              >
+                EN
+              </button>
+            </div>
 
             <ng-container *ngIf="!isAuthenticated()">
-              <a routerLink="/auth/login" class="nav-link">Login</a>
-              <a routerLink="/auth/register" class="nav-link btn-accent">Register</a>
+              <a routerLink="/auth/login" class="nav-link">{{ t.nav.login }}</a>
+              <a routerLink="/auth/register" class="nav-link btn-accent">{{ t.nav.register }}</a>
             </ng-container>
 
             <ng-container *ngIf="isAuthenticated()">
               <div class="user-menu">
                 <span class="user-label">{{ getCurrentUser() }}</span>
-                <button (click)="logout()" class="btn-logout">Logout</button>
+                <button (click)="logout()" class="btn-logout">{{ t.nav.logout }}</button>
               </div>
             </ng-container>
           </nav>
@@ -42,11 +62,11 @@ import { AuthService } from './core/services/auth.service';
 
       <footer class="footer">
         <div class="footer-content">
-          <p>&copy; 2025 L'Archipel Libre. All rights reserved.</p>
+          <p>{{ t.footer.copyright }}</p>
           <div class="footer-links">
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
-            <a href="#">Contact</a>
+            <a href="#">{{ t.footer.privacy }}</a>
+            <a href="#">{{ t.footer.terms }}</a>
+            <a href="#">{{ t.footer.contact }}</a>
           </div>
         </div>
       </footer>
@@ -130,6 +150,38 @@ import { AuthService } from './core/services/auth.service';
       .nav-link.btn-accent:hover {
         box-shadow: var(--shadow-md);
         transform: translateY(-2px);
+      }
+
+      .language-switcher {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .language-btn {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.7);
+        font-size: 0.9rem;
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .language-btn:hover {
+        color: white;
+        background: rgba(255, 255, 255, 0.1);
+      }
+
+      .language-btn.active {
+        color: var(--accent);
+        background: rgba(255, 107, 107, 0.15);
+      }
+
+      .language-divider {
+        color: rgba(255, 255, 255, 0.3);
       }
 
       .user-menu {
@@ -241,8 +293,23 @@ import { AuthService } from './core/services/auth.service';
     `,
   ],
 })
-export class AppComponent {
-  constructor(private authService: AuthService) {}
+export class AppComponent implements OnInit {
+  t: any;
+  currentLanguage: Language = 'fr';
+
+  constructor(
+    private authService: AuthService,
+    private languageService: LanguageService
+  ) {
+    this.t = this.languageService.getTranslations();
+  }
+
+  ngOnInit(): void {
+    this.languageService.currentLanguage$.subscribe((lang) => {
+      this.currentLanguage = lang;
+      this.t = this.languageService.getTranslations();
+    });
+  }
 
   isAuthenticated(): boolean {
     return this.authService.isAuthenticated();
@@ -255,5 +322,13 @@ export class AppComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  toggleLanguage(): void {
+    this.languageService.toggleLanguage();
+  }
+
+  setLanguage(lang: Language): void {
+    this.languageService.setLanguage(lang);
   }
 }
