@@ -12,7 +12,7 @@ describe('AuthService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [AuthService]
+      providers: [AuthService],
     });
 
     service = TestBed.inject(AuthService);
@@ -28,17 +28,19 @@ describe('AuthService', () => {
   describe('Login', () => {
     it('should store token on successful login', (done) => {
       const credentials = { usernameOrEmail: 'testuser', password: 'password' };
+      const validJwt =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJ1c2VybmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJleHAiOjk5OTk5OTk5OTl9.fake-signature';
       const mockResponse = {
-        accessToken: 'jwt-token-xyz',
+        accessToken: validJwt,
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@example.com',
-        role: 'USER'
+        role: 'USER',
       };
 
-      service.login(credentials).subscribe(response => {
-        expect(response.accessToken).toBe('jwt-token-xyz');
-        expect(localStorage.getItem(environment.jwtTokenKey)).toBe('jwt-token-xyz');
+      service.login(credentials).subscribe((response) => {
+        expect(response.accessToken).toBe(validJwt);
+        expect(localStorage.getItem(environment.jwtTokenKey)).toBe(validJwt);
         expect(service.isAuthenticated()).toBe(true);
         done();
       });
@@ -50,15 +52,17 @@ describe('AuthService', () => {
 
     it('should emit current user on login', (done) => {
       const credentials = { usernameOrEmail: 'testuser', password: 'password' };
+      const validJwt =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJ1c2VybmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJleHAiOjk5OTk5OTk5OTl9.fake-signature';
       const mockResponse = {
-        accessToken: 'jwt-token-xyz',
+        accessToken: validJwt,
         tokenType: 'Bearer',
         username: 'testuser',
         email: 'test@example.com',
-        role: 'USER'
+        role: 'USER',
       };
 
-      service.currentUser$.subscribe(user => {
+      service.currentUser$.subscribe((user) => {
         if (user) {
           expect(user.username).toBe('testuser');
           expect(user.email).toBe('test@example.com');
@@ -78,18 +82,27 @@ describe('AuthService', () => {
       const registerData = {
         username: 'newuser',
         email: 'new@example.com',
-        password: 'password123'
+        password: 'password123',
       };
 
-      service.register(registerData).subscribe(response => {
-        expect(response.message).toBe('User registered successfully');
+      const mockResponse = {
+        accessToken: 'jwt-token-new',
+        tokenType: 'Bearer',
+        username: 'newuser',
+        email: 'new@example.com',
+        role: 'USER',
+      };
+
+      service.register(registerData).subscribe((response) => {
+        expect(response.accessToken).toBe('jwt-token-new');
+        expect(response.username).toBe('newuser');
         done();
       });
 
       const req = httpMock.expectOne(`${environment.apiUrl}/auth/register`);
       expect(req.request.method).toBe('POST');
       expect(req.request.body).toEqual(registerData);
-      req.flush({ message: 'User registered successfully' });
+      req.flush(mockResponse);
     });
   });
 
@@ -109,17 +122,19 @@ describe('AuthService', () => {
       const token = 'test-jwt-token';
       localStorage.setItem(environment.jwtTokenKey, token);
 
-      expect(service.getToken()).toBe(token);
+      expect(service.getAccessToken()).toBe(token);
     });
 
     it('should return null if no token exists', () => {
-      expect(service.getToken()).toBeNull();
+      expect(service.getAccessToken()).toBeNull();
     });
 
     it('should check authentication status', () => {
       expect(service.isAuthenticated()).toBe(false);
 
-      localStorage.setItem(environment.jwtTokenKey, 'test-token');
+      const validJwt =
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0LXVzZXIiLCJ1c2VybmFtZSI6InRlc3R1c2VyIiwiZW1haWwiOiJ0ZXN0QGV4YW1wbGUuY29tIiwicm9sZSI6IlVTRVIiLCJleHAiOjk5OTk5OTk5OTl9.fake-signature';
+      localStorage.setItem(environment.jwtTokenKey, validJwt);
       expect(service.isAuthenticated()).toBe(true);
     });
   });
@@ -127,14 +142,14 @@ describe('AuthService', () => {
   describe('Storage Type', () => {
     it('should use localStorage by default', () => {
       localStorage.setItem(environment.jwtTokenKey, 'test-token');
-      expect(service.getToken()).toBe('test-token');
+      expect(service.getAccessToken()).toBe('test-token');
     });
 
-    it('should switch to sessionStorage', () => {
-      service.setStorageType('sessionStorage');
-      sessionStorage.setItem(environment.jwtTokenKey, 'session-token');
+    it('should retrieve access token from localStorage', () => {
+      const token = 'test-token';
+      localStorage.setItem(environment.jwtTokenKey, token);
 
-      expect(service.getToken()).toBe('session-token');
+      expect(service.getAccessToken()).toBe(token);
     });
   });
 });

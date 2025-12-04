@@ -1,0 +1,70 @@
+<mat-card class="forum-stats-card">
+  <mat-card-header>
+    <mat-card-title>Forum Statistics</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <div *ngIf="!loading && !error">
+      <!-- Stats Summary -->
+      <div class="stats-summary">
+        <div class="stat-box">
+          <mat-icon>forum</mat-icon>
+          <div class="stat-info">
+            <p class="label">Total Threads</p>
+            <p class="value">{{ stats.totalThreads }}</p>
+          </div>
+        </div>
+        <div class="stat-box">
+          <mat-icon>comment</mat-icon>
+          <div class="stat-info">
+            <p class="label">Total Posts</p>
+            <p class="value">{{ stats.totalPosts }}</p>
+          </div>
+        </div>
+        <div class="stat-box">
+          <mat-icon>trending_up</mat-icon>
+          <div class="stat-info">
+            <p class="label">Active Threads</p>
+            <p class="value">{{ stats.activeThreads }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Threads -->
+      <div *ngIf="stats.topThreads.length > 0" class="top-threads">
+        <h3>Top Threads</h3>
+        <div
+          *ngFor="let thread of stats.topThreads"
+          class="thread-item"
+          (click)="navigateToThread(thread.id)"
+        >
+          <div class="thread-title">{{ thread.title }}</div>
+          <div class="thread-posts">
+            <span class="post-count">{{ thread.postCount }} posts</span>
+            <mat-progress-bar [value]="getPostPercentage(thread.postCount)"></mat-progress-bar>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="stats.topThreads.length === 0" class="no-threads">
+        <mat-icon>forum</mat-icon>
+        <p>No forum threads yet</p>
+      </div>
+    </div>
+  </mat-card-content>
+
+  <mat-card-footer *ngIf="!loading && !error">
+    <button mat-button color="primary" (click)="viewForum()">
+      View Forum
+      <mat-icon>arrow_forward</mat-icon>
+    </button>
+  </mat-card-footer>
+</mat-card>

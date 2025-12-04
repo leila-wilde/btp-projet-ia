@@ -30,7 +30,7 @@ jobs:
 
     - name: Install dependencies
       working-directory: ./frontend
-      run: npm ci
+      run: npm install
 
     - name: Lint
       working-directory: ./frontend
@@ -46,7 +46,7 @@ jobs:
 
     - name: Test
       working-directory: ./frontend
-      run: npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
+      run: npm test -- --watch=false --browsers=ChromeHeadlessCI --code-coverage
 
     - name: Accessibility check
       working-directory: ./frontend

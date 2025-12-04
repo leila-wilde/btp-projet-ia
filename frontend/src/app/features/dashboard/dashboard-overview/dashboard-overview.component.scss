@@ -1,0 +1,119 @@
+.overview-card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  mat-card-header {
+    margin-bottom: 20px;
+
+    mat-card-title {
+      font-size: 1.3rem;
+      font-weight: 500;
+      margin: 0;
+    }
+  }
+}
+
+.error-message {
+  color: #d32f2f;
+  padding: 12px;
+  background-color: #ffebee;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #e8f5e9;
+    transform: translateY(-2px);
+  }
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+
+    &.events {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    &.registered {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    &.threads {
+      background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    &.posts {
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+  }
+
+  .stat-content {
+    flex: 1;
+    margin: 0;
+
+    .stat-label {
+      font-size: 0.875rem;
+      color: #666;
+      margin: 0 0 4px 0;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .stat-value {
+      font-size: 1.75rem;
+      font-weight: 600;
+      margin: 0;
+      color: #1a1a1a;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 12px;
+  }
+
+  .stat-card {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .stat-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .stat-content {
+    .stat-value {
+      font-size: 1.5rem;
+    }
+  }
+}

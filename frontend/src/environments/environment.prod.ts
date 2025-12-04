@@ -1,12 +1,12 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
+  apiUrl: 'https://api.yourdomain.com/api',
   jwtTokenKey: 'auth_token',
   // JWT Configuration
   jwt: {
     storage: 'localStorage',
     expirationTime: 3600000,
-    refreshPath: '/auth/refresh'
+    refreshPath: '/auth/refresh',
   },
   // API Configuration
   api: {
@@ -14,25 +14,25 @@ export const environment = {
       login: '/auth/login',
       register: '/auth/register',
       logout: '/auth/logout',
-      refresh: '/auth/refresh'
+      refresh: '/auth/refresh',
     },
     users: {
       profile: '/users/me',
-      changePassword: '/users/change-password'
+      changePassword: '/users/change-password',
     },
     events: {
       list: '/events',
       create: '/events',
       detail: '/events/:id',
       register: '/events/:id/register',
-      unregister: '/events/:id/unregister'
+      unregister: '/events/:id/unregister',
     },
     forum: {
       threads: '/forum/threads',
       posts: '/forum/posts',
       threadDetail: '/forum/threads/:id',
       userThreads: '/forum/user/threads',
-      userPosts: '/forum/user/posts'
+      userPosts: '/forum/user/posts',
     },
     workshops: {
       list: '/workshops',
@@ -40,7 +40,7 @@ export const environment = {
       detail: '/workshops/:id',
       vote: '/workshops/:id/vote',
       approve: '/workshops/:id/approve',
-      reject: '/workshops/:id/reject'
-    }
-  }
+      reject: '/workshops/:id/reject',
+    },
+  },
 };

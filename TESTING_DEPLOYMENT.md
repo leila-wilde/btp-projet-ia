@@ -1,10 +1,62 @@
 # Testing & Deployment Guide
 
-## 🧪 Testing
+## 🧪 Integration Testing (5-20 Minutes)
 
-### Run Tests
+### Quick Test (5 Minutes)
+```bash
+# Terminal 1: Start Backend
+cd backend && mvn spring-boot:run
 
-**Backend**:
+# Terminal 2: Start Frontend  
+cd frontend && npm start
+
+# Browser: http://localhost:4200
+```
+
+**Test flow:**
+1. Register user at /auth/register
+2. Login with credentials
+3. Open DevTools (F12) → Network tab
+4. Navigate to Events page
+5. Find GET /api/events request
+6. Check Request Headers → **Authorization: Bearer eyJ...**
+✓ If Authorization header present = Integration working!
+
+### Thorough Testing (15-20 Minutes)
+
+See full guide: [docs/INTEGRATION_TESTING_GUIDE.md](docs/INTEGRATION_TESTING_GUIDE.md)
+
+**Covers:**
+- ✅ Startup verification
+- ✅ Registration & authentication
+- ✅ JWT token injection
+- ✅ Pagination & filtering
+- ✅ CRUD operations
+- ✅ Error handling
+- ✅ Network monitoring
+- ✅ Performance checks
+
+### DevTools Inspection Checklist
+- ☐ **Network tab:** All requests show 200-299 status
+- ☐ **Network tab:** Authorization header present
+- ☐ **Network tab:** Responses are valid JSON
+- ☐ **Application tab:** auth_token in localStorage
+- ☐ **Console tab:** No red error messages
+
+### Success Indicators
+✅ Backend on :8080 (no errors)
+✅ Frontend on :4200 (compiled successfully)
+✅ Can register user
+✅ Tokens in localStorage
+✅ Authorization header in requests
+✅ Events/Forum/etc. pages load
+✅ No console errors
+
+---
+
+## 🧪 Unit Testing
+
+### Backend Tests
 ```bash
 cd backend
 mvn test              # Unit tests

@@ -352,19 +352,331 @@ Before deploying to production:
 7. Monitor performance metrics
 8. Check error logging
 
-## Next Steps
+## 🚀 QUICK START (5-Minute Test Flow)
 
-1. ✅ Run integration tests
-2. ✅ Fix any issues found
-3. ✅ Test all features thoroughly
-4. ✅ Performance testing
-5. ✅ Security review
-6. ✅ Deploy to staging
-7. ✅ Final testing
-8. ✅ Deploy to production
+### Minute 1: Start Backend
+```bash
+# Terminal 1
+cd backend
+mvn clean install
+mvn spring-boot:run
+
+# Wait for: "Application started"
+# Verify: curl http://localhost:8080/health
+```
+
+### Minute 2: Start Frontend
+```bash
+# Terminal 2
+cd frontend
+npm install  # First time only
+npm start
+
+# Wait for: "Compiled successfully"
+# Browser opens: http://localhost:4200
+```
+
+### Minute 3: Register & Login
+1. Click "Register"
+2. Fill form with test data
+3. Submit registration
+4. Verify redirect to dashboard
+✓ Check: Tokens in localStorage
+
+### Minute 4: Verify JWT Injection
+1. Press F12 (open DevTools)
+2. Click: Network tab
+3. Click: "Events" in navigation
+4. Find: GET /api/events
+5. Check Request Headers → **Authorization: Bearer eyJ...**
+✓ If present: Interceptor working!
+
+### Minute 5: Check Data Loads
+1. Events page should display
+2. Check Network tab: GET /api/events → **200 OK**
+3. Try: Forum page, Profile, etc.
+✓ All loading? **Integration successful!** 🎉
 
 ---
 
-**Documentation Version:** 1.0  
-**Last Updated:** 2025-10-31  
-**Status:** Ready for Integration Testing
+## 📊 DevTools Essentials
+
+### Network Tab Inspection
+
+**What to look for:**
+```
+GET /api/events                    [200 OK]
+Request Headers:
+  Authorization: Bearer eyJ...     ✓
+  Content-Type: application/json   ✓
+Response:
+  {
+    "content": [...],
+    "totalElements": 42,
+    "totalPages": 5
+  }                                ✓
+```
+
+### Application Tab (Check Tokens)
+
+**Location:** DevTools → Application → Local Storage → http://localhost:4200
+
+**Expected keys:**
+- `auth_token` - Current access token (JWT)
+- `refresh_token` - Refresh token (optional, JWT)
+
+**Format:** Both should start with `eyJ` (base64 JWT header)
+
+### Console Tab
+
+**Success indicators:**
+- ✓ No red error messages
+- ✓ No CORS warnings
+- ✓ Clean console output
+
+**Common errors to check:**
+- ❌ "Cannot read property of undefined"
+- ❌ "Access to XMLHttpRequest blocked by CORS"
+- ❌ "401 Unauthorized"
+
+---
+
+## 🔧 Advanced Testing Scenarios
+
+### Scenario 1: JWT Token Lifecycle
+1. Login successfully
+2. Open DevTools → Application
+3. View auth_token (note expiration time)
+4. Make API requests
+5. Token should be valid until expiration
+6. After expiration, auto-refresh should trigger
+
+**Watch for in Network tab:**
+- POST /api/auth/refresh → 200 OK (token refresh)
+- Followed by: Original request → 200 OK (retry with new token)
+
+### Scenario 2: Error Handling
+1. **Test 401 (Unauthorized):**
+   - Delete auth_token from localStorage
+   - Try to navigate/load data
+   - Should redirect to login
+
+2. **Test 403 (Forbidden):**
+   - As regular user, try admin endpoints
+   - Should show "Access Denied"
+
+3. **Test Network Error:**
+   - Stop backend (Ctrl+C)
+   - Try to load data
+   - Should show friendly error message
+
+### Scenario 3: Pagination & Filtering
+1. Go to Events page
+2. Check Network tab for query parameters
+3. Test page navigation
+4. Verify results update correctly
+5. Check URL parameters: `?page=0&size=10`
+
+### Scenario 4: CRUD Operations
+1. Create event (POST /api/events) → 201 Created
+2. Read event list (GET /api/events) → 200 OK
+3. Update event (PUT /api/events/:id) → 200 OK
+4. Delete event (DELETE /api/events/:id) → 204 No Content
+
+---
+
+## ✅ Complete Testing Checklist
+
+### Startup Phase
+- ☐ Backend starts without errors
+- ☐ Frontend compiles successfully
+- ☐ Browser loads http://localhost:4200
+- ☐ No console errors on page load
+
+### Authentication Phase
+- ☐ Can register new user
+- ☐ Tokens stored in localStorage
+- ☐ Can login with credentials
+- ☐ Redirect to dashboard after login
+- ☐ Invalid login shows error message
+
+### API Integration Phase
+- ☐ Events page loads with data
+- ☐ Forum page loads with threads
+- ☐ Profile page displays user info
+- ☐ Admin panel accessible (if admin)
+- ☐ All API calls include Authorization header
+
+### JWT Injection Phase
+- ☐ Authorization header format: `Bearer eyJ...`
+- ☐ Header present in all protected requests
+- ☐ Token stored correctly in localStorage
+- ☐ Refresh token present (if implemented)
+
+### Error Handling Phase
+- ☐ 401 errors redirect to login
+- ☐ 403 errors show access denied
+- ☐ 404 errors show not found
+- ☐ Network errors show friendly message
+- ☐ Connection refused handled gracefully
+
+### Data Operations Phase
+- ☐ Can create events
+- ☐ Can edit events
+- ☐ Can delete events
+- ☐ Pagination works
+- ☐ Filtering works
+- ☐ Search works
+
+### Network Monitoring Phase
+- ☐ All requests show correct status codes
+- ☐ Response bodies are valid JSON
+- ☐ Response times < 1000ms
+- ☐ No CORS errors
+- ☐ No failed requests
+
+---
+
+## 🐛 Troubleshooting Guide
+
+### Problem: "net::ERR_CONNECTION_REFUSED"
+**Where:** Network tab or Console
+**Cause:** Backend not running
+**Fix:**
+```bash
+# Check if backend running
+curl http://localhost:8080/health
+
+# If failed, start backend
+cd backend
+mvn spring-boot:run
+```
+
+### Problem: "CORS policy: No 'Access-Control-Allow-Origin' header"
+**Where:** Console (red error)
+**Cause:** Backend CORS not configured
+**Fix:**
+1. Check backend SecurityConfig
+2. Verify http://localhost:4200 in allowed origins
+3. Restart backend
+
+### Problem: "401 Unauthorized"
+**Where:** Network tab Response status
+**Cause:** No valid JWT token
+**Fix:**
+```bash
+# In DevTools Console:
+localStorage.getItem('auth_token')
+# If null, token not stored
+# Solution: Login again
+```
+
+### Problem: "Cannot read property 'X' of undefined"
+**Where:** Console (red error)
+**Cause:** Trying to access null/undefined data
+**Fix:**
+1. Check if API returned data
+2. Verify in Network tab Response
+3. Add null checks in component
+
+### Problem: Page loading forever
+**Cause:** Backend not responding
+**Fix:**
+1. Check Network tab for failed requests
+2. Restart backend
+3. Refresh page
+
+---
+
+## 🎯 Success Criteria
+
+✅ **Integration is working when you see:**
+
+1. **Network Tab:**
+   - POST /api/auth/register → 201 Created
+   - GET /api/events → 200 OK
+   - GET /api/forum/threads → 200 OK
+   - All requests have Authorization header
+
+2. **Application Tab:**
+   - auth_token exists (starts with eyJ)
+   - refresh_token exists (starts with eyJ)
+   - Both valid until expiration
+
+3. **Console Tab:**
+   - No red error messages
+   - Maybe some yellow warnings (normal)
+   - Clean output
+
+4. **UI/UX:**
+   - Can register user
+   - Can login user
+   - Dashboard loads
+   - Events/Forum/Admin pages load
+   - No "loading forever" states
+   - Logout works
+
+---
+
+## 📈 Performance Baselines
+
+**Expected response times:**
+- Login: < 500ms
+- Get user: < 500ms
+- List events: < 1000ms
+- List forum threads: < 1000ms
+- Create event: < 500ms
+
+**Bundle size (Frontend):**
+- Raw: ~344 KB
+- Gzipped: ~91 KB
+
+**Database queries:**
+- Should complete < 100ms
+- Check with DevTools Performance tab
+
+---
+
+## 🔐 Security Verification
+
+✓ **Check these security aspects:**
+
+1. **Authentication:**
+   - JWT tokens stored securely
+   - Passwords never in localStorage
+   - Login/logout works correctly
+
+2. **Authorization:**
+   - Protected routes require login
+   - Admin endpoints block non-admins
+   - 401/403 handled properly
+
+3. **Token Security:**
+   - Tokens have expiration time
+   - Refresh tokens work
+   - Logout clears tokens
+
+4. **Data Protection:**
+   - User data not exposed in URLs
+   - No sensitive data in LocalStorage
+   - CORS headers correct
+
+---
+
+## Next Steps
+
+1. ✅ Run integration tests (use Quick Start flow)
+2. ✅ Fix any issues found (use troubleshooting guide)
+3. ✅ Test all features thoroughly (use checklist)
+4. ✅ Performance testing (monitor with DevTools)
+5. ✅ Security review (verify all checks pass)
+6. ✅ Deploy to staging (use deployment guide)
+7. ✅ Final testing (repeat full checklist)
+8. ✅ Deploy to production (follow DEPLOYMENT guide)
+
+---
+
+**Documentation Version:** 2.0  
+**Last Updated:** 2025-12-03  
+**Status:** Complete - Ready for Integration Testing  
+**All Guides:** Quick Start (5 min) | Thorough (15-20 min) | Full (see SETUP_SUMMARY.md)

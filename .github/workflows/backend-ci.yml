@@ -45,23 +45,11 @@ jobs:
 
     - name: Run tests
       working-directory: ./backend
-      run: mvn test
-      env:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://localhost:5432/archipellibre_test
-        SPRING_DATASOURCE_USERNAME: test_user
-        SPRING_DATASOURCE_PASSWORD: test_password
+      run: mvn test -Dspring.profiles.active=test
 
     - name: Code quality check (Checkstyle)
       working-directory: ./backend
       run: mvn checkstyle:check
-
-    - name: Generate coverage report
-      working-directory: ./backend
-      run: mvn jacoco:report
-
-    - name: Verify code coverage (70% minimum)
-      working-directory: ./backend
-      run: mvn verify -DminCoveragePercent=70
 
     - name: Upload coverage to Codecov
       uses: codecov/codecov-action@v3

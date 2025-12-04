@@ -1,0 +1,116 @@
+<div class="create-event-container">
+  <mat-card class="create-event-card">
+    <mat-card-header>
+      <h1>Create New Event</h1>
+    </mat-card-header>
+
+    <mat-card-content>
+      <div *ngIf="error" class="error-message">
+        {{ error }}
+      </div>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Event Title</mat-label>
+            <input matInput formControlName="title" placeholder="Enter event title" />
+            <mat-error *ngIf="isFieldInvalid('title')">
+              {{ getFieldError('title') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Description</mat-label>
+            <textarea
+              matInput
+              formControlName="description"
+              placeholder="Enter event description"
+              rows="5"
+            ></textarea>
+            <mat-error *ngIf="isFieldInvalid('description')">
+              {{ getFieldError('description') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Start Date & Time</mat-label>
+            <input
+              matInput
+              [matDatepicker]="startPicker"
+              formControlName="startTime"
+              [min]="minStartDate"
+            />
+            <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+            <mat-datepicker #startPicker></mat-datepicker>
+            <mat-error *ngIf="isFieldInvalid('startTime')">
+              {{ getFieldError('startTime') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>End Date & Time</mat-label>
+            <input matInput [matDatepicker]="endPicker" formControlName="endTime" />
+            <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
+            <mat-datepicker #endPicker></mat-datepicker>
+            <mat-error *ngIf="isFieldInvalid('endTime')">
+              {{ getFieldError('endTime') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Location</mat-label>
+            <input matInput formControlName="location" placeholder="Enter event location" />
+            <mat-error *ngIf="isFieldInvalid('location')">
+              {{ getFieldError('location') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Max Capacity</mat-label>
+            <input matInput type="number" formControlName="maxCapacity" min="1" max="1000" />
+            <mat-error *ngIf="isFieldInvalid('maxCapacity')">
+              {{ getFieldError('maxCapacity') }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Image URL (Optional)</mat-label>
+            <input
+              matInput
+              formControlName="imageUrl"
+              placeholder="https://example.com/image.jpg"
+            />
+            <mat-error *ngIf="isFieldInvalid('imageUrl')">
+              {{ getFieldError('imageUrl') }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" mat-stroked-button (click)="cancel()" [disabled]="loading">
+            Cancel
+          </button>
+
+          <button
+            type="submit"
+            mat-raised-button
+            color="primary"
+            [disabled]="!form.valid || loading"
+          >
+            <mat-icon *ngIf="!loading">add</mat-icon>
+            <mat-spinner *ngIf="loading" diameter="20"></mat-spinner>
+            {{ loading ? 'Creating...' : 'Create Event' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

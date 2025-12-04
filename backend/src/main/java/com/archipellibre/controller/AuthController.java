@@ -4,14 +4,17 @@ import com.archipellibre.dto.ApiResponse;
 import com.archipellibre.dto.JwtResponse;
 import com.archipellibre.dto.LoginRequest;
 import com.archipellibre.dto.RegisterRequest;
+import com.archipellibre.dto.UserResponse;
 import com.archipellibre.model.User;
 import com.archipellibre.model.UserRole;
 import com.archipellibre.repository.UserRepository;
 import com.archipellibre.security.JwtTokenProvider;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,26 +40,31 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsernameOrEmail(),
-                        loginRequest.getPassword()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getUsernameOrEmail(),
+                            loginRequest.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = tokenProvider.generateToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String jwt = tokenProvider.generateToken(authentication);
 
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        User user = userRepository.findByUsername(userDetails.getUsername())
-                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            User user = userRepository.findByUsername(userDetails.getUsername())
+                    .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
 
-        return ResponseEntity.ok(new JwtResponse(
-                jwt,
-                user.getUsername(),
-                user.getEmail(),
-                user.getRole().name()
-        ));
+            return ResponseEntity.ok(new JwtResponse(
+                    jwt,
+                    user.getUsername(),
+                    user.getEmail(),
+                    user.getRole().name()
+            ));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new ApiResponse(false, "Invalid username or password"));
+        }
     }
 
     @PostMapping("/register")
@@ -83,5 +91,32 @@ public class AuthController {
         var unused = userRepository.save(user);
 
         return ResponseEntity.status(201).body(new ApiResponse(true, "User registered successfully"));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return ResponseEntity.status(401).body(new ApiResponse(false, "Not authenticated"));
+        }
+        
+        String username = authentication.getName();
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new org.springframework.security.core.userdetails.UsernameNotFoundException("User not found"));
+        
+        UserResponse response = UserResponse.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .bio(user.getBio())
+                .avatarUrl(user.getAvatarUrl())
+                .role(user.getRole().name())
+                .active(user.getActive())
+                .createdAt(user.getCreatedAt())
+                .updatedAt(user.getUpdatedAt())
+                .build();
+        
+        return ResponseEntity.ok(response);
     }
 }

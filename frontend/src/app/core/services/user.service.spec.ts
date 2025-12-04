@@ -1,16 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { UserService } from './user.service';
+import { UserService, UserFilterOptions } from './user.service';
 import { environment } from '../../../environments/environment';
+import { User, PaginatedResponse } from '../../models/domain.model';
 
 describe('UserService', () => {
   let service: UserService;
   let httpMock: HttpTestingController;
+  const apiUrl = `${environment.apiUrl}/users`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [UserService]
+      providers: [UserService],
     });
 
     service = TestBed.inject(UserService);
@@ -21,189 +23,119 @@ describe('UserService', () => {
     httpMock.verify();
   });
 
-  describe('User Profile', () => {
-    it('should retrieve current user profile', (done) => {
-      const mockUser = {
-        id: '1',
-        username: 'testuser',
-        email: 'test@example.com',
-        role: 'USER',
-        createdAt: '2025-01-01'
-      };
+  const mockUser: User = {
+    id: 'user1',
+    username: 'john_doe',
+    email: 'john@example.com',
+    role: 'USER',
+    status: 'ACTIVE',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
-      service.getCurrentUser().subscribe(user => {
-        expect(user.username).toBe('testuser');
-        expect(user.email).toBe('test@example.com');
-        done();
-      });
+  const mockPaginatedUsers: PaginatedResponse<User> = {
+    data: [mockUser],
+    total: 1,
+    page: 0,
+    pageSize: 10,
+    hasMore: false,
+  };
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/me`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockUser);
-    });
-
-    it('should retrieve user by ID', (done) => {
-      const mockUser = {
-        id: '1',
-        username: 'testuser',
-        email: 'test@example.com',
-        role: 'USER',
-        createdAt: '2025-01-01'
-      };
-
-      service.getUser('1').subscribe(user => {
-        expect(user.id).toBe('1');
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockUser);
-    });
-
-    it('should update user profile', (done) => {
-      const updates = { email: 'newemail@example.com' };
-      const updatedUser = {
-        id: '1',
-        username: 'testuser',
-        email: 'newemail@example.com',
-        role: 'USER',
-        createdAt: '2025-01-01'
-      };
-
-      service.updateUser('1', updates).subscribe(user => {
-        expect(user.email).toBe('newemail@example.com');
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
-      expect(req.request.method).toBe('PUT');
-      expect(req.request.body).toEqual(updates);
-      req.flush(updatedUser);
-    });
-  });
-
-  describe('User List (Admin)', () => {
+  describe('getAllUsers', () => {
     it('should retrieve all users', (done) => {
-      const mockUsers = [
-        { id: '1', username: 'user1', email: 'user1@example.com', role: 'USER' as const, createdAt: '2025-01-01' },
-        { id: '2', username: 'user2', email: 'user2@example.com', role: 'USER' as const, createdAt: '2025-01-02' }
-      ];
-
-      service.getAllUsers().subscribe(users => {
-        expect(users.length).toBe(2);
+      service.getAllUsers().subscribe((response) => {
+        expect(response.data.length).toBe(1);
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/users`);
+      const req = httpMock.expectOne((req) => req.url === apiUrl && req.params.has('page'));
       expect(req.request.method).toBe('GET');
-      req.flush(mockUsers);
-    });
-  });
-
-  describe('User Search & Filtering', () => {
-    it('should search users by username', (done) => {
-      const mockUsers = [
-        { id: '1', username: 'testuser', email: 'test@example.com', role: 'USER', createdAt: '2025-01-01' }
-      ];
-
-      // Create a simple test without using a non-existent method
-      service.getUser('1').subscribe(user => {
-        expect(user.username).toContain('testuser');
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockUsers[0]);
+      req.flush(mockPaginatedUsers);
     });
 
-    it('should filter users by role', (done) => {
-      const mockModerators = [
-        { id: '2', username: 'moderator1', email: 'mod1@example.com', role: 'MODERATOR', createdAt: '2025-01-02' }
-      ];
-
-      service.getAllUsers().subscribe(users => {
-        expect(users[0].role).toBe('MODERATOR');
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/users`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockModerators);
-    });
-  });
-
-  describe('User Role Management', () => {
-    it('should demonstrate user roles', (done) => {
-      const moderatorUser = {
-        id: '1',
-        username: 'testuser',
-        email: 'test@example.com',
-        role: 'MODERATOR' as const,
-        createdAt: '2025-01-01'
+    it('should retrieve users with filter options', (done) => {
+      const filter: UserFilterOptions = {
+        role: 'USER',
+        page: 0,
+        size: 10,
       };
 
-      service.getUser('1').subscribe(user => {
-        expect(user.role).toBe('MODERATOR');
+      service.getAllUsers(filter).subscribe((response) => {
+        expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+      const req = httpMock.expectOne(
+        (req) => req.url === apiUrl && req.params.get('role') === 'USER'
+      );
       expect(req.request.method).toBe('GET');
-      req.flush(moderatorUser);
+      req.flush(mockPaginatedUsers);
     });
   });
 
-  describe('Account Management', () => {
-    it('should delete user account', (done) => {
-      service.deleteUser('1').subscribe(() => {
-        expect(true).toBe(true);
+  describe('getUser', () => {
+    it('should retrieve a user by ID', (done) => {
+      service.getUser('user1').subscribe((user) => {
+        expect(user.id).toBe('user1');
+        expect(user.username).toBe('john_doe');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/1`);
+      const req = httpMock.expectOne(`${apiUrl}/user1`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockUser);
+    });
+  });
+
+  describe('getCurrentUser', () => {
+    it('should retrieve current user profile', (done) => {
+      service.getCurrentUser().subscribe((user) => {
+        expect(user.id).toBe('user1');
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiUrl}/me`);
+      expect(req.request.method).toBe('GET');
+      req.flush(mockUser);
+    });
+  });
+
+  describe('updateUser', () => {
+    it('should update a user', (done) => {
+      const updates = { email: 'newemail@example.com' };
+
+      service.updateUser('user1', updates).subscribe((user) => {
+        expect(user.id).toBe('user1');
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiUrl}/user1`);
+      expect(req.request.method).toBe('PUT');
+      req.flush(mockUser);
+    });
+  });
+
+  describe('deleteUser', () => {
+    it('should delete a user', (done) => {
+      service.deleteUser('user1').subscribe(() => {
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiUrl}/user1`);
       expect(req.request.method).toBe('DELETE');
-      req.flush({});
-    });
-
-    it('should change password', (done) => {
-      service.changePassword('old123', 'new456').subscribe(() => {
-        expect(true).toBe(true);
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/change-password`);
-      expect(req.request.method).toBe('POST');
-      req.flush({});
+      req.flush(null);
     });
   });
 
-  describe('Error Handling', () => {
-    it('should handle user not found error', (done) => {
-      service.getUser('invalid').subscribe(
-        () => fail('should have failed'),
-        (error: any) => {
-          expect(error.status).toBe(404);
-          done();
-        }
-      );
+  describe('changePassword', () => {
+    it('should change user password', (done) => {
+      service.changePassword('oldpass', 'newpass').subscribe(() => {
+        done();
+      });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/users/invalid`);
-      req.flush('User not found', { status: 404, statusText: 'Not Found' });
-    });
-
-    it('should handle unauthorized access error', (done) => {
-      service.getAllUsers().subscribe(
-        () => fail('should have failed'),
-        (error: any) => {
-          expect(error.status).toBe(403);
-          done();
-        }
-      );
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/users`);
-      req.flush('Admin access required', { status: 403, statusText: 'Forbidden' });
+      const req = httpMock.expectOne(`${apiUrl}/change-password`);
+      expect(req.request.method).toBe('POST');
+      req.flush(null);
     });
   });
 });

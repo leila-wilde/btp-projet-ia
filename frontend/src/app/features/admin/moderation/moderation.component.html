@@ -1,0 +1,106 @@
+<mat-card class="moderation-card">
+  <mat-card-header>
+    <mat-card-title>Moderation Queue</mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Stats Cards -->
+    <div class="stats-container">
+      <div class="stat-card">
+        <mat-icon>flag</mat-icon>
+        <div class="stat-content">
+          <p class="label">Total Flagged</p>
+          <p class="value">{{ stats.totalFlagged }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon>schedule</mat-icon>
+        <div class="stat-content">
+          <p class="label">Pending Review</p>
+          <p class="value">{{ stats.pendingReview }}</p>
+        </div>
+      </div>
+      <div class="stat-card">
+        <mat-icon>check_circle</mat-icon>
+        <div class="stat-content">
+          <p class="label">Resolved</p>
+          <p class="value">{{ stats.resolved }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <mat-form-field class="filter-field">
+      <mat-label>Filter by Status</mat-label>
+      <mat-select [(ngModel)]="selectedFilter" (selectionChange)="onFilterChange()">
+        <mat-option *ngFor="let option of filterOptions" [value]="option.value">
+          {{ option.label }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- Error Message -->
+    <div *ngIf="error" class="error-message">
+      {{ error }}
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="loading" class="loading-spinner">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+
+    <!-- Flagged Content -->
+    <div *ngIf="!loading && !error" class="flagged-content">
+      <div *ngIf="flaggedContent.length === 0" class="no-content">
+        <mat-icon>check_circle_outline</mat-icon>
+        <p>No flagged content to review</p>
+      </div>
+
+      <mat-accordion *ngIf="flaggedContent.length > 0">
+        <mat-expansion-panel *ngFor="let item of flaggedContent" class="content-item">
+          <mat-expansion-panel-header>
+            <mat-icon matListItemIcon [color]="getTypeColor(item.type)">flag</mat-icon>
+            <div class="header-content">
+              <span class="content-type">{{ item.type }}</span>
+              <span class="author">by {{ item.author }}</span>
+              <mat-chip-set>
+                <mat-chip [color]="getStatusColor(item.status)" selected>
+                  {{ item.status }}
+                </mat-chip>
+              </mat-chip-set>
+            </div>
+            <span class="report-count">{{ item.reportCount }} reports</span>
+          </mat-expansion-panel-header>
+
+          <div class="content-body">
+            <div class="content-preview">
+              <h4>Content:</h4>
+              <p>{{ item.content }}</p>
+            </div>
+
+            <div class="content-details">
+              <p><strong>Reason:</strong> {{ item.reason }}</p>
+              <p><strong>Reports:</strong> {{ item.reportCount }}</p>
+              <p><strong>Date:</strong> {{ item.createdAt | date: 'medium' }}</p>
+            </div>
+
+            <div class="action-buttons">
+              <button mat-raised-button color="accent" (click)="approveContent(item.id)">
+                <mat-icon>done</mat-icon>
+                Approve
+              </button>
+              <button mat-raised-button color="warn" (click)="removeContent(item.id)">
+                <mat-icon>delete</mat-icon>
+                Remove
+              </button>
+              <button mat-raised-button (click)="warnUser(item.id)">
+                <mat-icon>warning</mat-icon>
+                Warn User
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </div>
+  </mat-card-content>
+</mat-card>

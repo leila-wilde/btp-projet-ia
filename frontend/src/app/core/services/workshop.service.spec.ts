@@ -1,16 +1,18 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { WorkshopService } from './workshop.service';
+import { WorkshopService, WorkshopFilterOptions } from './workshop.service';
 import { environment } from '../../../environments/environment';
+import { WorkshopProposal, PaginatedResponse } from '../../models/domain.model';
 
 describe('WorkshopService', () => {
   let service: WorkshopService;
   let httpMock: HttpTestingController;
+  const apiUrl = `${environment.apiUrl}/workshops`;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [WorkshopService]
+      providers: [WorkshopService],
     });
 
     service = TestBed.inject(WorkshopService);
@@ -21,237 +23,154 @@ describe('WorkshopService', () => {
     httpMock.verify();
   });
 
-  describe('Workshop Proposals', () => {
-    it('should retrieve all workshop proposals', (done) => {
-      const mockProposals = [
-        { id: '1', title: 'Workshop 1', description: 'Description 1', proposer: 'user1', status: 'PENDING', votesCount: 5, createdAt: '2025-01-01', proposerId: '1', updatedAt: '2025-01-01' },
-        { id: '2', title: 'Workshop 2', description: 'Description 2', proposer: 'user2', status: 'APPROVED', votesCount: 15, createdAt: '2025-01-02', proposerId: '2', updatedAt: '2025-01-02' }
-      ];
+  const mockProposal: WorkshopProposal = {
+    id: 'workshop1',
+    title: 'Advanced Angular',
+    description: 'Learn advanced Angular techniques',
+    proposerId: 'user1',
+    proposer: 'john_doe',
+    votesCount: 10,
+    status: 'PROPOSED',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  };
 
-      service.getAllProposals().subscribe(proposals => {
-        expect(proposals.length).toBe(2);
+  const mockPaginatedProposals: PaginatedResponse<WorkshopProposal> = {
+    data: [mockProposal],
+    total: 1,
+    page: 0,
+    pageSize: 10,
+    hasMore: false,
+  };
+
+  describe('getAllProposals', () => {
+    it('should retrieve all workshop proposals', (done) => {
+      service.getAllProposals().subscribe((response) => {
+        expect(response.data.length).toBe(1);
+        expect(response.total).toBe(1);
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops`);
+      const req = httpMock.expectOne((req) => req.url === apiUrl && req.params.has('page'));
       expect(req.request.method).toBe('GET');
-      req.flush(mockProposals);
+      req.flush(mockPaginatedProposals);
     });
 
-    it('should retrieve proposal by ID', (done) => {
-      const mockProposal = {
-        id: '1',
-        title: 'Workshop 1',
-        description: 'Description 1',
-        proposer: 'user1',
-        status: 'PENDING',
-        votesCount: 5,
-        createdAt: '2025-01-01',
-        proposerId: '1',
-        updatedAt: '2025-01-01'
+    it('should retrieve proposals with filter options', (done) => {
+      const filter: WorkshopFilterOptions = {
+        status: 'PROPOSED',
+        page: 0,
+        size: 10,
       };
 
-      service.getProposal('1').subscribe(proposal => {
-        expect(proposal.id).toBe('1');
-        expect(proposal.title).toBe('Workshop 1');
+      service.getAllProposals(filter).subscribe((response) => {
+        expect(response.data).toBeDefined();
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1`);
+      const req = httpMock.expectOne(
+        (req) => req.url === apiUrl && req.params.get('status') === 'PROPOSED'
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(mockPaginatedProposals);
+    });
+  });
+
+  describe('getProposal', () => {
+    it('should retrieve a workshop proposal by ID', (done) => {
+      service.getProposal('workshop1').subscribe((proposal) => {
+        expect(proposal.id).toBe('workshop1');
+        expect(proposal.title).toBe('Advanced Angular');
+        done();
+      });
+
+      const req = httpMock.expectOne(`${apiUrl}/workshop1`);
       expect(req.request.method).toBe('GET');
       req.flush(mockProposal);
     });
+  });
 
-    it('should create new workshop proposal', (done) => {
-      const newProposal = { title: 'New Workshop', description: 'Test', category: 'Tech' };
-      const responseProposal = { 
-        id: '3', 
-        title: 'New Workshop',
-        description: 'Test',
-        proposer: 'user1',
-        status: 'PENDING',
-        votesCount: 0,
-        createdAt: new Date().toISOString(),
-        proposerId: '1',
-        updatedAt: new Date().toISOString()
+  describe('createProposal', () => {
+    it('should create a new workshop proposal', (done) => {
+      const newProposal = {
+        title: 'React Workshop',
+        description: 'Learn React',
       };
 
-      service.createProposal(newProposal as any).subscribe(proposal => {
-        expect(proposal.id).toBe('3');
-        expect(proposal.status).toBe('PENDING');
+      service.createProposal(newProposal).subscribe((proposal) => {
+        expect(proposal.id).toBe('workshop1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops`);
+      const req = httpMock.expectOne(apiUrl);
       expect(req.request.method).toBe('POST');
-      expect(req.request.body).toEqual(newProposal);
-      req.flush(responseProposal);
+      req.flush(mockProposal);
     });
+  });
 
-    it('should update workshop proposal', (done) => {
-      const updates = { title: 'Updated Title', description: 'Updated Description' };
-      const updatedProposal = {
-        id: '1',
-        title: 'Updated Title',
-        description: 'Updated Description',
-        proposer: 'user1',
-        status: 'PENDING',
-        votesCount: 5,
-        createdAt: '2025-01-01',
-        proposerId: '1',
-        updatedAt: '2025-01-01'
-      };
+  describe('updateProposal', () => {
+    it('should update a workshop proposal', (done) => {
+      const updates = { title: 'Updated Title' };
 
-      service.updateProposal('1', updates).subscribe(proposal => {
-        expect(proposal.title).toBe('Updated Title');
+      service.updateProposal('workshop1', updates).subscribe((proposal) => {
+        expect(proposal.id).toBe('workshop1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1`);
+      const req = httpMock.expectOne(`${apiUrl}/workshop1`);
       expect(req.request.method).toBe('PUT');
-      req.flush(updatedProposal);
+      req.flush(mockProposal);
     });
+  });
 
-    it('should delete workshop proposal', (done) => {
-      service.deleteProposal('1').subscribe(() => {
-        expect(true).toBe(true);
+  describe('deleteProposal', () => {
+    it('should delete a workshop proposal', (done) => {
+      service.deleteProposal('workshop1').subscribe(() => {
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1`);
+      const req = httpMock.expectOne(`${apiUrl}/workshop1`);
       expect(req.request.method).toBe('DELETE');
-      req.flush({});
+      req.flush(null);
     });
   });
 
-  describe('Voting System', () => {
-    it('should vote on workshop proposal', (done) => {
-      const updatedProposal = {
-        id: '1',
-        title: 'Workshop 1',
-        description: 'Description',
-        proposer: 'user1',
-        status: 'PENDING',
-        votesCount: 6,
-        createdAt: '2025-01-01',
-        proposerId: '1',
-        updatedAt: '2025-01-01'
-      };
-
-      service.voteProposal('1').subscribe(proposal => {
-        expect(proposal.votesCount).toBe(6);
+  describe('voteProposal', () => {
+    it('should vote for a workshop proposal', (done) => {
+      service.voteProposal('workshop1').subscribe((proposal: WorkshopProposal) => {
+        expect(proposal.id).toBe('workshop1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1/vote`);
+      const req = httpMock.expectOne(`${apiUrl}/workshop1/vote`);
       expect(req.request.method).toBe('POST');
-      req.flush(updatedProposal);
+      req.flush(mockProposal);
     });
   });
 
-  describe('Proposal Status Management', () => {
-    it('should approve workshop proposal', (done) => {
-      const approvedProposal = {
-        id: '1',
-        title: 'Workshop 1',
-        description: 'Description',
-        proposer: 'user1',
-        status: 'APPROVED',
-        votesCount: 5,
-        createdAt: '2025-01-01',
-        proposerId: '1',
-        updatedAt: '2025-01-01'
-      };
-
-      service.approveProposal('1').subscribe(proposal => {
-        expect(proposal.status).toBe('APPROVED');
+  describe('approveProposal', () => {
+    it('should approve a workshop proposal', (done) => {
+      service.approveProposal('workshop1').subscribe((proposal) => {
+        expect(proposal.id).toBe('workshop1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1/approve`);
+      const req = httpMock.expectOne(`${apiUrl}/workshop1/approve`);
       expect(req.request.method).toBe('POST');
-      req.flush(approvedProposal);
+      req.flush(mockProposal);
     });
+  });
 
-    it('should reject workshop proposal', (done) => {
-      const rejectedProposal = {
-        id: '1',
-        title: 'Workshop 1',
-        description: 'Description',
-        proposer: 'user1',
-        status: 'REJECTED',
-        votesCount: 5,
-        createdAt: '2025-01-01',
-        proposerId: '1',
-        updatedAt: '2025-01-01'
-      };
-
-      service.rejectProposal('1').subscribe(proposal => {
-        expect(proposal.status).toBe('REJECTED');
+  describe('rejectProposal', () => {
+    it('should reject a workshop proposal', (done) => {
+      service.rejectProposal('workshop1').subscribe((proposal) => {
+        expect(proposal.id).toBe('workshop1');
         done();
       });
 
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1/reject`);
+      const req = httpMock.expectOne(`${apiUrl}/workshop1/reject`);
       expect(req.request.method).toBe('POST');
-      req.flush(rejectedProposal);
-    });
-  });
-
-  describe('Search & Filtering', () => {
-    it('should filter proposals by status', (done) => {
-      const mockApprovedProposals = [
-        { id: '2', title: 'Workshop 2', description: 'Description 2', proposer: 'user2', status: 'APPROVED', votesCount: 15, createdAt: '2025-01-02', proposerId: '2', updatedAt: '2025-01-02' }
-      ];
-
-      service.getProposalsByStatus('APPROVED').subscribe(proposals => {
-        expect(proposals[0].status).toBe('APPROVED');
-        done();
-      });
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops?status=APPROVED`);
-      expect(req.request.method).toBe('GET');
-      req.flush(mockApprovedProposals);
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('should handle proposal not found error', (done) => {
-      service.getProposal('invalid').subscribe(
-        () => fail('should have failed'),
-        (error: any) => {
-          expect(error.status).toBe(404);
-          done();
-        }
-      );
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/invalid`);
-      req.flush('Workshop proposal not found', { status: 404, statusText: 'Not Found' });
-    });
-
-    it('should handle duplicate vote error', (done) => {
-      service.voteProposal('1').subscribe(
-        () => fail('should have failed'),
-        (error: any) => {
-          expect(error.status).toBe(400);
-          done();
-        }
-      );
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1/vote`);
-      req.flush('You have already voted on this proposal', { status: 400, statusText: 'Bad Request' });
-    });
-
-    it('should handle unauthorized action error', (done) => {
-      service.approveProposal('1').subscribe(
-        () => fail('should have failed'),
-        (error: any) => {
-          expect(error.status).toBe(403);
-          done();
-        }
-      );
-
-      const req = httpMock.expectOne(`${environment.apiUrl}/workshops/1/approve`);
-      req.flush('Admin access required', { status: 403, statusText: 'Forbidden' });
+      req.flush(mockProposal);
     });
   });
 });

@@ -1,0 +1,134 @@
+<div class="create-thread-container">
+  <div class="create-header">
+    <h1>Create New Thread</h1>
+    <p>Share your thoughts and start a discussion</p>
+  </div>
+
+  <!-- Error Message -->
+  <mat-card *ngIf="error" class="error-card">
+    <mat-icon color="warn">error</mat-icon>
+    <div class="error-content">
+      <h3>Unable to Create Thread</h3>
+      <p>{{ error }}</p>
+    </div>
+  </mat-card>
+
+  <!-- Create Form -->
+  <mat-card class="create-form-card">
+    <mat-card-content>
+      <form [formGroup]="createForm" (ngSubmit)="submitForm()">
+        <!-- Category -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Category</mat-label>
+          <mat-select formControlName="category">
+            <mat-option *ngFor="let cat of categories" [value]="cat.value">
+              {{ cat.label }}
+            </mat-option>
+          </mat-select>
+          <mat-hint>Choose the most relevant category for your discussion</mat-hint>
+          <mat-error *ngIf="createForm.get('category')?.hasError('required')">
+            Category is required
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Title -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Thread Title</mat-label>
+          <input
+            matInput
+            formControlName="title"
+            placeholder="What's your discussion about?"
+            maxlength="200"
+          />
+          <mat-hint align="end">
+            {{ getCharacterCount('title') }}/{{ getCharacterLimit('title') }}
+          </mat-hint>
+          <mat-error *ngIf="createForm.get('title')?.hasError('required')">
+            Title is required
+          </mat-error>
+          <mat-error *ngIf="createForm.get('title')?.hasError('minlength')">
+            Title must be at least 5 characters long
+          </mat-error>
+          <mat-error *ngIf="createForm.get('title')?.hasError('maxlength')">
+            Title cannot exceed 200 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Content -->
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Discussion Content</mat-label>
+          <textarea
+            matInput
+            formControlName="content"
+            rows="10"
+            placeholder="Share your thoughts, ideas, and questions..."
+            maxlength="5000"
+          ></textarea>
+          <mat-hint align="end">
+            {{ getCharacterCount('content') }}/{{ getCharacterLimit('content') }}
+          </mat-hint>
+          <mat-error *ngIf="createForm.get('content')?.hasError('required')">
+            Content is required
+          </mat-error>
+          <mat-error *ngIf="createForm.get('content')?.hasError('minlength')">
+            Content must be at least 10 characters long
+          </mat-error>
+          <mat-error *ngIf="createForm.get('content')?.hasError('maxlength')">
+            Content cannot exceed 5000 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Guidelines -->
+        <mat-card class="guidelines-card">
+          <mat-card-content>
+            <h4>Community Guidelines</h4>
+            <ul>
+              <li>Be respectful and constructive</li>
+              <li>Avoid spam and promotional content</li>
+              <li>Keep discussions on-topic</li>
+              <li>Search for existing threads before creating new ones</li>
+              <li>Provide clear and detailed information</li>
+            </ul>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button mat-raised-button type="button" (click)="cancel()" [disabled]="submitting">
+            <mat-icon>close</mat-icon>
+            Cancel
+          </button>
+          <button
+            mat-raised-button
+            color="primary"
+            type="submit"
+            [disabled]="!createForm.valid || submitting"
+          >
+            <mat-icon *ngIf="!submitting">add</mat-icon>
+            <mat-spinner *ngIf="submitting" diameter="20"></mat-spinner>
+            {{ submitting ? 'Creating...' : 'Create Thread' }}
+          </button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Tips Section -->
+  <mat-card class="tips-card">
+    <mat-card-content>
+      <h3>
+        <mat-icon>lightbulb</mat-icon>
+        Tips for a Great Thread
+      </h3>
+      <ul>
+        <li>
+          <strong>Clear Title:</strong> Use a descriptive title that summarizes the discussion
+        </li>
+        <li><strong>Context:</strong> Provide background information to help others understand</li>
+        <li><strong>Specific:</strong> Ask specific questions or raise specific points</li>
+        <li><strong>Formatting:</strong> Use paragraphs and line breaks for readability</li>
+        <li><strong>Engagement:</strong> Be prepared to respond to replies and clarify points</li>
+      </ul>
+    </mat-card-content>
+  </mat-card>
+</div>
