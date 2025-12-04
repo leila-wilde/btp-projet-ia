@@ -26,7 +26,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/events")
 @RequiredArgsConstructor
-public class EventController {
+public class EventController extends BaseApiController {
 
     private final EventService eventService;
     private final UserRepository userRepository;
