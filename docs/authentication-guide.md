@@ -214,7 +214,10 @@ POST   /api/auth/login
 GET    /api/events/**
 GET    /api/forum/**
 GET    /api/workshops/**
+GET    /swagger-ui.html
 GET    /swagger-ui/**
+GET    /webjars/**
+GET    /v3/api-docs
 GET    /v3/api-docs/**
 ```
 
