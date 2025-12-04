@@ -1,7 +1,9 @@
 # L'Archipel Libre - Integration Testing Report
 **Date**: 2025-12-03  
-**Last Updated**: 2025-12-04T01:08:00Z  
+**Last Updated**: 2025-12-04T02:35:00Z  
 **Status**: ✅ CRITICAL FEATURES VERIFIED - All Core API Endpoints Working (Auth, Events, Forum, User Profiles)
+
+📋 **Note**: For current testing info, see **[TESTING_GUIDE.md](TESTING_GUIDE.md)** (consolidated documentation)
 
 ## 🟢 Working Features
 
