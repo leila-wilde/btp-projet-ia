@@ -212,7 +212,7 @@ describe('EventService', () => {
     });
 
     it('should check if event is full', () => {
-      const fullEvent = { ...mockEvent, registeredCount: 30 };
+      const fullEvent = { ...mockEvent, participantCount: 30 };
       expect(service.isEventFull(fullEvent)).toBe(true);
       expect(service.isEventFull(mockEvent)).toBe(false);
     });

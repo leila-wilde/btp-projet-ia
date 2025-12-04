@@ -54,6 +54,10 @@ describe('ProfileComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ProfileComponent);
     component = fixture.componentInstance;
+    
+    // Setup default return values
+    userService.getCurrentUser.and.returnValue(of(mockUser));
+    authService.isLoggedIn.and.returnValue(true);
   });
 
   describe('Initialization', () => {

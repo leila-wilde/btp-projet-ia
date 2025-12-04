@@ -253,8 +253,8 @@ describe('EventCreateComponent', () => {
   describe('Field Name Formatting', () => {
     it('should format field names correctly', () => {
       expect(component.formatFieldName('title')).toBe('Title');
-      expect(component.formatFieldName('capacity')).toBe('Capacity');
-      expect(component.formatFieldName('date')).toBe('Date');
+      expect(component.formatFieldName('maxCapacity')).toBe('Max Capacity');
+      expect(component.formatFieldName('startTime')).toBe('Start Time');
     });
   });
 
