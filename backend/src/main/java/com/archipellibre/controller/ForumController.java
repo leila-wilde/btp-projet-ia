@@ -30,7 +30,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/forum")
 @RequiredArgsConstructor
-public class ForumController {
+public class ForumController extends BaseApiController {
 
     private final ForumService forumService;
     private final UserRepository userRepository;
