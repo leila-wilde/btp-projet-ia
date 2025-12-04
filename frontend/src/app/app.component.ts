@@ -14,7 +14,7 @@ import { Language } from './core/i18n/translations';
       <header class="navbar">
         <div class="navbar-content">
           <div class="navbar-brand">
-            <span class="logo">🏝️</span>
+            <img src="assets/logo.png" alt="L'Archipel Libre Logo" class="logo-img" />
             <h1>L'Archipel Libre</h1>
           </div>
           <nav class="nav-links">
@@ -107,6 +107,12 @@ import { Language } from './core/i18n/translations';
 
       .logo {
         font-size: 2rem;
+      }
+
+      .logo-img {
+        height: 50px;
+        width: auto;
+        object-fit: contain;
       }
 
       .navbar-brand h1 {
